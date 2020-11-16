@@ -9,12 +9,12 @@ import java.util.Scanner;
 public class AdminSession implements ISession{
     private final Scanner _scanner;
     private boolean loggedIn = true;
-    private AbstractUser _user;
+    private Staff _user;
 
 
     public AdminSession(Scanner scanner, AbstractUser user) {
         _scanner = scanner;
-        _user = user;
+        _user = (Staff) user;
     }
 
     @Override

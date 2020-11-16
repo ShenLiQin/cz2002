@@ -5,8 +5,6 @@ public class RegistrationDatabase implements Serializable{
     private final TreeMap<RegistrationKey, Long> registrations = new TreeMap<>();
     private RegistrationPeriod registrationPeriod = null;
     private static RegistrationDatabase instance = null;
-    private CourseDatabase courseDatabase;
-    private UserDatabase userDatabase;
 
     private RegistrationDatabase() {
         super();
@@ -72,18 +70,16 @@ public class RegistrationDatabase implements Serializable{
             }
             registrations.put(registrationKey, new Date().getTime());
 
+            CourseDatabase courseDatabase = Factory.getCourseDatabase();
             Course course = courseDatabase.getCourse(registrationKey.getCourseCode());
             Index index = course.getIndex(registrationKey.getIndexNumber());
             index.enrollStudent(registrationKey.getMatricNumber());
             course.updateIndex(index);
             courseDatabase.updateCourse(course);
 
+            UserDatabase userDatabase = Factory.getUserDatabase();
             Student student = userDatabase.getStudent(registrationKey.getMatricNumber());
             student.registerCourse(registrationKey.getCourseCode(), registrationKey.getIndexNumber());
         }
-    }
-
-    private void notifyStudentCourseDatabase(RegistrationKey registrationKey) {
-
     }
 }

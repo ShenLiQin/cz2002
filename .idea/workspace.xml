@@ -13,13 +13,8 @@
     <list default="true" id="0b2a96ea-68a5-4f89-8ab5-21e919bb5e30" name="Default Changelist" comment="initial commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AdminSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AdminSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CourseDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CourseDatabase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RegistrationDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RegistrationDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RegistrationKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RegistrationKey.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Student.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StudentCourseRegistrar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StudentCourseRegistrar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UserDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UserDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UserSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UserSession.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +78,7 @@
       <workItem from="1605320212777" duration="35499000" />
       <workItem from="1605507051415" duration="206000" />
       <workItem from="1605507376413" duration="210000" />
-      <workItem from="1605507850865" duration="10027000" />
+      <workItem from="1605507850865" duration="10716000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1605511966758</created>
@@ -92,7 +87,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605511966758</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="initial commit">
+      <created>1605520637704</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1605520637704</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -195,10 +197,10 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="82" y="0" key="SettingsEditor/0.0.1200.760@0.0.1200.760" timestamp="1605507881846" />
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1605511996429">
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1605521280448">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1605511996429" />
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1605521280448" />
     <state width="606" height="386" key="XDebugger.FullValuePopup" timestamp="1605511825096">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
