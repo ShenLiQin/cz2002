@@ -61,7 +61,7 @@ public class Course implements Serializable {
         }
     }
 
-    public boolean checkForStudent(String matricNumber) {
+    public boolean getStudent(String matricNumber) {
         for (Index index : indexes.values()) {
             if (index.getEnrolledStudents().contains(matricNumber)) {
                 return true;
@@ -107,8 +107,12 @@ public class Course implements Serializable {
         }
     }
 
-    public Index checkForIndex(int indexNumber) {
+    public Index getIndex(int indexNumber) {
         return indexes.get(indexNumber);
+    }
+
+    public void updateIndex(Index index) {
+        indexes.replace(index.getIndexNumber(), index);
     }
 
     @Override

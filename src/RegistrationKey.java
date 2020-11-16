@@ -3,6 +3,18 @@ public class RegistrationKey implements Comparable<RegistrationKey>{
     private final String courseCode;
     private final int indexNumber;
 
+    public String getMatricNumber() {
+        return matricNumber;
+    }
+
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public int getIndexNumber() {
+        return indexNumber;
+    }
+
     public RegistrationKey(String matricNumber, String courseCode, int indexNumber) {
         this.matricNumber = matricNumber;
         this.courseCode = courseCode;

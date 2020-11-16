@@ -1,6 +1,4 @@
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class StudentCourseRegistrar {
 
@@ -16,20 +14,25 @@ public class StudentCourseRegistrar {
             System.out.println("registration period have not started/ is over");
 //            throw new Exception();
         }
-        if (userDatabase.checkForStudent(matricNumber) == null) {
+        if (userDatabase.getStudent(matricNumber) == null) {
             System.out.println("no such student");
 //            throw new Exception();
         }
-        Course course = courseDatabase.checkForCourse(courseCode);
+        Course course = courseDatabase.getCourse(courseCode);
         if (course == null) {
             System.out.println("no such course");
 //            throw new Exception();
-        } else if (course.checkForIndex(indexNumber) == null){
+        } else if (course.getIndex(indexNumber) == null){
             System.out.println("no such index");
 //            throw new Exception();
         }
 
+//      ... check if student can still register (AU count)
+
         RegistrationKey registrationKey = Factory.createRegistrationKey(matricNumber, courseCode, indexNumber);
+        //update registrationdatabase
+        //update coursedatabase
+        //update userdatabase
         registrationDatabase.addRegistration(registrationKey);
     }
 }

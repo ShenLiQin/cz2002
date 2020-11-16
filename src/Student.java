@@ -1,17 +1,17 @@
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 public class Student extends AbstractUser {
     private String matricNumber;
-    private ArrayList<String> registeredCourseCodes;
+    private Hashtable<String, Integer> registeredCourses;
     private int totalRegisteredAUs;
     private int maxAUs;
 
     public Student(String name, String school, int maxAUs, Random random) {
         super(name, school, UserType.USER);
-        this.matricNumber = "U" + 1000000 + (int)(random.nextFloat() * 9000000) + (char)(random.nextInt(26) + 'a');;
-        this.registeredCourseCodes = new ArrayList<>();
+        this.matricNumber = "U" + 1000000 + (int)(random.nextFloat() * 90000) + (char)(random.nextInt(26) + 'a');
+        this.registeredCourses = new Hashtable<>();
         this.totalRegisteredAUs = 0;
         this.maxAUs = maxAUs;
     }
@@ -20,15 +20,15 @@ public class Student extends AbstractUser {
         return matricNumber;
     }
 
-    public ArrayList<String> getRegisteredCourseCodes() {
-        return registeredCourseCodes;
+    public Hashtable<String, Integer> getRegisteredCourses() {
+        return registeredCourses;
     }
 
-    public void registerCourse(String courseCode) throws Exception {
-        if (registeredCourseCodes.contains(courseCode)) {
+    public void registerCourse(String courseCode, int indexNumber) throws Exception {
+        if (registeredCourses.contains(courseCode)) {
             throw new Exception();
         } else {
-            registeredCourseCodes.add(courseCode);
+            registeredCourses.put(courseCode, indexNumber);
         }
     }
 
@@ -40,8 +40,8 @@ public class Student extends AbstractUser {
         this.matricNumber = matricNumber;
     }
 
-    public void setRegisteredCourseCodes(ArrayList<String> registeredCourseCodes) {
-        this.registeredCourseCodes = registeredCourseCodes;
+    public void setRegisteredCourses(Hashtable<String, Integer> registeredCourses) {
+        this.registeredCourses = registeredCourses;
     }
 
     public void setTotalRegisteredAUs(int totalRegisteredAUs) {

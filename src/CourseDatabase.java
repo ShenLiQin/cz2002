@@ -63,17 +63,12 @@ public class CourseDatabase implements Serializable{
         }
     }
 
-    public void updateCourse(Course oldCourse, Course newCourse) throws Exception {
-        if (!courses.containsKey(oldCourse.getCourseCode())) {
-            throw new Exception();
-        } else {
-            courses.remove(oldCourse.getCourseCode());
-            courses.put(newCourse.getCourseCode(), newCourse);
-            persist();
-        }
+    public void updateCourse(Course newCourse) {
+        courses.replace(newCourse.getCourseCode(), newCourse);
+        persist();
     }
 
-    public Course checkForCourse(String courseCode) {
+    public Course getCourse(String courseCode) {
         return courses.get(courseCode);
     }
 }

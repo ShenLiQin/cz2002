@@ -1,4 +1,3 @@
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -162,7 +161,7 @@ public class AdminSession implements ISession{
                         try {
                             System.out.print("course code: ");
                             String courseCode = _scanner.nextLine();
-                            course = Factory.getCourseDatabase().checkForCourse(courseCode);
+                            course = Factory.getCourseDatabase().getCourse(courseCode);
                             if (course == null) {
                                 System.out.println("no such course");
                             }
@@ -176,7 +175,7 @@ public class AdminSession implements ISession{
                             System.out.print("index number: ");
                             int indexNumber = _scanner.nextInt();
                             _scanner.nextLine();
-                            index = course.checkForIndex(indexNumber);
+                            index = course.getIndex(indexNumber);
                             if (index == null) {
                                 System.out.println("no such index");
                             }
@@ -192,7 +191,7 @@ public class AdminSession implements ISession{
                         try {
                             System.out.print("course code: ");
                             String courseCode = _scanner.nextLine();
-                            course = Factory.getCourseDatabase().checkForCourse(courseCode);
+                            course = Factory.getCourseDatabase().getCourse(courseCode);
                             if (course == null) {
                                 System.out.println("no such course");
                             }
@@ -212,7 +211,7 @@ public class AdminSession implements ISession{
     }
 
     private Course getCourse(CourseDatabase courseDatabase, String courseCode) {
-        return courseDatabase.checkForCourse(courseCode);
+        return courseDatabase.getCourse(courseCode);
     }
 
     private void changeAccessPeriod(RegistrationDatabase registrationDatabase, RegistrationPeriod newRP) throws Exception {

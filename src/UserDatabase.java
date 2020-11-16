@@ -1,9 +1,8 @@
 import java.io.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.TreeMap;
 
-public class UserDatabase implements Serializable{
+public class UserDatabase implements Serializable {
     private final TreeMap<String, AbstractUser> loginInformation = new TreeMap<>();
     private static UserDatabase instance = null;
 
@@ -59,6 +58,18 @@ public class UserDatabase implements Serializable{
         return students;
     }
 
+    public void updateStudent(Student student) throws Exception {
+        HashMap<String, Student> students = getAllStudents();
+
+        if (!students.containsKey(student.getMatricNumber())) {
+            System.out.println("student do not exist");
+            throw new Exception();
+        } else {
+            loginInformation.put(student.getUsername(), student);
+            persist();
+        }
+    }
+
     public void addStudent(Student student) throws Exception {
         HashMap<String, Student> students = getAllStudents();
 
@@ -91,7 +102,7 @@ public class UserDatabase implements Serializable{
         return null;
     }
 
-    public Student checkForStudent(String matricNumber) {
+    public Student getStudent(String matricNumber) {
         HashMap<String, Student> students = getAllStudents();
         return students.get(matricNumber);
     }
