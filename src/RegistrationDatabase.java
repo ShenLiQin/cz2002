@@ -50,8 +50,9 @@ public class RegistrationDatabase implements Serializable{
     }
 
     public void setRegistrationPeriod(RegistrationPeriod newRegistrationPeriod) throws Exception {
-        if (newRegistrationPeriod.equals(newRegistrationPeriod)) {
-            throw new Exception();
+        if (registrationPeriod.equals(newRegistrationPeriod)) {
+            System.out.println("same registration period");
+//            throw new Exception();
         } else {
             registrationPeriod = newRegistrationPeriod;
         }
@@ -59,8 +60,10 @@ public class RegistrationDatabase implements Serializable{
 
     public void addRegistration(RegistrationKey registrationKey) throws Exception {
         if (registrations.containsKey(registrationKey)) {
-            throw new Exception();
+            System.out.println("registration already exists");
+//            throw new Exception();
         } else {
+//            registrationKey.
             registrations.put(registrationKey, new Date().getTime());
         }
     }

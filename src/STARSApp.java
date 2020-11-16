@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -9,10 +10,10 @@ public class STARSApp {
         RegistrationDatabase registrationDatabase;
         try {
             userDatabase = Factory.getUserDatabase();
-//            Student newS = Factory.createStudent("meg", "scse", 23);
-//            Staff newA = Factory.createStaff("richard", "scse");
-//            userDatabase.addStudent(newS);
-//            userDatabase.addAdmin(newA);
+            Student newS = Factory.createStudent("meg", "scse", 23);
+            Staff newA = Factory.createStaff("richard", "scse");
+            userDatabase.addStudent(newS);
+            userDatabase.addAdmin(newA);
 
             courseDatabase = Factory.getCourseDatabase();
             Index index1 = Factory.createIndex(20000, 31);
@@ -38,14 +39,15 @@ public class STARSApp {
             ISession session;
             do {
                 LoginControl loginControl = Factory.createLoginControl();
-                UserType userType = loginControl.login(userDatabase);
+                AbstractUser user = loginControl.login(userDatabase);
 
-                session = Factory.createSession(userType);
+                session = Factory.createSession(user);
                 session.run();
             } while (!session.logout());
 
+        } catch(IOException | ClassNotFoundException e) {
+            System.out.println("error reading files... \nexiting...");
         } catch (Exception e) {
-            System.out.println("failed to read files");
             e.printStackTrace();
         }
     }

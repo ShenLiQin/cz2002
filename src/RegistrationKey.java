@@ -1,9 +1,9 @@
 public class RegistrationKey implements Comparable<RegistrationKey>{
-    private final int matricNumber;
+    private final String matricNumber;
     private final String courseCode;
     private final int indexNumber;
 
-    public RegistrationKey(int matricNumber, String courseCode, int indexNumber) {
+    public RegistrationKey(String matricNumber, String courseCode, int indexNumber) {
         this.matricNumber = matricNumber;
         this.courseCode = courseCode;
         this.indexNumber = indexNumber;
@@ -11,14 +11,14 @@ public class RegistrationKey implements Comparable<RegistrationKey>{
 
     @Override
     public int compareTo(RegistrationKey other) {
-        if (this.matricNumber == other.matricNumber) {
+        if (this.matricNumber.equals(other.matricNumber)) {
             if (this.courseCode.equals(other.courseCode)) {
-                return this.indexNumber - other.indexNumber;
+                return 0;
             } else {
                 return this.courseCode.compareTo(other.courseCode);
             }
         } else {
-            return this.matricNumber - other.matricNumber;
+            return this.matricNumber.compareTo(other.matricNumber);
         }
     }
 }

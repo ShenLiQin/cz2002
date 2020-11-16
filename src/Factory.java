@@ -23,13 +23,13 @@ public class Factory {
         return RegistrationDatabase.getInstance();
     }
 
-    public static ISession createSession(UserType userType) {
-        switch (userType) {
+    public static ISession createSession(AbstractUser user) {
+        switch (user.getUserType()) {
             case ADMIN -> {
-                return new AdminSession(new Scanner(System.in));
+                return new AdminSession(new Scanner(System.in), user);
             }
             case USER -> {
-                return new UserSession(new Scanner(System.in));
+                return new UserSession(new Scanner(System.in), user);
             }
             default -> throw new NullPointerException();
         }
@@ -61,5 +61,9 @@ public class Factory {
 
     public static RegistrationPeriod createRegistrationPeriod(LocalDateTime startDate, LocalDateTime endDate) {
         return new RegistrationPeriod(startDate, endDate);
+    }
+
+    public static RegistrationKey createRegistrationKey(String matricNumber, String courseCode, int indexNumber) {
+        return new RegistrationKey(matricNumber, courseCode, indexNumber);
     }
 }

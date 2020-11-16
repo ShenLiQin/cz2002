@@ -3,9 +3,11 @@ import java.util.Scanner;
 public class UserSession implements ISession{
     private final Scanner _scanner;
     private boolean loggedIn = false;
+    private AbstractUser _user;
 
-    public UserSession(Scanner scanner) {
+    public UserSession(Scanner scanner, AbstractUser user) {
         _scanner = scanner;
+        _user = user;
     }
 
     @Override

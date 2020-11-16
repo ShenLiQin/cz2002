@@ -20,11 +20,11 @@ public class UserDatabase implements Serializable{
     }
 
     private static void initialize() throws IOException, ClassNotFoundException {
-        InputStream file = new FileInputStream("Users.txt");
-        InputStream buffer = new BufferedInputStream(file);
-        ObjectInput input = new ObjectInputStream(buffer);
+//        InputStream file = new FileInputStream("Users.txt");
+//        InputStream buffer = new BufferedInputStream(file);
+//        ObjectInput input = new ObjectInputStream(buffer);
 
-        instance = (UserDatabase) input.readObject();
+//        instance = (UserDatabase) input.readObject();
         // hash password
     }
 
@@ -48,7 +48,7 @@ public class UserDatabase implements Serializable{
         }
     }
 
-    public void addStudent(Student student) throws Exception {
+    private HashMap<String, Student> getAllStudents() {
         HashMap<String, Student> students = new HashMap<>();
         for (AbstractUser user : loginInformation.values()) {
             if (user instanceof Student) {
@@ -56,6 +56,11 @@ public class UserDatabase implements Serializable{
                 students.put(s.getMatricNumber(), s);
             }
         }
+        return students;
+    }
+
+    public void addStudent(Student student) throws Exception {
+        HashMap<String, Student> students = getAllStudents();
 
         if (students.containsKey(student.getMatricNumber())) {
             throw new Exception();
@@ -74,15 +79,20 @@ public class UserDatabase implements Serializable{
         }
     }
 
-    public UserType authenticate(String username, String password) {
+    public AbstractUser authenticate(String username, String password) {
         AbstractUser user = loginInformation.get(username);
 
         if (user != null) {
             if (password.equals(user.getPassword())) {
-                return user.getUserType();
+                return user;
             }
         }
         System.out.println("wrong username/password");
         return null;
+    }
+
+    public Student checkForStudent(String matricNumber) {
+        HashMap<String, Student> students = getAllStudents();
+        return students.get(matricNumber);
     }
 }
