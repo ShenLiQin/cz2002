@@ -69,6 +69,7 @@ public class RegistrationDatabase implements Serializable{
                 }
             }
             registrations.put(registrationKey, new Date().getTime());
+            persist();
 
             CourseDatabase courseDatabase = Factory.getCourseDatabase();
             Course course = courseDatabase.getCourse(registrationKey.getCourseCode());

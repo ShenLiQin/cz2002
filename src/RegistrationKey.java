@@ -1,7 +1,10 @@
-public class RegistrationKey implements Comparable<RegistrationKey>{
+import java.io.Serializable;
+
+public class RegistrationKey implements Comparable<RegistrationKey>, Serializable {
     private final String matricNumber;
     private final String courseCode;
     private final int indexNumber;
+    private static final long serialVersionUID = 1L;
 
     public String getMatricNumber() {
         return matricNumber;
