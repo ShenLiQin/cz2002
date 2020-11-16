@@ -28,7 +28,7 @@ public class CourseDatabase implements Serializable{
     }
 
     public static void persist(){
-        FileOutputStream fos = null;
+        FileOutputStream fos;
         ObjectOutputStream out = null;
         try{
             fos = new FileOutputStream("Courses.txt");

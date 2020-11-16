@@ -10,7 +10,8 @@ public class STARSApp {
         RegistrationDatabase registrationDatabase;
         try {
             userDatabase = Factory.getUserDatabase();
-            Student newS = Factory.createStudent("meg", "scse", 23);
+            Student newS = Factory.createStudent("ian", "scse", 23);
+            newS.setMatricNumber("U1274243D");
             Staff newA = Factory.createStaff("richard", "scse");
             userDatabase.addStudent(newS);
             userDatabase.addAdmin(newA);
@@ -23,19 +24,18 @@ public class STARSApp {
             dates.add(new Date(1605360255));
             dates.add(new Date(1606137855));
             index2.setLaboratoryTimings(dates);
-            ArrayList<String> enrolledStudents = new ArrayList<>();
-            enrolledStudents.add("U1921319D");
-            index2.setEnrolledStudents(enrolledStudents);
 
             ArrayList<Index> indexes = new ArrayList<>();
             indexes.add(index1);
             indexes.add(index2);
 
-
             Course course = Factory.createCourse("cz2001", "algorithm", new ArrayList<Date>(), "LT2", 3, indexes);
             courseDatabase.addCourse(course);
 
-//            registrationDatabase = Factory.getRegistrationDatabase();
+            registrationDatabase = Factory.getRegistrationDatabase();
+            RegistrationKey registrationKey = Factory.createRegistrationKey(newS.getMatricNumber(), course.getCourseCode(), index2.getIndexNumber());
+            registrationDatabase.addRegistration(registrationKey);
+
             ISession session;
             do {
                 LoginControl loginControl = Factory.createLoginControl();

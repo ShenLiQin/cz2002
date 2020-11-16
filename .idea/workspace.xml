@@ -10,13 +10,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b2a96ea-68a5-4f89-8ab5-21e919bb5e30" name="Default Changelist" comment="initial commit">
+    <list default="true" id="0b2a96ea-68a5-4f89-8ab5-21e919bb5e30" name="Default Changelist" comment="added exceptions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LoginControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RegistrationDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RegistrationDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Student.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UserDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UserDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CourseDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CourseDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/STARSApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/STARSApp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +77,7 @@
       <workItem from="1605320212777" duration="35499000" />
       <workItem from="1605507051415" duration="206000" />
       <workItem from="1605507376413" duration="210000" />
-      <workItem from="1605507850865" duration="13104000" />
+      <workItem from="1605507850865" duration="13729000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1605511966758</created>
@@ -110,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605521322046</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="added exceptions">
+      <created>1605523951334</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1605523951334</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -130,7 +134,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
+    <MESSAGE value="added exceptions" />
+    <option name="LAST_COMMIT_MESSAGE" value="added exceptions" />
   </component>
   <component name="WindowStateProjectService">
     <state x="299" y="0" width="616" height="760" key="#Main" timestamp="1605507032156">
@@ -173,22 +178,22 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="279" y="79" key="Github.UntrackedFilesDialog/0.0.1200.760@0.0.1200.760" timestamp="1605508454475" />
-    <state width="1157" height="190" key="GridCell.Tab.0.bottom" timestamp="1605511954822">
+    <state width="1157" height="190" key="GridCell.Tab.0.bottom" timestamp="1605523798677">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="190" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1605511954822" />
-    <state width="1157" height="190" key="GridCell.Tab.0.center" timestamp="1605511954821">
+    <state width="1157" height="190" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1605523798677" />
+    <state width="1157" height="190" key="GridCell.Tab.0.center" timestamp="1605523798677">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="190" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1605511954821" />
-    <state width="1157" height="190" key="GridCell.Tab.0.left" timestamp="1605511954821">
+    <state width="1157" height="190" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1605523798677" />
+    <state width="1157" height="190" key="GridCell.Tab.0.left" timestamp="1605523798677">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="190" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1605511954821" />
-    <state width="1157" height="190" key="GridCell.Tab.0.right" timestamp="1605511954822">
+    <state width="1157" height="190" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1605523798677" />
+    <state width="1157" height="190" key="GridCell.Tab.0.right" timestamp="1605523798677">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="190" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1605511954822" />
+    <state width="1157" height="190" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1605523798677" />
     <state width="1157" height="236" key="GridCell.Tab.1.bottom" timestamp="1605511826765">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -213,10 +218,10 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="82" y="0" key="SettingsEditor/0.0.1200.760@0.0.1200.760" timestamp="1605507881846" />
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1605521332129">
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1605523984062">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1605521332129" />
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1605523984062" />
     <state width="606" height="386" key="XDebugger.FullValuePopup" timestamp="1605511825096">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
