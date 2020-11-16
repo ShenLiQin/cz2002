@@ -24,11 +24,19 @@ public class Student extends AbstractUser {
         return registeredCourses;
     }
 
-    public void registerCourse(String courseCode, int indexNumber) throws Exception {
+    public void registerCourse(String courseCode, int indexNumber) throws ExistingCourseException {
         if (registeredCourses.contains(courseCode)) {
-            throw new Exception();
+            throw new ExistingCourseException();
         } else {
             registeredCourses.put(courseCode, indexNumber);
+        }
+    }
+
+    public void deregisterCourse(String courseCode) throws NonExistentCourseException {
+        if (!registeredCourses.contains(courseCode)) {
+            throw new NonExistentCourseException();
+        } else {
+            registeredCourses.remove(courseCode);
         }
     }
 

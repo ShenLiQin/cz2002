@@ -13,9 +13,9 @@ public class Index implements Serializable {
     private String laboratoryVenue;
     private static final long serialVersionUID = 1L;
 
-    public void enrollStudent(String matricNumber) throws Exception {
+    public void enrollStudent(String matricNumber) throws ExistingUserException {
         if (enrolledStudents.contains(matricNumber)) {
-            throw new Exception();
+            throw new ExistingUserException();
         } else {
             enrolledStudents.add(matricNumber);
         }
@@ -31,9 +31,9 @@ public class Index implements Serializable {
         this.laboratoryVenue = laboratoryVenue;
     }
 
-    public void dropStudent(String matricNumber) throws Exception {
+    public void dropStudent(String matricNumber) throws NonExistentStudentException {
         if (!enrolledStudents.contains(matricNumber)) {
-            throw new Exception();
+            throw new NonExistentStudentException();
         } else {
             enrolledStudents.remove(matricNumber);
         }

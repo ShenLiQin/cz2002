@@ -28,14 +28,12 @@ public class UserDatabase implements Serializable {
     }
 
     public static void persist(){
-        FileOutputStream fos = null;
+        FileOutputStream fos;
         ObjectOutputStream out = null;
         try{
             fos = new FileOutputStream("Users.txt");
             out = new ObjectOutputStream(fos);
             out.writeObject(instance);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }finally{
@@ -58,32 +56,32 @@ public class UserDatabase implements Serializable {
         return students;
     }
 
-    public void updateStudent(Student student) throws Exception {
+    public void updateStudent(Student student) throws NonExistentStudentException {
         HashMap<String, Student> students = getAllStudents();
 
         if (!students.containsKey(student.getMatricNumber())) {
             System.out.println("student do not exist");
-            throw new Exception();
+            throw new NonExistentStudentException();
         } else {
             loginInformation.put(student.getUsername(), student);
             persist();
         }
     }
 
-    public void addStudent(Student student) throws Exception {
+    public void addStudent(Student student) throws ExistingUserException {
         HashMap<String, Student> students = getAllStudents();
 
         if (students.containsKey(student.getMatricNumber())) {
-            throw new Exception();
+            throw new ExistingUserException();
         } else {
             loginInformation.put(student.getUsername(), student);
             persist();
         }
     }
 
-    public void addAdmin(Staff staff) throws Exception {
+    public void addAdmin(Staff staff) throws ExistingUserException {
         if (loginInformation.containsKey(staff.getUsername())) {
-            throw new Exception();
+            throw new ExistingUserException();
         } else {
             loginInformation.put(staff.getUsername(), staff);
             persist();
@@ -98,7 +96,6 @@ public class UserDatabase implements Serializable {
                 return user;
             }
         }
-        System.out.println("wrong username/password");
         return null;
     }
 

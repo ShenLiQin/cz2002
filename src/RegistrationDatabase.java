@@ -19,15 +19,15 @@ public class RegistrationDatabase implements Serializable{
     }
 
     private static void initialize() throws IOException, ClassNotFoundException {
-        InputStream file = new FileInputStream("Registrations.txt");
-        InputStream buffer = new BufferedInputStream(file);
-        ObjectInput input = new ObjectInputStream(buffer);
-
-        instance = (RegistrationDatabase) input.readObject();
+//        InputStream file = new FileInputStream("Registrations.txt");
+//        InputStream buffer = new BufferedInputStream(file);
+//        ObjectInput input = new ObjectInputStream(buffer);
+//
+//        instance = (RegistrationDatabase) input.readObject();
     }
 
     public static void persist(){
-        FileOutputStream fos = null;
+        FileOutputStream fos;
         ObjectOutputStream out = null;
         try{
             fos = new FileOutputStream("Registrations.txt");
@@ -57,15 +57,15 @@ public class RegistrationDatabase implements Serializable{
         }
     }
 
-    public void addRegistration(RegistrationKey registrationKey) throws Exception {
+    public void addRegistration(RegistrationKey registrationKey) throws ExistingRegistrationException, IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException {
         if (registrations.containsKey(registrationKey)) {
             System.out.println("registration already exists");
-            throw new Exception();
+            throw new ExistingRegistrationException();
         } else {
             for (RegistrationKey registrationKey1 : registrations.keySet()) {
                 if (registrationKey.compareTo(registrationKey1) == 0) {
                     System.out.println("course already registered");
-                    throw new Exception();
+                    throw new ExistingRegistrationException();
                 }
             }
             registrations.put(registrationKey, new Date().getTime());
@@ -80,6 +80,32 @@ public class RegistrationDatabase implements Serializable{
             UserDatabase userDatabase = Factory.getUserDatabase();
             Student student = userDatabase.getStudent(registrationKey.getMatricNumber());
             student.registerCourse(registrationKey.getCourseCode(), registrationKey.getIndexNumber());
+        }
+    }
+
+    public void deleteRegistration(RegistrationKey registrationKey) throws NonExistentRegistrationException, IOException, ClassNotFoundException, NonExistentStudentException, NonExistentCourseException {
+        if (!registrations.containsKey(registrationKey)) {
+            System.out.println("no such registration");
+            throw new NonExistentRegistrationException();
+        } else {
+            for (RegistrationKey registrationKey1 : registrations.keySet()) {
+                if (registrationKey.compareTo(registrationKey1) == 0) {
+                    System.out.println("course already registered");
+                    throw new NonExistentRegistrationException();
+                }
+            }
+            registrations.remove(registrationKey);
+
+            CourseDatabase courseDatabase = Factory.getCourseDatabase();
+            Course course = courseDatabase.getCourse(registrationKey.getCourseCode());
+            Index index = course.getIndex(registrationKey.getIndexNumber());
+            index.dropStudent(registrationKey.getMatricNumber());
+            course.updateIndex(index);
+            courseDatabase.updateCourse(course);
+
+            UserDatabase userDatabase = Factory.getUserDatabase();
+            Student student = userDatabase.getStudent(registrationKey.getMatricNumber());
+            student.deregisterCourse(registrationKey.getCourseCode());
         }
     }
 }

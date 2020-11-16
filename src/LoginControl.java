@@ -19,6 +19,9 @@ public class LoginControl {
             String password = _scanner.nextLine();
 
             user = userDatabase.authenticate(username, password);
+            if (user == null) {
+                System.out.println("wrong username/password");
+            }
 
         } while (user == null);
 
