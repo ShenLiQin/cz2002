@@ -37,7 +37,7 @@ public class STARSApp {
             indexes.add(index1);
             indexes.add(index2);
 
-            Course course = Factory.createCourse("cz2001", "algorithm", new ArrayList<Date>(), "LT2", 3, indexes);
+            Course course = Factory.createCourse("cz2001", "algorithm", new ArrayList<>(), "LT2", 3, indexes);
             courseDataAccessObject.addCourse(course);
 
             registrationDataAccessObject = Factory.getTextRegistrationDataAccess();
