@@ -1,34 +1,41 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Index implements Serializable {
     private int indexNumber;
     private int maxClassSize;
     private int vacancy;
     private ArrayList<String> enrolledStudents;
+    private Queue<String> waitingList;
     private ArrayList<Date> tutorialTimings;
     private String tutorialVenue;
     private ArrayList<Date> laboratoryTimings;
     private String laboratoryVenue;
     private static final long serialVersionUID = 1L;
 
-    public void enrollStudent(String matricNumber) throws ExistingUserException {
-        if (enrolledStudents.contains(matricNumber)) {
-            throw new ExistingUserException();
-        } else {
-            enrolledStudents.add(matricNumber);
-        }
-    }
-
     public Index(int indexNumber, int maxClassSize, ArrayList<Date> tutorialTimings, String tutorialVenue, ArrayList<Date> laboratoryTimings, String laboratoryVenue) {
         this.indexNumber = indexNumber;
         this.maxClassSize = maxClassSize;
         this.enrolledStudents = new ArrayList<>();
+        this.waitingList = new LinkedList<>();
         this.tutorialTimings = tutorialTimings;
         this.tutorialVenue = tutorialVenue;
         this.laboratoryTimings = laboratoryTimings;
         this.laboratoryVenue = laboratoryVenue;
+    }
+
+    public void enrollStudent(String matricNumber) throws ExistingUserException, MaxClassSizeException {
+        if (enrolledStudents.contains(matricNumber)) {
+            throw new ExistingUserException();
+        } else if (enrolledStudents.size() >= maxClassSize) {
+            waitingList.add(matricNumber);
+            throw new MaxClassSizeException();
+        } else {
+            enrolledStudents.add(matricNumber);
+        }
     }
 
     public void dropStudent(String matricNumber) throws NonExistentStudentException {
@@ -36,6 +43,10 @@ public class Index implements Serializable {
             throw new NonExistentStudentException();
         } else {
             enrolledStudents.remove(matricNumber);
+            if (!waitingList.isEmpty()) {
+                enrolledStudents.add(waitingList.remove());
+                //send email
+            }
         }
     }
 

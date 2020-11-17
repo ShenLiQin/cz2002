@@ -2,7 +2,7 @@ import java.io.Serializable;
 
 public abstract class AbstractUser implements Serializable {
     private String username;
-    private String password;
+    private String hash;
     private String name;
     private String school;
     private UserType userType;
@@ -12,9 +12,9 @@ public abstract class AbstractUser implements Serializable {
         return userType;
     }
 
-    public AbstractUser(String name, String school, UserType userType) {
+    public AbstractUser(String name, String school, UserType userType) throws PasswordStorage.CannotPerformOperationException {
         this.username = name+school+"2020";
-        this.password = name+"2020";
+        this.hash = PasswordStorage.createHash(name+"2020");
         this.name = name;
         this.school = school;
         this.userType = userType;
@@ -28,12 +28,12 @@ public abstract class AbstractUser implements Serializable {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getHash() {
+        return hash;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
     public String getName() {

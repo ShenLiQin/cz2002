@@ -88,11 +88,11 @@ public class UserDatabase implements Serializable {
         }
     }
 
-    public AbstractUser authenticate(String username, String password) {
+    public AbstractUser authenticate(String username, String password) throws PasswordStorage.InvalidHashException, PasswordStorage.CannotPerformOperationException {
         AbstractUser user = loginInformation.get(username);
 
         if (user != null) {
-            if (password.equals(user.getPassword())) {
+            if (PasswordStorage.verifyPassword(password, user.getHash())) {
                 return user;
             }
         }

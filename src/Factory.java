@@ -35,15 +35,15 @@ public class Factory {
         }
     }
 
-    public static Student createStudent(String name, String school, int maxAUs) {
+    public static Student createStudent(String name, String school, int maxAUs) throws PasswordStorage.CannotPerformOperationException {
         return new Student(name, school, maxAUs, new Random());
     }
 
-    public static Student createStudent(String name, String school) {
+    public static Student createStudent(String name, String school) throws PasswordStorage.CannotPerformOperationException {
         return new Student(name, school, 23 , new Random());
     }
 
-    public static Staff createStaff(String name, String school) {
+    public static Staff createStaff(String name, String school) throws PasswordStorage.CannotPerformOperationException {
         return new Staff(name, school);
     }
 
@@ -65,5 +65,9 @@ public class Factory {
 
     public static RegistrationKey createRegistrationKey(String matricNumber, String courseCode, int indexNumber) {
         return new RegistrationKey(matricNumber, courseCode, indexNumber);
+    }
+
+    public static IMessanger createEmailMessanger(String senderEmail, String v) {
+        return new EmailMessanger(senderEmail, senderEmail);
     }
 }

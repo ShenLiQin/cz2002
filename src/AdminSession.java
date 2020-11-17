@@ -215,7 +215,7 @@ public class AdminSession implements ISession{
     }
 
     private void changeAccessPeriod(RegistrationDatabase registrationDatabase, RegistrationPeriod newRP) throws Exception {
-        registrationDatabase.setRegistrationPeriod(newRP);
+        registrationDatabase.updateRegistrationPeriod(newRP);
     }
 
     private void addStudent(UserDatabase userDatabase, Student student) throws Exception {

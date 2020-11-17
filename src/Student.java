@@ -8,7 +8,7 @@ public class Student extends AbstractUser {
     private int totalRegisteredAUs;
     private int maxAUs;
 
-    public Student(String name, String school, int maxAUs, Random random) {
+    public Student(String name, String school, int maxAUs, Random random) throws PasswordStorage.CannotPerformOperationException {
         super(name, school, UserType.USER);
         this.matricNumber = "U" + 1000000 + (int)(random.nextFloat() * 90000) + (char)(random.nextInt(26) + 'a');
         this.registeredCourses = new Hashtable<>();

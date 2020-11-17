@@ -48,16 +48,16 @@ public class RegistrationDatabase implements Serializable{
         return registrationPeriod;
     }
 
-    public void setRegistrationPeriod(RegistrationPeriod newRegistrationPeriod) throws Exception {
+    public void updateRegistrationPeriod(RegistrationPeriod newRegistrationPeriod) throws IdenticalRegistrationPeriodException {
         if (registrationPeriod.equals(newRegistrationPeriod)) {
             System.out.println("same registration period");
-//            throw new Exception();
+            throw new IdenticalRegistrationPeriodException();
         } else {
             registrationPeriod = newRegistrationPeriod;
         }
     }
 
-    public void addRegistration(RegistrationKey registrationKey) throws ExistingRegistrationException, IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException {
+    public void addRegistration(RegistrationKey registrationKey) throws ExistingRegistrationException, IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException, MaxClassSizeException {
         if (registrations.containsKey(registrationKey)) {
             System.out.println("registration already exists");
             throw new ExistingRegistrationException();
