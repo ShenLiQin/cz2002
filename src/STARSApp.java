@@ -22,19 +22,19 @@ public class STARSApp {
         IRegistrationDataAccessObject registrationDataAccessObject;
         try {
             userDataAccessObject = Factory.getTextUserDataAccess();
-            Staff newA = Factory.createStaff("richard", "scse");
+            Staff newA = Factory.createStaff("richard", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN);
             userDataAccessObject.addAdmin(newA);
 
-            Student newS1 = Factory.createStudent("ian", "scse", 23);
+            Student newS1 = Factory.createStudent("ian", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN, 23);
             newS1.setMatricNumber("U1941314D");
             userDataAccessObject.addStudent(newS1);
-            Student newS2 = Factory.createStudent("noah", "scse", 21);
+            Student newS2 = Factory.createStudent("noah", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN);
             newS2.setMatricNumber("U1921314F");
             userDataAccessObject.addStudent(newS2);
-            Student newS3 = Factory.createStudent("li qin", "scse", 21);
+            Student newS3 = Factory.createStudent("liqin", School.SCSE, Gender.FEMALE, Nationality.SINGAPOREAN);
             newS3.setMatricNumber("U1941315R");
             userDataAccessObject.addStudent(newS3);
-            Student newS4 = Factory.createStudent("selvira", "scse", 21);
+            Student newS4 = Factory.createStudent("selvira", School.SCSE, Gender.FEMALE, Nationality.SINGAPOREAN);
             newS4.setMatricNumber("U1951316D");
             userDataAccessObject.addStudent(newS4);
 

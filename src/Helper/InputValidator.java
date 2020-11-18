@@ -4,11 +4,14 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ValueObject.Gender;
+import ValueObject.Nationality;
 import ValueObject.School;
 import ValueObject.Venue;
 
 public class InputValidator {
-    public boolean courseStrMatcher(String courseInput) {
+    public static boolean courseStrMatcher(String courseInput) {
         boolean match = false;
         final String regex = "[a-zA-Z]\\d";
         Pattern p = Pattern.compile(regex);
@@ -19,7 +22,7 @@ public class InputValidator {
         return match;
     }
 
-    public boolean schoolStrMatcher(String schoolInput) {
+    public static boolean schoolStrMatcher(String schoolInput) {
         boolean match = false;
         for (School NTUschool : School.values()) {
             if (schoolInput.equals(NTUschool.toString())) {
@@ -27,37 +30,60 @@ public class InputValidator {
             }
         }
         return match;
-
     }
 
-    public boolean indexStrMatcher(String indexInput) {
-
-        final String regex = "\\d";
-        Pattern p = Pattern.compile(regex);
-        Matcher m = p.matcher(indexInput);
-        return (m.find() && indexInput.length() == 6);
+    public static boolean genderStrMatcher(String genderInput) {
+        boolean match = false;
+        for (Gender gender : Gender.values()) {
+            if (genderInput.equals(gender.toString())) {
+                match = true;
+            }
+        }
+        return match;
     }
 
-    public boolean validateTimeInput(String timeStr) {
+    public static boolean nationalityStrMatcher(String nationalityInput) {
+        boolean match = false;
+        for (Nationality nationality : Nationality.values()) {
+            if (nationalityInput.equals(nationality.toString())) {
+                match = true;
+            }
+        }
+        return match;
+    }
+
+    public static boolean indexStrMatcher(String indexInput) {
         boolean valid;
-        try {
-            String[] time = timeStr.split(":");
-            valid = (time[0].length() == 2) && (time[1].equals("00") || time[1].equals("30"));
-        } catch (Exception e) {
+        valid = indexInput.matches("\\d{6}");
+        return valid;
+    }
+
+    public static boolean validateTimeInput(String timeStr) {
+        boolean valid;
+        if(timeStr.matches("\\d{2}:\\d{2}")){
+            String splitTime[] = timeStr.split(":");
+            int hour = Integer.parseInt(splitTime[0]);
+            int min = Integer.parseInt(splitTime[1]);
+            valid = ((hour >= 0 && hour < 24) && (min == 0 || min == 30));
+        }
+        else{
             valid = false;
         }
         return valid;
     }
 
-    public boolean validateTimeInput(String timeStr, String schoolStartTime, String schoolEndTime, int duration) {
+    public static boolean validateTimeInput(String timeStr, String schoolStartTime, String schoolEndTime, int duration) {
+        boolean valid;
         LocalTime classStartTime = LocalTime.parse(timeStr);
         LocalTime classEndTime = classStartTime.plusHours(duration);
         LocalTime earliestTime = LocalTime.parse(schoolStartTime);
         LocalTime latestTime = LocalTime.parse(schoolEndTime);
-        return !classStartTime.isBefore(earliestTime) && !classEndTime.isAfter(latestTime) && !classEndTime.isBefore(earliestTime);
+        valid = !classStartTime.isBefore(earliestTime) && classStartTime.isBefore(latestTime) &&
+                !classEndTime.isAfter(latestTime) && !classEndTime.isBefore(earliestTime);
+        return valid;
     }
 
-    public boolean validateYNInput(String input) {
+    public static boolean validateYNInput(String input) {
         boolean valid;
         List<String> yList = List.of("y", "Y", "yes", "Yes");
         List<String> nList = List.of("n", "N", "no", "No");
@@ -65,7 +91,7 @@ public class InputValidator {
         return valid;
     }
 
-    public boolean validateVenue(String venueInput) {
+    public static boolean validateVenue(String venueInput) {
         boolean match = false;
         for (Venue NTUvenue : Venue.values()) {
             if (venueInput.equals(NTUvenue.toString())) {

@@ -13,8 +13,8 @@ public class Student extends AbstractUser {
     private int totalRegisteredAUs;
     private int maxAUs;
 
-    public Student(String name, String school, int maxAUs, Random random) throws PasswordStorage.CannotPerformOperationException {
-        super(name, school, UserType.USER);
+    public Student(String name, School school, Gender gender, Nationality nationality, int maxAUs, Random random) throws PasswordStorage.CannotPerformOperationException {
+        super(name, school, gender, nationality, UserType.USER);
         this.matricNumber = "U" + 1000000 + (int)(random.nextFloat() * 90000) + (char)(random.nextInt(26) + 'a');
         this.registeredCourses = new Hashtable<>();
         this.totalRegisteredAUs = 0;
@@ -57,8 +57,11 @@ public class Student extends AbstractUser {
         this.registeredCourses = registeredCourses;
     }
 
-    public void setTotalRegisteredAUs(int totalRegisteredAUs) {
-        this.totalRegisteredAUs = totalRegisteredAUs;
+    public void registerAUs(int AUs) {
+        this.totalRegisteredAUs -= AUs;
+    }
+    public void deregisterAUs(int AUs) {
+        this.totalRegisteredAUs += AUs;
     }
 
     public void setMaxAUs(int maxAUs) {

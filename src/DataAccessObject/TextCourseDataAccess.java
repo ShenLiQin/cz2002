@@ -3,6 +3,7 @@ package DataAccessObject;
 import Exception.ExistingCourseException;
 import Exception.NonExistentCourseException;
 import ValueObject.Course;
+import ValueObject.Index;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -81,5 +82,14 @@ public class TextCourseDataAccess implements Serializable, ICourseDataAccessObje
     @Override
     public Course getCourse(String courseCode) {
         return courses.get(courseCode);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        for (Course course : courses.values()) {
+            str.append(course.toString()).append('\n');;
+        }
+        return str.toString();
     }
 }

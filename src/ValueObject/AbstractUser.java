@@ -8,7 +8,9 @@ public abstract class AbstractUser implements Serializable {
     private String username;
     private String hash;
     private String name;
-    private String school;
+    private Gender gender;
+    private Nationality nationality;
+    private School school;
     private UserType userType;
     private static final long serialVersionUID = 1L;
 
@@ -16,12 +18,30 @@ public abstract class AbstractUser implements Serializable {
         return userType;
     }
 
-    public AbstractUser(String name, String school, UserType userType) throws PasswordStorage.CannotPerformOperationException {
-        this.username = name+school+"2020";
+    public AbstractUser(String name, School school, Gender gender, Nationality nationality, UserType userType) throws PasswordStorage.CannotPerformOperationException {
+        this.username = name+school.toString().toLowerCase()+"2020";
         this.hash = PasswordStorage.createHash(name+"2020");
+        this.gender = gender;
+        this.nationality = nationality;
         this.name = name;
         this.school = school;
         this.userType = userType;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Nationality getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(Nationality nationality) {
+        this.nationality = nationality;
     }
 
     public String getUsername() {
@@ -48,11 +68,11 @@ public abstract class AbstractUser implements Serializable {
         this.name = name;
     }
 
-    public String getSchool() {
+    public School getSchool() {
         return school;
     }
 
-    public void setSchool(String school) {
+    public void setSchool(School school) {
         this.school = school;
     }
 

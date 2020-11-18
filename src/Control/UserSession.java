@@ -1,7 +1,7 @@
 package Control;
 
-import DataAccessObject.IUserDataAccessObject;
 import Helper.Factory;
+import Helper.InputValidator;
 import Helper.PasswordStorage;
 import ValueObject.AbstractUser;
 import ValueObject.Course;
@@ -10,9 +10,10 @@ import ValueObject.Student;
 import Exception.*;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserSession implements ISession{
     private final Scanner _scanner;
@@ -39,6 +40,7 @@ public class UserSession implements ISession{
         int choice;
 
         do {
+            System.out.println("\t\twelcome " + _user.getName());
             System.out.println("_______User Dashboard_______");
             System.out.println("1. Add Course");
             System.out.println("2. Drop Course");
@@ -53,6 +55,64 @@ public class UserSession implements ISession{
             _scanner.nextLine();
 
             switch (choice) {
+                case 1 -> {
+                    String regex = "[0-9]+";
+                    Pattern digits = Pattern.compile(regex);
+
+                    //get course input
+                    boolean validCourseCode;
+                    String courseCodeInput;
+                    do {
+                        System.out.println("Enter course code: ");
+                        courseCodeInput = _scanner.nextLine();
+
+                        validCourseCode = InputValidator.courseStrMatcher(courseCodeInput);
+                        Matcher m = digits.matcher(courseCodeInput.substring(2));
+                        if (!validCourseCode) {
+                            System.out.println("Please enter a course code in its valid format.");
+                        }
+                    } while (!validCourseCode);
+
+                    //get index input
+                    boolean validIndex = false;
+                    String indexInputStr = "";
+                    do {
+                        System.out.println("Enter index: ");
+                        indexInputStr = _scanner.nextLine();
+
+                        Matcher m = digits.matcher(indexInputStr);
+                        if (indexInputStr.length() == 6 && m.matches()) {
+                            int indexInput = Integer.parseInt(indexInputStr);
+                            addCourse(courseCodeInput, indexInput);
+                            validIndex = true;
+                        } else {
+                            System.out.println("Please enter an index in its valid format.");
+                        }
+                    } while (validIndex == false);
+                }
+                case 2 -> {
+                    String regex = "[0-9]+";
+                    Pattern digits = Pattern.compile(regex);
+
+                    //get course input
+                    boolean validCode = false;
+                    String courseCodeInput = "";
+                    do {
+                        printRegisteredCourse();
+                        System.out.println("Enter course code: ");
+                        courseCodeInput = _scanner.nextLine();
+
+                        Matcher m = digits.matcher(courseCodeInput.substring(2));
+                        if (courseCodeInput.length() == 6 && Character.isLetter(courseCodeInput.charAt(0)) && Character.isLetter(courseCodeInput.charAt(1))
+                                && m.matches()) {
+                            dropCourse(courseCodeInput);
+                            validCode = true;
+                        } else {
+                            System.out.println("Please enter a course code in its valid format.");
+                        }
+                    } while (validCode == false);
+                }
+
                 case 3 -> {
                     //print registered course
                     printRegisteredCourse();
@@ -65,10 +125,11 @@ public class UserSession implements ISession{
                     Course course = null;
                     do {
                         try {
+                            System.out.println(Factory.getTextCourseDataAccess().toString());
                             System.out.print("course code: ");
                             String courseCode = _scanner.nextLine();
                             //check courseCode format
-                            courseFormat = checkCourseCodeFormat(courseCode);
+                            courseFormat = InputValidator.courseStrMatcher(courseCode);
                             course = Factory.getTextCourseDataAccess().getCourse(courseCode);
                             //check if course exist in database
                             if(course == null){
@@ -77,7 +138,7 @@ public class UserSession implements ISession{
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    } while (courseFormat == false || course == null);
+                    } while (!courseFormat || course == null);
 
                     //enter which index user want
 
@@ -85,13 +146,13 @@ public class UserSession implements ISession{
                     Index index = null;
                     do {
                         try {
+                            System.out.println(course.allInfoToString());
                             System.out.print("index number: ");
-                            int indexNumber = _scanner.nextInt();
-                            _scanner.nextLine();
+                            String indexNumber = _scanner.nextLine();
 
                             //check if index is 6 integers
-                            indexFormat = checkIndexFormat(indexNumber);
-                            index = course.getIndex(indexNumber);
+                            indexFormat = InputValidator.indexStrMatcher(indexNumber);
+                            index = course.getIndex(Integer.parseInt(indexNumber));
                             //check if index exist in database
                             if(index == null){
                                 System.out.println("Index does not exist");
@@ -121,17 +182,19 @@ public class UserSession implements ISession{
                     boolean userRegisteredCourse = false;
                     do {
                         try {
+                            System.out.println("_______All Available Courses_______");
+                            System.out.println(Factory.getTextCourseDataAccess().toString());
                             System.out.print("Enter course code: ");
                             String courseCode = _scanner.nextLine();
                             //check courseCode format
-                            courseFormat = checkCourseCodeFormat(courseCode);
+                            courseFormat = InputValidator.courseStrMatcher(courseCode);
                             course = Factory.getTextCourseDataAccess().getCourse(courseCode);
                             //check if course exist in database
                             if(course == null){
                                 System.out.println("Course does not exist");
                             }
                             //check if user registered this course before
-                            userRegisteredCourse = gotRegisterThisCourse(_user, courseCode);
+                            userRegisteredCourse = _user.getRegisteredCourses().containsKey(courseCode);
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -146,13 +209,13 @@ public class UserSession implements ISession{
                     //user new index number
                     Index newIndexNumber = null;
                     do {
+                        System.out.println(course.allInfoToString());
                         System.out.print("Enter new index number: ");
-                        int indexNumber = _scanner.nextInt();
-                        _scanner.nextLine();
+                        String indexNumber = _scanner.nextLine();
 
                         //check if index is 6 integers
-                        indexFormat = checkIndexFormat(indexNumber);
-                        newIndexNumber = course.getIndex(indexNumber);
+                        indexFormat = InputValidator.indexStrMatcher(indexNumber);
+                        newIndexNumber = course.getIndex(Integer.parseInt(indexNumber));
                         //check if index exist in database
                         if(newIndexNumber == null) {
                             System.out.println("Index does not exist");
@@ -196,14 +259,14 @@ public class UserSession implements ISession{
                             System.out.print("Enter course code: ");
                             String courseCode = _scanner.nextLine();
                             //check courseCode format
-                            courseFormat = checkCourseCodeFormat(courseCode);
+                            courseFormat = InputValidator.courseStrMatcher(courseCode);
                             course = Factory.getTextCourseDataAccess().getCourse(courseCode);
                             //check if course exist in database
                             if(course == null){
                                 System.out.println("Course does not exist");
                             }
                             //check if user registered this course before
-                            userRegisteredCourse = gotRegisterThisCourse(_user, courseCode);
+                            userRegisteredCourse = _user.getRegisteredCourses().containsKey(courseCode);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -304,67 +367,53 @@ public class UserSession implements ISession{
         try {
             _user = Factory.getTextUserDataAccess().getStudent(_user.getMatricNumber());
             Hashtable<String, Integer> registered = _user.getRegisteredCourses();
-            System.out.println("Course code | Index");
-            registered.forEach((key, value) -> System.out.println(key + ":" + value));
+            System.out.println("_______Registered Courses_______");
+            System.out.println("Course code |\t Index");
+            registered.forEach((key, value) -> System.out.println(key + ":\t" + value));
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("error reading file");
         }
     }
 
-    public static boolean isNumeric(String str){
-        for (char c : str.toCharArray()){
-            if (!Character.isDigit(c)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean checkCourseCodeFormat(String courseCode){
-        char c1 = courseCode.charAt(0);
-        char c2 = courseCode.charAt(1);
-
-        if (courseCode.length() != 6) {
-            System.out.println("Wrong format");
-            return false;
-        }
-        else if((c1 < 'a' || c1 > 'z') && (c1 < 'A' || c1 > 'Z')){ //first letter not a char
-            System.out.println("Wrong format");
-            return false;
-        }
-        else if((c2 < 'a' || c2 > 'z') && (c2 < 'A' || c2 > 'Z')){ // second letter not a char
-            System.out.println("Wrong format");
-            return false;
-        }
-        else if(!isNumeric(courseCode.substring(2, 6))){ //last 4 not number
-            System.out.println("Wrong format");
-            return false;
-        }
-        else{
-            return true;
+    private void addCourse(String courseCode, int indexNumber) {
+        printRegisteredCourse();
+        String matricNumber = _user.getMatricNumber();
+        try {
+            StudentCourseRegistrar studentCourseRegistration = Factory.createStudentCourseRegistrar();
+            studentCourseRegistration.addRegistration(matricNumber, courseCode, indexNumber);
+        } catch (NonExistentUserException e) {
+            System.out.println("no such student");
+        } catch (InsufficientAUsException e) {
+            System.out.println("Course exceeds AU limit.");
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
-    public boolean checkIndexFormat(int indexNumber){
-        if(indexNumber < 100000 || indexNumber > 999999){
-            System.out.println("Wrong format");
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
+    private void dropCourse(String courseCode) {
+        String matricNumber = _user.getMatricNumber();
 
+        //get index number of course that student wants to drop, confirms course is already reg
+        Hashtable<String, Integer> registeredCourses = _user.getRegisteredCourses();
+        int indexNumber = 0;
 
-    public boolean gotRegisterThisCourse(Student student, String courseCode){
-        Hashtable<String, Integer> userCourseList = student.getRegisteredCourses();
-        boolean userRegisteredCourse = userCourseList.containsKey(courseCode);
-        if(!userRegisteredCourse){
-            System.out.println("You did not register for this course. Try again.");
-            return false;
+        if (registeredCourses.containsKey(courseCode)) {
+            indexNumber = registeredCourses.get(courseCode);
+        } else {
+            System.out.println("Course has not been registered yet.");
         }
-        else{
-            return true;
+
+        try {
+            StudentCourseRegistrar studentCourseRegistration = Factory.createStudentCourseRegistrar();
+            studentCourseRegistration.deleteRegistration(matricNumber, courseCode, indexNumber);
+        } catch (NonExistentCourseException e) {
+            System.out.println("no such course");
+        } catch (NonExistentUserException e) {
+            System.out.println("no such student");
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 }

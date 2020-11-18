@@ -40,16 +40,16 @@ public class Factory {
         }
     }
 
-    public static Student createStudent(String name, String school, int maxAUs) throws PasswordStorage.CannotPerformOperationException {
-        return new Student(name, school, maxAUs, new Random());
+    public static Student createStudent(String name, School school, Gender gender, Nationality nationality, int maxAUs) throws PasswordStorage.CannotPerformOperationException {
+        return new Student(name, school, gender, nationality, maxAUs, new Random());
     }
 
-    public static Student createStudent(String name, String school) throws PasswordStorage.CannotPerformOperationException {
-        return new Student(name, school, 21 , new Random());
+    public static Student createStudent(String name, School school, Gender gender, Nationality nationality) throws PasswordStorage.CannotPerformOperationException {
+        return new Student(name, school, gender, nationality, 23 , new Random());
     }
 
-    public static Staff createStaff(String name, String school) throws PasswordStorage.CannotPerformOperationException {
-        return new Staff(name, school);
+    public static Staff createStaff(String name, School school, Gender gender, Nationality nationality) throws PasswordStorage.CannotPerformOperationException {
+        return new Staff(name, school, gender, nationality);
     }
 
     public static Index createIndex(int indexNumber, int maxClassSize, Hashtable<DayOfWeek, List<LocalTime>> tutorialTimings, Venue tutorialVenue, Hashtable<DayOfWeek, List<LocalTime>> laboratoryTimings, Venue laboratoryVenue) {

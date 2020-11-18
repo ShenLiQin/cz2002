@@ -126,14 +126,18 @@ public class Course implements Serializable {
         indexes.replace(index.getIndexNumber(), index);
     }
 
-    @Override
-    public String toString() {
+    public String StudentListToString() {
         StringBuilder str = new StringBuilder();
         str.append("courseCode: ").append(courseCode).append(",\t").append("courseName: ").append(courseName).append('\n');
         for (Index index : indexes.values()) {
             str.append(index.toString()).append('\n');
         }
         return str.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "courseCode : " + courseCode + "\t\t" + "courseName: " + courseName + "\t\t" +  "school: " + school;
     }
 
     public String allInfoToString(){
@@ -143,6 +147,15 @@ public class Course implements Serializable {
         str.append("\tschool: ").append(school);
         str.append("\nlecture timings: ").append(lectureTimings).append("\tlecture venue: ").append(lectureVenue);
         str.append("\nindex group numbers: ");
+        for (Index index : indexes.values()) {
+            str.append('\n').append(index.getIndexNumber());
+        }
+        return str.toString();
+    }
+
+    public String indexNumberToString() {
+        StringBuilder str = new StringBuilder();
+        str.append("courseCode : ").append(courseCode).append("\t\t").append("courseName: ").append(courseName).append("\t\t");
         for (Index index : indexes.values()) {
             str.append('\n').append(index.getIndexNumber());
         }

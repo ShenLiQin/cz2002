@@ -9,7 +9,6 @@ import ValueObject.*;
 import Exception.*;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -42,6 +41,7 @@ public class AdminSession implements ISession{
         int choice;
 
         do {
+            System.out.println("\t\twelcome " + _user.getName());
             System.out.println("_______Admin Dashboard_______");
             System.out.println("1. Edit student access period");
             System.out.println("2. Add a student (name, matric number, gender, nationality, etc)");
@@ -70,35 +70,62 @@ public class AdminSession implements ISession{
                     }
                 }
                 case 2 -> {
-                    //add try catch system.out errors
-                    System.out.print("name: ");
-                    String name = _scanner.nextLine();
-                    System.out.print("school: ");
-                    String school = _scanner.nextLine();
-                    System.out.print("maxAUs: ");
-                    int maxAUs = _scanner.nextInt();
                     try {
-                        Student newStudent = Factory.createStudent(name, school, maxAUs);
+                        String name = "";
+                        do {
+                            System.out.print("name: ");
+                            name = _scanner.nextLine();
+                            if (name.matches(".*\\d.*")) {
+                                System.out.println("name cannot contain number");
+                            }
+                        }while (name.matches(".*\\d.*"));
+
+                        System.out.print("gender: ");
+                        Gender gender = getGender();
+                        System.out.print("nationality: ");
+                        Nationality nationality = getNationality();
+                        System.out.print("school: ");
+                        School school = getSchool();
+
+                        int maxAUs = 0;
+                        do {
+                            System.out.print("maxAUs: ");
+                            try {
+                                maxAUs = _scanner.nextInt();
+                            } catch (InputMismatchException e) {
+                                System.out.println("Pls input only numbers");
+                                _scanner.nextLine();
+                            }
+                            if (maxAUs <25 && maxAUs >=0)
+                            {
+                                System.out.println("you have set MaxAUs as " + maxAUs);
+                            }
+                            else {
+                                System.out.println("Number of AUs cannot be 25 or more");
+                            }
+                        } while(maxAUs >=25 || maxAUs <= 0);
+
+                        Student newStudent = Factory.createStudent(name, school, gender, nationality, maxAUs);
                         addStudent(Factory.getTextUserDataAccess(), newStudent);
-                    } catch (Exception e) {
+
+                    }catch (Exception e) {
                         e.printStackTrace();
                     }
+
                 }
                 case 3 -> {
                     Course course = null;
-                    InputValidator inputValidator = new InputValidator();
                     String courseCode;
                     String courseName = "";
                     School school;
 
-                    boolean validCourse = true;
                     System.out.print("enter a course code to add/update: ");
-                    courseCode = getcourseCode(inputValidator);
+                    courseCode = getcourseCode();
 
                     try {
                         course = getCourse(Factory.getTextCourseDataAccess(), courseCode);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (ClassNotFoundException | IOException e1) {
+                        System.out.println("file/class not found");
                     }
                     if (course == null) {
                         Hashtable<DayOfWeek, List<LocalTime>> lectureTimings = new Hashtable<>();
@@ -108,41 +135,45 @@ public class AdminSession implements ISession{
                         ArrayList<Index> indexes = new ArrayList<>();
 
                         try {
-                            System.out.println("no course found, input some details to add the course.");
+                            System.out.println(courseCode + " not found in the database.");
+                            System.out.println("____input the following details to add the course____"); //changed
                             System.out.print("course name: ");
                             courseName = _scanner.nextLine();
 
                             System.out.print("school: ");
-                            school = getSchool(inputValidator);
+                            school = getSchool();
 
                             System.out.print("number of AUs (1-4): ");
-                            AUs = getInt(inputValidator, "academic units", 1, 5);
+                            AUs = getInt("academic units", 1, 5);
 
                             System.out.println("____add a day and time period of a lecture session____");
                             boolean contAdd;
                             do {
-                                lectureDay = getSessionDay(inputValidator);
-                                lectureTiming = getSessionTiming(inputValidator, "lecture");
+                                lectureDay = getSessionDay();
+                                lectureTiming = getSessionTiming("lecture");
                                 lectureTimings.put(lectureDay, lectureTiming);
-                                contAdd = getYNBool(inputValidator, "lecture Session");
+                                contAdd = getYNBool("lecture Session");
                             } while (contAdd);
 
-                            Venue lectureVenue = getSessionVenue(inputValidator, "lecture");
+                            Venue lectureVenue = getSessionVenue("lecture");
                             System.out.println("course details have been recorded.\n");
 
-                            int newIndexGroup = 100000;
+                            String newIndexGroupsubStr = courseCode.substring(2); //get the 4 digits
+                            int newIndexGroup = Integer.parseInt(newIndexGroupsubStr)*100;
                             contAdd = false;
                             int maxSize;
 
                             do {
-                                newIndexGroup += 1;
                                 System.out.println("____add details for new index group " + newIndexGroup
                                         + " of the course____");
                                 System.out.print("maximum class size of the index group: ");
-                                maxSize = getInt(inputValidator, "maximum class size", 0);
+                                maxSize = getInt("maximum class size", 0);
                                 Index newIndex = Factory.createIndex(newIndexGroup, maxSize);
                                 indexes.add(newIndex);
-                                contAdd = getYNBool(inputValidator, "index group");
+                                contAdd = getYNBool("index group");
+                                if(contAdd){
+                                    newIndexGroup++;
+                                }
                             } while (contAdd);
 
                             course = Factory.createCourse(courseCode, courseName, school, lectureTimings, lectureVenue, AUs, indexes);
@@ -164,7 +195,7 @@ public class AdminSession implements ISession{
                             System.out.println("5. Add/Update index group");
                             System.out.println("6. Quit");
 
-                            option = getInt(inputValidator, "option", 1, 6);
+                            option = getInt("option", 1, 7);
 
                             try {
                                 switch (option) {
@@ -175,26 +206,26 @@ public class AdminSession implements ISession{
                                     }
                                     case 2 -> {
                                         System.out.print("enter new school: ");
-                                        school = getSchool(inputValidator);
+                                        school = getSchool();
                                         course.setSchool(school);
                                     }
                                     case 3->{
-                                        DayOfWeek lectureDay = getSessionDay(inputValidator);
-                                        List<LocalTime> lectureTiming = getSessionTiming(inputValidator, "lecture");
+                                        DayOfWeek lectureDay = getSessionDay();
+                                        List<LocalTime> lectureTiming = getSessionTiming("lecture");
                                         Hashtable<DayOfWeek, List<LocalTime>> lectureTimings = course.getLectureTimings();
                                         lectureTimings.put(lectureDay, lectureTiming);
                                         course.setLectureTimings(lectureTimings);
                                     }
                                     case 4->{
-                                        Venue lectureVenue = getSessionVenue(inputValidator, "lecture");
+                                        Venue lectureVenue = getSessionVenue("lecture");
                                         course.setLectureVenue(lectureVenue);
                                     }
                                     case 5->{
                                         System.out.print("enter an index to add/update: ");
                                         String indexInput = _scanner.nextLine();
-                                        boolean validIndexInput = inputValidator.indexStrMatcher(indexInput);
+                                        boolean validIndexInput = InputValidator.indexStrMatcher(indexInput);
                                         if(validIndexInput){
-                                            course = addUpdateIndex(inputValidator, course, Integer.parseInt(indexInput));
+                                            course = addUpdateIndex(course, Integer.parseInt(indexInput));
                                         }
                                         else{
                                             System.out.println("index input is invalid.");
@@ -206,17 +237,16 @@ public class AdminSession implements ISession{
                                 System.out.println("file/class not found");
                             }
 
-                        } while (option != 5);
+                        } while (option != 6);
 
                     }
                 }
                 case 4 -> {
                     Course course = null;
-                    InputValidator inputValidator = new InputValidator();
                     System.out.print("course code: ");
                     do {
                         try {
-                            String courseCode = getcourseCode(inputValidator);
+                            String courseCode = getcourseCode();
                             course = Factory.getTextCourseDataAccess().getCourse(courseCode);
                             if (course == null) {
                                 System.out.println("no such course");
@@ -226,9 +256,10 @@ public class AdminSession implements ISession{
                             System.out.println("file/class not found");
                         }
                     } while (course == null);
+                    System.out.println(course.allInfoToString());
                     try {
                         System.out.print("index number: ");
-                        int indexNumber = getIndex(inputValidator);
+                        int indexNumber = getIndex();
                         System.out.println("vacancies: " + checkForIndexVacancy(course, indexNumber));
                     } catch (NonExistentIndexException e) {
                         System.out.println("no such index");
@@ -239,9 +270,11 @@ public class AdminSession implements ISession{
                     Course course = null;
                     do {
                         try {
+                            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+                            System.out.println(courseDataAccessObject.toString());
                             System.out.print("course code: ");
                             String courseCode = _scanner.nextLine();
-                            course = Factory.getTextCourseDataAccess().getCourse(courseCode);
+                            course = courseDataAccessObject.getCourse(courseCode);
                             if (course == null) {
                                 System.out.println("no such course");
                             }
@@ -252,6 +285,7 @@ public class AdminSession implements ISession{
                     Index index = null;
                     do {
                         try {
+                            System.out.println(course.allInfoToString());
                             System.out.print("index number: ");
                             int indexNumber = _scanner.nextInt();
                             _scanner.nextLine();
@@ -269,9 +303,11 @@ public class AdminSession implements ISession{
                     Course course = null;
                     do {
                         try {
+                            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+                            System.out.println(courseDataAccessObject.toString());
                             System.out.print("course code: ");
                             String courseCode = _scanner.nextLine();
-                            course = Factory.getTextCourseDataAccess().getCourse(courseCode);
+                            course = courseDataAccessObject.getCourse(courseCode);
                             if (course == null) {
                                 System.out.println("no such course");
                             }
@@ -279,15 +315,12 @@ public class AdminSession implements ISession{
                             e.printStackTrace();
                         }
                     } while (course == null);
-                    System.out.println(course.toString());
+                    System.out.println(course.StudentListToString());
                 }
                 case 7 -> loggedIn = false;
                 case 8 -> exit();
             }
-
         } while (choice > 0 && choice < 7);
-
-
     }
 
     private Course getCourse(ICourseDataAccessObject courseDataAccessObject, String courseCode) {
@@ -332,12 +365,12 @@ public class AdminSession implements ISession{
         return course.checkVacancies(indexNum);
     }
 
-    private Course addUpdateIndex(InputValidator inputValidator, Course course, int index){
+    private Course addUpdateIndex(Course course, int index){
         Hashtable<DayOfWeek, List<LocalTime>> laboratoryTimings;
         Hashtable<DayOfWeek, List<LocalTime>> tutorialTimings;
         Index existingIndex = course.getIndex(index);
         if(existingIndex == null){
-            Index newIndex = createNewIndex(inputValidator, index);
+            Index newIndex = createNewIndex(index);
             course.addIndex(newIndex);
             existingIndex = newIndex;
         }
@@ -352,7 +385,7 @@ public class AdminSession implements ISession{
             System.out.println("5. Update Maximum Class Size");
             System.out.println("6. Update Vacancies");
             System.out.println("7. Return to previous menu");
-            option = getInt(inputValidator, "option", 1, 8);
+            option = getInt("option", 1, 8);
 
             switch(option){
                 case 1 ->{
@@ -360,8 +393,8 @@ public class AdminSession implements ISession{
                     if(tutorialTimings == null){
                         tutorialTimings = new Hashtable<>();
                     }
-                    DayOfWeek sessionDay = getSessionDay(inputValidator);
-                    List<LocalTime> sessionTiming = getSessionTiming(inputValidator, "tutorial");
+                    DayOfWeek sessionDay = getSessionDay();
+                    List<LocalTime> sessionTiming = getSessionTiming("tutorial");
                     tutorialTimings.put(sessionDay, sessionTiming);
                     existingIndex.setTutorialTimings(tutorialTimings);
                 }
@@ -370,27 +403,27 @@ public class AdminSession implements ISession{
                     if(laboratoryTimings == null){
                         laboratoryTimings = new Hashtable<>();
                     }
-                    DayOfWeek sessionDay = getSessionDay(inputValidator);
-                    List<LocalTime> sessionTiming = getSessionTiming(inputValidator, "laboratory");
+                    DayOfWeek sessionDay = getSessionDay();
+                    List<LocalTime> sessionTiming = getSessionTiming("laboratory");
                     laboratoryTimings.put(sessionDay, sessionTiming);
                     existingIndex.setLaboratoryTimings(laboratoryTimings);
                 }
                 case 3->{
-                    Venue tutorialVenue = getSessionVenue(inputValidator, "tutorial");
+                    Venue tutorialVenue = getSessionVenue("tutorial");
                     existingIndex.setTutorialVenue(tutorialVenue);
                 }
                 case 4->{
-                    Venue laboratoryVenue = getSessionVenue(inputValidator, "laboratory");
+                    Venue laboratoryVenue = getSessionVenue("laboratory");
                     existingIndex.setTutorialVenue(laboratoryVenue);
                 }
                 case 5->{
                     System.out.print("update maximum class size to: ");
-                    int maxClassSize = getInt(inputValidator, "maximum class size", 1);
+                    int maxClassSize = getInt("maximum class size", 1);
                     existingIndex.setMaxClassSize(maxClassSize);
                 }
                 case 6->{
                     System.out.print("update vacancies to: ");
-                    int vacancies = getInt(inputValidator, "vacancies", 1);
+                    int vacancies = getInt("vacancies", 1);
                     System.out.println(vacancies);
                     existingIndex.setVacancy(vacancies);
                 }
@@ -401,21 +434,21 @@ public class AdminSession implements ISession{
         return course;
     }
 
-    private Index createNewIndex(InputValidator inputValidator, int newIndexGroup){
+    private Index createNewIndex(int newIndexGroup){
         System.out.println("____add details for new index group " + newIndexGroup
                 + " of the course____");
         System.out.print("maximum class size of the index group: ");
-        int maxSize = getInt(inputValidator, "maximum class size", 0);
+        int maxSize = getInt("maximum class size", 0);
         Index newIndex = Factory.createIndex(newIndexGroup, maxSize);
         return newIndex;
     }
 
-    private String getcourseCode(InputValidator inputValidator){
+    private String getcourseCode(){
         String courseCode = "";
         boolean validCourse;
         do {
             courseCode = _scanner.nextLine();
-            validCourse = inputValidator.courseStrMatcher(courseCode);
+            validCourse = InputValidator.courseStrMatcher(courseCode);
             if (!validCourse) {
                 System.out.println("course code is not valid.");
                 System.out.print("please re-enter course code: ");
@@ -424,12 +457,12 @@ public class AdminSession implements ISession{
         return courseCode;
     }
 
-    private int getIndex(InputValidator inputValidator){
+    private int getIndex(){
         String indexStr;
         boolean validIndex;
         do {
             indexStr = _scanner.nextLine();
-            validIndex = inputValidator.indexStrMatcher(indexStr);
+            validIndex = InputValidator.indexStrMatcher(indexStr);
             if (!validIndex) {
                 System.out.println("index number is not valid.");
                 System.out.print("please re-enter index number: ");
@@ -437,12 +470,13 @@ public class AdminSession implements ISession{
         } while (!validIndex);
         return Integer.parseInt(indexStr);
     }
-    private School getSchool(InputValidator inputValidator){
+
+    private School getSchool(){
         boolean validSchool = false;
         String school = "";
         do {
             school = _scanner.nextLine().toUpperCase();
-            validSchool = inputValidator.schoolStrMatcher(school);
+            validSchool = InputValidator.schoolStrMatcher(school);
             if (!validSchool) {
                 System.out.println("school does not exist in ntu.");
                 System.out.println("please re-enter a valid school: ");
@@ -451,26 +485,55 @@ public class AdminSession implements ISession{
         return School.valueOf(school);
     }
 
-    private List<LocalTime> getSessionTiming(InputValidator inputValidator, String sessionType){
+    private Gender getGender(){
+        boolean validGender;
+        String gender;
+        do {
+            gender = _scanner.nextLine().toUpperCase();
+            validGender = InputValidator.genderStrMatcher(gender);
+            if (!validGender) {
+                System.out.println("invalid gender: only male/female allowed.");
+                System.out.println("please re-enter a gender: ");
+            }
+        } while (!validGender);
+        return Gender.valueOf(gender);
+    }
+
+    private Nationality getNationality(){
+        boolean validNationality;
+        String nationality;
+        do {
+            nationality = _scanner.nextLine().toUpperCase();
+            validNationality = InputValidator.nationalityStrMatcher(nationality);
+            if (!validNationality) {
+                System.out.println("invalid nationality.");
+                System.out.println("please re-enter a valid nationality: ");
+            }
+        } while (!validNationality);
+        return Nationality.valueOf(nationality);
+    }
+
+    private List<LocalTime> getSessionTiming(String sessionType){
         List<LocalTime> startEndTime = new ArrayList<>();
         boolean proceed = false;
         String startTime = "00:00";
         String schoolStartTime = "07:30";
-        String schoolEndTime = "21:31";
+        String schoolEndTime = "21:30";
+        int maxDuration = 5;
         int duration = 0;
         do {
-            System.out.print("enter the duration of the " + sessionType + "(hrs): ");
-            duration = getInt(inputValidator, "duration", 0);
+            System.out.print("enter the duration (1-5) of the " + sessionType + "(hrs): ");
+            duration = getInt("duration of lecture(hrs)", 1, maxDuration+1);
             System.out.print("enter the start time in HH:MM(30 min interval, e.g. 16:30): ");
             do{
                 startTime = _scanner.nextLine();
-                proceed = inputValidator.validateTimeInput(startTime);
+                proceed = InputValidator.validateTimeInput(startTime);
                 if(!proceed){
                     System.out.println("invalid time format.");
                     System.out.print("please re-enter start time: ");
                 }
             }while(!proceed);
-            proceed = inputValidator.validateTimeInput(startTime, schoolStartTime, schoolEndTime, duration);
+            proceed = InputValidator.validateTimeInput(startTime, schoolStartTime, schoolEndTime, duration);
             if(!proceed){
                 System.out.println("timing is invalid. school should start earliest at 07:30 and end latest by 21:30.\n");
             }
@@ -484,21 +547,21 @@ public class AdminSession implements ISession{
         return startEndTime;
     }
 
-    private DayOfWeek getSessionDay(InputValidator inputValidator){
+    private DayOfWeek getSessionDay(){
         int day = -1;
         System.out.print("select a working day(1 - 6, e.g. 1 -> Monday): ");
-        day = getInt(inputValidator, "selection", 1, 7);
+        day = getInt("selection", 1, 7);
         return DayOfWeek.of(day);
     }
 
-    private Venue getSessionVenue(InputValidator inputValidator, String sessionType){
+    private Venue getSessionVenue(String sessionType){
         boolean validVenue = false;
         String venue;
         System.out.println("\nthe valid venues in NTU are LT(1-5), TR(1-5), SWL1&2, HWL1&2.");
         System.out.print("add the venue for the " + sessionType + " session(s): ");
         do{
             venue = _scanner.nextLine().toUpperCase();
-            validVenue = inputValidator.validateVenue(venue);
+            validVenue = InputValidator.validateVenue(venue);
             if(!validVenue){
                 System.out.print("please re-enter a valid venue in NTU: ");
             }
@@ -506,7 +569,7 @@ public class AdminSession implements ISession{
         return Venue.valueOf(venue);
     }
 
-    private int getInt(InputValidator inputValidator, String info, int startRange, int endRange){
+    private int getInt(String info, int startRange, int endRange){
         boolean validInt;
         int intInput = -1;
         do{
@@ -530,7 +593,7 @@ public class AdminSession implements ISession{
         return intInput;
     }
 
-    private int getInt(InputValidator inputValidator, String info, int startRange){
+    private int getInt(String info, int startRange){
         boolean validInt;
         int intInput = -1;
 
@@ -555,13 +618,13 @@ public class AdminSession implements ISession{
         return intInput;
     }
 
-    private boolean getYNBool(InputValidator inputValidator, String info){
+    private boolean getYNBool(String info){
         System.out.print("do you wish to continue adding a " + info + " (Y/N)? ");
         boolean proceed;
         String ynStr;
         do{
             ynStr = _scanner.nextLine();
-            proceed = inputValidator.validateYNInput(ynStr);
+            proceed = InputValidator.validateYNInput(ynStr);
             if(!proceed){
                 System.out.print("please re-enter either Y or N: ");
             }

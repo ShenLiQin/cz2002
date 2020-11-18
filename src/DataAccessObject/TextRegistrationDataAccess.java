@@ -74,7 +74,7 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
     }
 
     @Override
-    public void addRegistration(RegistrationKey registrationKey) throws ExistingRegistrationException, IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException, MaxClassSizeException {
+    public void addRegistration(RegistrationKey registrationKey) throws ExistingRegistrationException, IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException, MaxClassSizeException, NonExistentUserException {
         if (registrations.containsKey(registrationKey)) {
             System.out.println("registration already exists");
             throw new ExistingRegistrationException();
@@ -92,6 +92,8 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
         IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
         Student student = userDataAccess.getStudent(registrationKey.getMatricNumber());
         student.registerCourse(registrationKey.getCourseCode(), registrationKey.getIndexNumber());
+        student.registerAUs(course.getAUs());
+        userDataAccess.updateStudent(student);
     }
 
     @Override
@@ -112,6 +114,7 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
         IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
         Student student = userDataAccess.getStudent(registrationKey.getMatricNumber());
         student.deregisterCourse(registrationKey.getCourseCode());
+        student.deregisterAUs(course.getAUs());
         userDataAccess.updateStudent(student);
     }
 }
