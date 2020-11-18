@@ -11,30 +11,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b2a96ea-68a5-4f89-8ab5-21e919bb5e30" name="Default Changelist" comment="added most functionalities">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Courses.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/Courses.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Registrations.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/Registrations.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Users.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/Users.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Control/AdminSession.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Control/AdminSession.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Control/StudentCourseRegistrar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Control/StudentCourseRegistrar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Control/UserSession.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Control/UserSession.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/IRegistrationDataAccessObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/DataAccessObject/IRegistrationDataAccessObject.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextCourseDataAccess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextCourseDataAccess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextRegistrationDataAccess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextRegistrationDataAccess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Exception/MaxClassSizeException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/InputValidator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Helper/InputValidator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/Index.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/ValueObject/Index.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Control/AdminSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/AdminSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Control/StudentCourseRegistrar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/StudentCourseRegistrar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Control/UserSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/UserSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/IRegistrationDataAccessObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataAccessObject/IRegistrationDataAccessObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/TextCourseDataAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataAccessObject/TextCourseDataAccess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/TextRegistrationDataAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataAccessObject/TextRegistrationDataAccess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Exception/MaxClassSizeException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helper/InputValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helper/InputValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/STARSApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/STARSApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueObject/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ValueObject/Index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueObject/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ValueObject/Student.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Control/LoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/LoginControl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +94,7 @@
       <workItem from="1605320212777" duration="35499000" />
       <workItem from="1605507051415" duration="206000" />
       <workItem from="1605507376413" duration="210000" />
-      <workItem from="1605507850865" duration="66471000" />
+      <workItem from="1605507850865" duration="67306000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1605511966758</created>
@@ -259,7 +236,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605698461786</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="added most functionalities">
+      <created>1605705859298</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1605705859298</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -349,22 +333,22 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="279" y="79" key="Github.UntrackedFilesDialog/0.0.1200.760@0.0.1200.760" timestamp="1605508454475" />
-    <state width="1157" height="197" key="GridCell.Tab.0.bottom" timestamp="1605704545506">
+    <state width="1157" height="197" key="GridCell.Tab.0.bottom" timestamp="1605705841939">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1605704545506" />
-    <state width="1157" height="197" key="GridCell.Tab.0.center" timestamp="1605704545506">
+    <state width="1157" height="197" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1605705841939" />
+    <state width="1157" height="197" key="GridCell.Tab.0.center" timestamp="1605705841939">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1605704545506" />
-    <state width="1157" height="197" key="GridCell.Tab.0.left" timestamp="1605704545506">
+    <state width="1157" height="197" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1605705841939" />
+    <state width="1157" height="197" key="GridCell.Tab.0.left" timestamp="1605705841938">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1605704545506" />
-    <state width="1157" height="197" key="GridCell.Tab.0.right" timestamp="1605704545506">
+    <state width="1157" height="197" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1605705841938" />
+    <state width="1157" height="197" key="GridCell.Tab.0.right" timestamp="1605705841939">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1605704545506" />
+    <state width="1157" height="197" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1605705841939" />
     <state width="1157" height="236" key="GridCell.Tab.1.bottom" timestamp="1605695302742">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -393,10 +377,10 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="168" y="295" key="VCS.EditChangelistDialog/0.0.1200.760@0.0.1200.760" timestamp="1605685783627" />
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1605698520591">
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1605705870681">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1605698520591" />
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1605705870681" />
     <state width="606" height="386" key="XDebugger.FullValuePopup" timestamp="1605511825096">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
