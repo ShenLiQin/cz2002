@@ -10,7 +10,9 @@ import ValueObject.Index;
 import ValueObject.Student;
 import Exception.*;
 
+import java.io.Console;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Scanner;
 
@@ -268,8 +270,14 @@ public class UserSession implements ISession{
                         System.out.println("Enter peer username:");
                         String peerUsername = _scanner.nextLine();
                         //peer password
-                        System.out.println("Enter peer password:");
-                        String peerPassword = _scanner.nextLine();
+//                        System.out.println("Enter peer password:");
+//                        String peerPassword = _scanner.nextLine();
+                        Console console = System.console();
+                        if (console == null) {
+                            System.out.println("Couldn't get Console instance");
+                            System.exit(0);
+                        }
+                        String peerPassword = Arrays.toString(console.readPassword("Enter your password: "));
 
                         //authenticate peer
                         try {
