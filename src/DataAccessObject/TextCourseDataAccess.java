@@ -87,6 +87,7 @@ public class TextCourseDataAccess implements Serializable, ICourseDataAccessObje
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
+        str.append("_______All Available Courses_______").append('\n');
         for (Course course : courses.values()) {
             str.append(course.toString()).append('\n');;
         }

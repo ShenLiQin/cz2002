@@ -1,6 +1,9 @@
 package Helper;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,6 +58,24 @@ public class InputValidator {
     public static boolean indexStrMatcher(String indexInput) {
         boolean valid;
         valid = indexInput.matches("\\d{6}");
+        return valid;
+    }
+
+    public static boolean validateDateTimeInput(String dateTimeStr) {
+        boolean valid;
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        try {
+            LocalDateTime.parse(dateTimeStr , format);
+            valid = true;
+        } catch (DateTimeParseException e) {
+            valid = false;
+        }
+        return valid;
+    }
+
+    public static boolean validateNameInput(String nameStr) {
+        boolean valid;
+        valid = nameStr.matches(".*\\d.*");
         return valid;
     }
 

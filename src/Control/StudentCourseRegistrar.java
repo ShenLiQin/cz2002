@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 public class StudentCourseRegistrar {
 
-    public void addRegistration(String matricNumber, String courseCode, int indexNumber) throws IOException, ClassNotFoundException, InvalidAccessPeriodException, InsufficientAUsException, ExistingCourseException, ExistingUserException, MaxClassSizeException, ExistingRegistrationException, NonExistentUserException {
+    public void addRegistration(String matricNumber, String courseCode, int indexNumber) throws IOException, ClassNotFoundException, InvalidAccessPeriodException, InsufficientAUsException, ExistingCourseException, ExistingUserException, ExistingRegistrationException, NonExistentUserException, NonExistentCourseException, NonExistentIndexException {
         IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
         ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
         IRegistrationDataAccessObject registrationDataAccess = Factory.getTextRegistrationDataAccess();
@@ -32,11 +32,17 @@ public class StudentCourseRegistrar {
         if (student.getMaxAUs() - student.getTotalRegisteredAUs() < course.getAUs()) {
             throw new InsufficientAUsException();
         }
+        course = courseDataAccessObject.getCourse(courseCode);
+        if (course == null) {
+            throw new NonExistentCourseException();
+        } else if (course.getIndex(indexNumber) == null){
+            throw new NonExistentIndexException();
+        }
+
         registrationDataAccess.addRegistration(registrationKey);
     }
 
-    public void deleteRegistration(String matricNumber, String courseCode, int indexNumber) throws IOException, ClassNotFoundException, InvalidAccessPeriodException, InsufficientAUsException, NonExistentRegistrationException, NonExistentUserException, NonExistentCourseException {
-        IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
+    public void deleteRegistration(String matricNumber, String courseCode, int indexNumber) throws IOException, ClassNotFoundException, InvalidAccessPeriodException, NonExistentRegistrationException, NonExistentUserException, NonExistentCourseException, NonExistentIndexException {
         ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
         IRegistrationDataAccessObject registrationDataAccess = Factory.getTextRegistrationDataAccess();
 
@@ -47,12 +53,15 @@ public class StudentCourseRegistrar {
             throw new InvalidAccessPeriodException();
         }
         RegistrationKey registrationKey = Factory.createRegistrationKey(matricNumber, courseCode, indexNumber);
-        Student student = userDataAccess.getStudent(matricNumber);
         Course course = courseDataAccessObject.getCourse(courseCode);
         course.getIndex(indexNumber);
-        if (student.getMaxAUs() - student.getTotalRegisteredAUs() < course.getAUs()) {
-            throw new InsufficientAUsException();
+        course = courseDataAccessObject.getCourse(courseCode);
+        if (course == null) {
+            throw new NonExistentCourseException();
+        } else if (course.getIndex(indexNumber) == null){
+            throw new NonExistentIndexException();
         }
         registrationDataAccess.deleteRegistration(registrationKey);
+
     }
 }

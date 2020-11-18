@@ -4,6 +4,7 @@ import Exception.ExistingCourseException;
 import Exception.NonExistentCourseException;
 import Helper.PasswordStorage;
 
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Random;
 
@@ -15,7 +16,8 @@ public class Student extends AbstractUser {
 
     public Student(String name, School school, Gender gender, Nationality nationality, int maxAUs, Random random) throws PasswordStorage.CannotPerformOperationException {
         super(name, school, gender, nationality, UserType.USER);
-        this.matricNumber = "U" + 1000000 + (int)(random.nextFloat() * 90000) + (char)(random.nextInt(26) + 'a');
+        int year = (Calendar.getInstance().get(Calendar.YEAR))%100 ;
+        this.matricNumber = "U" + year + (int)(random.nextFloat() * 90000) + (char)(random.nextInt(26) + 'a');
         this.registeredCourses = new Hashtable<>();
         this.totalRegisteredAUs = 0;
         this.maxAUs = maxAUs;

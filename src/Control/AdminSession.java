@@ -5,6 +5,7 @@ import DataAccessObject.IRegistrationDataAccessObject;
 import DataAccessObject.IUserDataAccessObject;
 import Helper.Factory;
 import Helper.InputValidator;
+import Helper.PasswordStorage;
 import ValueObject.*;
 import Exception.*;
 
@@ -13,6 +14,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class AdminSession implements ISession{
@@ -57,76 +59,88 @@ public class AdminSession implements ISession{
 
             switch (choice) {
                 case 1 -> {
-                    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                    System.out.print("new start date: ");
-                    LocalDateTime startDate = LocalDateTime.parse(_scanner.nextLine(), format);
-                    System.out.print("new end date: ");
-                    LocalDateTime endDate = LocalDateTime.parse(_scanner.nextLine(), format);
+                    boolean validDateTime;
+                    LocalDateTime startDate, endDate;
+                    do {
+                        String startDateStr;
+                        do {
+                            System.out.print("new start date in yy-MM-dd HH:mm format: ");
+                            startDateStr = _scanner.nextLine();
+                            validDateTime = InputValidator.validateDateTimeInput(startDateStr);
+                        } while (!validDateTime);
+                        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                        startDate = LocalDateTime.parse(startDateStr, format);
+
+                        String endDateStr;
+                        do {
+                            System.out.print("new end date in yy-MM-dd HH:mm format: ");
+                            endDateStr = _scanner.nextLine();
+                            validDateTime = InputValidator.validateDateTimeInput(endDateStr);
+                        } while (!validDateTime);
+                        endDate = LocalDateTime.parse(endDateStr, format);
+
+                        validDateTime = startDate.compareTo(endDate) < 0;
+                        if (startDate.compareTo(endDate) > 0) {
+                            System.out.println("start date should occur after end date");
+                        } else if (startDate.compareTo(endDate) == 0) {
+                            System.out.println("Both dates are equal");
+                        }
+                    } while (!validDateTime);
                     RegistrationPeriod newRP = Factory.createRegistrationPeriod(startDate, endDate);
-                    try {
-                        changeAccessPeriod(Factory.getTextRegistrationDataAccess(), newRP);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    changeAccessPeriod(newRP);
                 }
                 case 2 -> {
+                    String name;
+                    boolean validName;
+                    do {
+                        System.out.print("name: ");
+                        name = _scanner.nextLine();
+                        validName = InputValidator.validateNameInput(name);
+                        if (!validName) {
+                            System.out.println("name cannot contain number");
+                        }
+                    }while (!validName);
+
+                    System.out.print("gender: ");
+                    Gender gender = getGender();
+                    System.out.print("nationality: ");
+                    Nationality nationality = getNationality();
+                    System.out.print("school: ");
+                    School school = getSchool();
+
+                    int maxAUs = 0;
+                    do {
+                        System.out.print("maxAUs: ");
+                        try {
+                            maxAUs = _scanner.nextInt();
+                        } catch (InputMismatchException e) {
+                            System.out.println("Pls input only numbers");
+                            _scanner.nextLine();
+                        }
+                        if (maxAUs <25 && maxAUs >=0) {
+                            System.out.println("you have set MaxAUs as " + maxAUs);
+                        }
+                        else {
+                            System.out.println("Number of AUs cannot be 25 or more");
+                        }
+                    } while(maxAUs >=25 || maxAUs <= 0);
                     try {
-                        String name = "";
-                        do {
-                            System.out.print("name: ");
-                            name = _scanner.nextLine();
-                            if (name.matches(".*\\d.*")) {
-                                System.out.println("name cannot contain number");
-                            }
-                        }while (name.matches(".*\\d.*"));
-
-                        System.out.print("gender: ");
-                        Gender gender = getGender();
-                        System.out.print("nationality: ");
-                        Nationality nationality = getNationality();
-                        System.out.print("school: ");
-                        School school = getSchool();
-
-                        int maxAUs = 0;
-                        do {
-                            System.out.print("maxAUs: ");
-                            try {
-                                maxAUs = _scanner.nextInt();
-                            } catch (InputMismatchException e) {
-                                System.out.println("Pls input only numbers");
-                                _scanner.nextLine();
-                            }
-                            if (maxAUs <25 && maxAUs >=0)
-                            {
-                                System.out.println("you have set MaxAUs as " + maxAUs);
-                            }
-                            else {
-                                System.out.println("Number of AUs cannot be 25 or more");
-                            }
-                        } while(maxAUs >=25 || maxAUs <= 0);
-
                         Student newStudent = Factory.createStudent(name, school, gender, nationality, maxAUs);
-                        addStudent(Factory.getTextUserDataAccess(), newStudent);
-
-                    }catch (Exception e) {
-                        e.printStackTrace();
+                        addStudent(newStudent);
+                    } catch (PasswordStorage.CannotPerformOperationException e) {
+                        System.out.println("error hashing password");
                     }
 
                 }
                 case 3 -> {
-                    Course course = null;
                     String courseCode;
-                    String courseName = "";
+                    String courseName;
                     School school;
 
                     System.out.print("enter a course code to add/update: ");
-                    courseCode = getcourseCode();
+                    courseCode = getCourseCode();
+                    Course course = getCourse(courseCode);
 
-                    try {
-                        course = getCourse(Factory.getTextCourseDataAccess(), courseCode);
-                    } catch (ClassNotFoundException | IOException e1) {
-                        System.out.println("file/class not found");
-                    }
                     if (course == null) {
                         Hashtable<DayOfWeek, List<LocalTime>> lectureTimings = new Hashtable<>();
                         DayOfWeek lectureDay;
@@ -246,7 +260,7 @@ public class AdminSession implements ISession{
                     System.out.print("course code: ");
                     do {
                         try {
-                            String courseCode = getcourseCode();
+                            String courseCode = getCourseCode();
                             course = Factory.getTextCourseDataAccess().getCourse(courseCode);
                             if (course == null) {
                                 System.out.println("no such course");
@@ -323,16 +337,36 @@ public class AdminSession implements ISession{
         } while (choice > 0 && choice < 7);
     }
 
-    private Course getCourse(ICourseDataAccessObject courseDataAccessObject, String courseCode) {
-        return courseDataAccessObject.getCourse(courseCode);
+    private Course getCourse(String courseCode) {
+        try {
+            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+            return courseDataAccessObject.getCourse(courseCode);
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("error reading file");
+            return null;
+        }
     }
 
-    private void changeAccessPeriod(IRegistrationDataAccessObject registrationDataAccessObject, RegistrationPeriod newRP) throws Exception {
-        registrationDataAccessObject.updateRegistrationPeriod(newRP);
+    private void changeAccessPeriod(RegistrationPeriod newRP) {
+        try {
+            IRegistrationDataAccessObject registrationDataAccessObject = Factory.getTextRegistrationDataAccess();
+            registrationDataAccessObject.updateRegistrationPeriod(newRP);
+        } catch (IdenticalRegistrationPeriodException e) {
+            System.out.println("new registration period same as old registration period");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("error reading file");
+        }
     }
 
-    private void addStudent(IUserDataAccessObject userDataAccessObject, Student student) throws Exception {
-        userDataAccessObject.addStudent(student);
+    private void addStudent(Student student) {
+        try {
+            IUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess();
+            userDataAccessObject.addStudent(student);
+        } catch (ExistingUserException e) {
+            System.out.println("student already exists");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("error reading file");
+        }
     }
 
     private void addCourse(ICourseDataAccessObject courseDataAccessObject, Course newCourse) {
@@ -443,8 +477,8 @@ public class AdminSession implements ISession{
         return newIndex;
     }
 
-    private String getcourseCode(){
-        String courseCode = "";
+    private String getCourseCode(){
+        String courseCode;
         boolean validCourse;
         do {
             courseCode = _scanner.nextLine();
@@ -472,8 +506,8 @@ public class AdminSession implements ISession{
     }
 
     private School getSchool(){
-        boolean validSchool = false;
-        String school = "";
+        boolean validSchool;
+        String school;
         do {
             school = _scanner.nextLine().toUpperCase();
             validSchool = InputValidator.schoolStrMatcher(school);

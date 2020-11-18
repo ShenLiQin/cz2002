@@ -1,7 +1,6 @@
 package ValueObject;
 
 import Exception.ExistingUserException;
-import Exception.MaxClassSizeException;
 import Exception.NonExistentUserException;
 
 import java.io.Serializable;
@@ -32,12 +31,11 @@ public class Index implements Serializable {
         this.laboratoryVenue = laboratoryVenue;
     }
 
-    public void enrollStudent(String matricNumber) throws ExistingUserException, MaxClassSizeException {
+    public void enrollStudent(String matricNumber) throws ExistingUserException {
         if (enrolledStudents.contains(matricNumber)) {
             throw new ExistingUserException();
         } else if (vacancy == 0) {
             waitingList.add(matricNumber);
-            throw new MaxClassSizeException();
         } else {
             enrolledStudents.add(matricNumber);
             vacancy--;

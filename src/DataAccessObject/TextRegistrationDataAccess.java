@@ -66,7 +66,6 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
     @Override
     public void updateRegistrationPeriod(RegistrationPeriod newRegistrationPeriod) throws IdenticalRegistrationPeriodException {
         if (registrationPeriod.equals(newRegistrationPeriod)) {
-            System.out.println("same registration period");
             throw new IdenticalRegistrationPeriodException();
         } else {
             registrationPeriod = newRegistrationPeriod;
@@ -74,9 +73,8 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
     }
 
     @Override
-    public void addRegistration(RegistrationKey registrationKey) throws ExistingRegistrationException, IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException, MaxClassSizeException, NonExistentUserException {
+    public void addRegistration(RegistrationKey registrationKey) throws ExistingRegistrationException, IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException, NonExistentUserException {
         if (registrations.containsKey(registrationKey)) {
-            System.out.println("registration already exists");
             throw new ExistingRegistrationException();
         }
         registrations.put(registrationKey, new Date().getTime());
@@ -99,7 +97,6 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
     @Override
     public void deleteRegistration(RegistrationKey registrationKey) throws NonExistentRegistrationException, IOException, ClassNotFoundException, NonExistentUserException, NonExistentCourseException {
         if (!registrations.containsKey(registrationKey)) {
-            System.out.println("no such registration");
             throw new NonExistentRegistrationException();
         }
         registrations.remove(registrationKey);
