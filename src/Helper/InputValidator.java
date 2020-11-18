@@ -35,21 +35,14 @@ public class InputValidator {
         final String regex = "\\d";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(indexInput);
-        if (m.find() && indexInput.length() == 6) {
-            return true;
-        }
-        return false;
+        return (m.find() && indexInput.length() == 6);
     }
 
     public boolean validateTimeInput(String timeStr) {
         boolean valid;
         try {
             String[] time = timeStr.split(":");
-            if ((time[0].length() == 2) && (time[1].equals("00") || time[1].equals("30"))) {
-                valid = true;
-            } else {
-                valid = false;
-            }
+            valid = (time[0].length() == 2) && (time[1].equals("00") || time[1].equals("30"));
         } catch (Exception e) {
             valid = false;
         }
@@ -57,17 +50,11 @@ public class InputValidator {
     }
 
     public boolean validateTimeInput(String timeStr, String schoolStartTime, String schoolEndTime, int duration) {
-        boolean valid;
         LocalTime classStartTime = LocalTime.parse(timeStr);
         LocalTime classEndTime = classStartTime.plusHours(duration);
         LocalTime earliestTime = LocalTime.parse(schoolStartTime);
         LocalTime latestTime = LocalTime.parse(schoolEndTime);
-        if (!classStartTime.isBefore(earliestTime) && !classEndTime.isAfter(latestTime) && !classEndTime.isBefore(earliestTime)) {
-            valid = true;
-        } else {
-            valid = false;
-        }
-        return valid;
+        return !classStartTime.isBefore(earliestTime) && !classEndTime.isAfter(latestTime) && !classEndTime.isBefore(earliestTime);
     }
 
     public boolean validateYNInput(String input) {

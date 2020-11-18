@@ -78,27 +78,20 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
         if (registrations.containsKey(registrationKey)) {
             System.out.println("registration already exists");
             throw new ExistingRegistrationException();
-        } else {
-            for (RegistrationKey registrationKey1 : registrations.keySet()) {
-                if (registrationKey.compareTo(registrationKey1) == 0) {
-                    System.out.println("course already registered");
-                    throw new ExistingRegistrationException();
-                }
-            }
-            registrations.put(registrationKey, new Date().getTime());
-            persist();
-
-            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
-            Course course = courseDataAccessObject.getCourse(registrationKey.getCourseCode());
-            Index index = course.getIndex(registrationKey.getIndexNumber());
-            index.enrollStudent(registrationKey.getMatricNumber());
-            course.updateIndex(index);
-            courseDataAccessObject.updateCourse(course);
-
-            IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
-            Student student = userDataAccess.getStudent(registrationKey.getMatricNumber());
-            student.registerCourse(registrationKey.getCourseCode(), registrationKey.getIndexNumber());
         }
+        registrations.put(registrationKey, new Date().getTime());
+        persist();
+
+        ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+        Course course = courseDataAccessObject.getCourse(registrationKey.getCourseCode());
+        Index index = course.getIndex(registrationKey.getIndexNumber());
+        index.enrollStudent(registrationKey.getMatricNumber());
+        course.updateIndex(index);
+        courseDataAccessObject.updateCourse(course);
+
+        IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
+        Student student = userDataAccess.getStudent(registrationKey.getMatricNumber());
+        student.registerCourse(registrationKey.getCourseCode(), registrationKey.getIndexNumber());
     }
 
     @Override
@@ -106,26 +99,19 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
         if (!registrations.containsKey(registrationKey)) {
             System.out.println("no such registration");
             throw new NonExistentRegistrationException();
-        } else {
-            for (RegistrationKey registrationKey1 : registrations.keySet()) {
-                if (registrationKey.compareTo(registrationKey1) != 0) {
-                    System.out.println("course not registered");
-                    throw new NonExistentRegistrationException();
-                }
-            }
-            registrations.remove(registrationKey);
-
-            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
-            Course course = courseDataAccessObject.getCourse(registrationKey.getCourseCode());
-            Index index = course.getIndex(registrationKey.getIndexNumber());
-            index.dropStudent(registrationKey.getMatricNumber());
-            course.updateIndex(index);
-            courseDataAccessObject.updateCourse(course);
-
-            IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
-            Student student = userDataAccess.getStudent(registrationKey.getMatricNumber());
-            student.deregisterCourse(registrationKey.getCourseCode());
-            userDataAccess.updateStudent(student);
         }
+        registrations.remove(registrationKey);
+
+        ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+        Course course = courseDataAccessObject.getCourse(registrationKey.getCourseCode());
+        Index index = course.getIndex(registrationKey.getIndexNumber());
+        index.dropStudent(registrationKey.getMatricNumber());
+        course.updateIndex(index);
+        courseDataAccessObject.updateCourse(course);
+
+        IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
+        Student student = userDataAccess.getStudent(registrationKey.getMatricNumber());
+        student.deregisterCourse(registrationKey.getCourseCode());
+        userDataAccess.updateStudent(student);
     }
 }
