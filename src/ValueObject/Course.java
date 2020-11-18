@@ -1,16 +1,19 @@
 package ValueObject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.lang.reflect.Array;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.*;
+
 import Exception.NonExistentIndexException;
 
 public class Course implements Serializable {
     private String courseCode;
     private String courseName;
-    private ArrayList<Date> lectureTimings;
-    private String lectureVenue;
+    private School school;
+    private Hashtable<DayOfWeek, List<LocalTime>> lectureTimings;
+    private Venue lectureVenue;
     private int AUs;
     private HashMap<Integer, Index> indexes;
     private static final long serialVersionUID = 1L;
@@ -31,19 +34,27 @@ public class Course implements Serializable {
         this.courseName = courseName;
     }
 
-    public ArrayList<Date> getLectureTimings() {
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    public Hashtable<DayOfWeek, List<LocalTime>> getLectureTimings() {
         return lectureTimings;
     }
 
-    public void setLectureTimings(ArrayList<Date> lectureTimings) {
+    public void setLectureTimings(Hashtable<DayOfWeek, List<LocalTime>> lectureTimings) {
         this.lectureTimings = lectureTimings;
     }
 
-    public String getLectureVenue() {
+    public Venue getLectureVenue() {
         return lectureVenue;
     }
 
-    public void setLectureVenue(String lectureVenue) {
+    public void setLectureVenue(Venue lectureVenue) {
         this.lectureVenue = lectureVenue;
     }
 
@@ -82,12 +93,8 @@ public class Course implements Serializable {
         }
     }
 
-    public void addIndex(Index index) throws Exception {
-        if (indexes.containsKey(index.getIndexNumber())) {
-            throw new Exception();
-        } else {
-            indexes.put(index.getIndexNumber(), index);
-        }
+    public void addIndex(Index index) {
+        indexes.put(index.getIndexNumber(), index);
     }
 
     public void deleteIndex(int indexNumber) throws Exception {
@@ -98,9 +105,10 @@ public class Course implements Serializable {
         }
     }
 
-    public Course(String courseCode, String courseName, ArrayList<Date> lectureTimings, String lectureVenue, int AUs, ArrayList<Index> indexes) {
+    public Course(String courseCode, String courseName, School school, Hashtable<DayOfWeek, List<LocalTime>> lectureTimings, Venue lectureVenue, int AUs, ArrayList<Index> indexes) {
         this.courseCode = courseCode;
         this.courseName = courseName;
+        this.school = school;
         this.lectureTimings = lectureTimings;
         this.lectureVenue = lectureVenue;
         this.AUs = AUs;
@@ -124,6 +132,19 @@ public class Course implements Serializable {
         str.append("courseCode: ").append(courseCode).append(",\t").append("courseName: ").append(courseName).append('\n');
         for (Index index : indexes.values()) {
             str.append(index.toString()).append('\n');
+        }
+        return str.toString();
+    }
+
+    public String allInfoToString(){
+        StringBuilder str = new StringBuilder();
+        str.append("---------------latest course info---------------");
+        str.append("\ncourseCode: ").append(courseCode).append("\tcourseName: ").append(courseName);
+        str.append("\tschool: ").append(school);
+        str.append("\nlecture timings: ").append(lectureTimings).append("\tlecture venue: ").append(lectureVenue);
+        str.append("\nindex group numbers: ");
+        for (Index index : indexes.values()) {
+            str.append('\n').append(index.getIndexNumber());
         }
         return str.toString();
     }

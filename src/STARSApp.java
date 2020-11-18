@@ -7,9 +7,12 @@ import Helper.Factory;
 import ValueObject.*;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalTime;
+import java.util.*;
 
 public class STARSApp {
 
@@ -37,48 +40,75 @@ public class STARSApp {
 
             courseDataAccessObject = Factory.getTextCourseDataAccess();
             Index index1 = Factory.createIndex(200100, 10);
+
             Index index2 = Factory.createIndex(200101, 10);
-            index2.setLaboratoryVenue("Hardware Lab 2");
-            ArrayList<Date> index2Date = new ArrayList<>();
-            index2Date.add(new Date(1605360255));
-            index2Date.add(new Date(1606137855));
+            Hashtable<DayOfWeek, List<LocalTime>> index2Date = new Hashtable<>();
+            List<LocalTime> timing = new LinkedList<>();
+            timing.add(LocalTime.of(10,0));
+            timing.add(LocalTime.of(11,0));
+            index2Date.put(DayOfWeek.TUESDAY, timing);
             index2.setLaboratoryTimings(index2Date);
+            index2.setLaboratoryVenue(Venue.HWL2);
 
             Index index3 = Factory.createIndex(200102, 10);
-            index3.setLaboratoryVenue("Hardware Lab 1");
-            ArrayList<Date> index3dates = new ArrayList<>();
-            index3dates.add(new Date(1605678778));
-            index3dates.add(new Date(1605765178));
-            index3.setLaboratoryTimings(index3dates);
+            Hashtable<DayOfWeek, List<LocalTime>> index3Date = new Hashtable<>();
+            timing = new LinkedList<>();
+            timing.add(LocalTime.of(10,0));
+            timing.add(LocalTime.of(11,0));
+            index3Date.put(DayOfWeek.THURSDAY, timing);
+            index3.setLaboratoryTimings(index3Date);
+            index3.setLaboratoryVenue(Venue.HWL1);
 
             ArrayList<Index> indexes1 = new ArrayList<>();
             indexes1.add(index1);
             indexes1.add(index2);
             indexes1.add(index3);
 
+            Hashtable<DayOfWeek, List<LocalTime>> lectureTiming = new Hashtable<>();
+            timing = new LinkedList<>();
+            timing.add(LocalTime.of(9,0));
+            timing.add(LocalTime.of(10,0));
+            lectureTiming.put(DayOfWeek.MONDAY, timing);
+
+            Course course1 = Factory.createCourse("cz2001", "algorithm", School.SCSE, lectureTiming, Venue.LT1, 3, indexes1);
+            courseDataAccessObject.addCourse(course1);
+
+
             Index index4 = Factory.createIndex(200200, 10);
+
             Index index5 = Factory.createIndex(200201, 10);
-            index2.setLaboratoryVenue("Software Lab 2");
-            ArrayList<Date> index5Date = new ArrayList<>();
-            index2Date.add(new Date(1605765178));
-            index2Date.add(new Date(1605783178));
-            index2.setLaboratoryTimings(index5Date);
+            Hashtable<DayOfWeek, List<LocalTime>> index5Date = new Hashtable<>();
+            timing = new LinkedList<>();
+            timing.add(LocalTime.of(15,0));
+            timing.add(LocalTime.of(16,0));
+            index5Date.put(DayOfWeek.WEDNESDAY, timing);
+            index5.setLaboratoryTimings(index5Date);
+            index5.setLaboratoryVenue(Venue.SWL1);
 
             Index index6 = Factory.createIndex(200202, 10);
-            index3.setLaboratoryVenue("Software Project Lab");
-            ArrayList<Date> index6dates = new ArrayList<>();
-            index3dates.add(new Date(1608375178));
-            index3dates.add(new Date(1608461578));
-            index3.setLaboratoryTimings(index6dates);
+            Hashtable<DayOfWeek, List<LocalTime>> index6Date = new Hashtable<>();
+            timing = new LinkedList<>();
+            timing.add(LocalTime.of(10,0));
+            timing.add(LocalTime.of(11,0));
+            index6Date.put(DayOfWeek.FRIDAY, timing);
+            index6.setLaboratoryTimings(index6Date);
+            index6.setLaboratoryVenue(Venue.SWL2);
 
             ArrayList<Index> indexes2 = new ArrayList<>();
             indexes2.add(index4);
             indexes2.add(index5);
             indexes2.add(index6);
 
-            Course course1 = Factory.createCourse("cz2001", "algorithm", new ArrayList<>(), "LT2", 3, indexes1);
-            courseDataAccessObject.addCourse(course1);
-            Course course2 = Factory.createCourse("cz2002", "object oriented design and programming", new ArrayList<>(), "LT1", 3, indexes2);
+            lectureTiming = new Hashtable<>();
+            timing = new LinkedList<>();
+            timing.add(LocalTime.of(10,0));
+            timing.add(LocalTime.of(11,0));
+            lectureTiming.put(DayOfWeek.MONDAY, timing);
+            timing.add(LocalTime.of(15,0));
+            timing.add(LocalTime.of(16,0));
+            lectureTiming.put(DayOfWeek.FRIDAY, timing);
+
+            Course course2 = Factory.createCourse("cz2002", "object oriented design and programming", School.SCSE, lectureTiming, Venue.LT1, 3, indexes2);
             courseDataAccessObject.addCourse(course2);
 
             registrationDataAccessObject = Factory.getTextRegistrationDataAccess();

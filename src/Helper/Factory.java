@@ -5,11 +5,10 @@ import DataAccessObject.*;
 import ValueObject.*;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
-import java.util.Scanner;
+import java.time.LocalTime;
+import java.util.*;
 
 
 public class Factory {
@@ -46,14 +45,14 @@ public class Factory {
     }
 
     public static Student createStudent(String name, String school) throws PasswordStorage.CannotPerformOperationException {
-        return new Student(name, school, 23 , new Random());
+        return new Student(name, school, 21 , new Random());
     }
 
     public static Staff createStaff(String name, String school) throws PasswordStorage.CannotPerformOperationException {
         return new Staff(name, school);
     }
 
-    public static Index createIndex(int indexNumber, int maxClassSize, ArrayList<Date> tutorialTimings, String tutorialVenue, ArrayList<Date> laboratoryTimings, String laboratoryVenue) {
+    public static Index createIndex(int indexNumber, int maxClassSize, Hashtable<DayOfWeek, List<LocalTime>> tutorialTimings, Venue tutorialVenue, Hashtable<DayOfWeek, List<LocalTime>> laboratoryTimings, Venue laboratoryVenue) {
         return new Index(indexNumber, maxClassSize, tutorialTimings, tutorialVenue, laboratoryTimings, laboratoryVenue);
     }
 
@@ -61,8 +60,8 @@ public class Factory {
         return createIndex(indexNumber, maxClassSize, null, null, null, null);
     }
 
-    public static Course createCourse(String courseCode, String courseName, ArrayList<Date> lectureTimings, String lectureVenue, int AUs, ArrayList<Index> indexes) {
-        return new Course(courseCode, courseName, lectureTimings, lectureVenue, AUs, indexes);
+    public static Course createCourse(String courseCode, String courseName, School school, Hashtable<DayOfWeek, List<LocalTime>> lectureTimings, Venue lectureVenue, int AUs, ArrayList<Index> indexes) {
+        return new Course(courseCode, courseName, school, lectureTimings, lectureVenue, AUs, indexes);
     }
 
     public static RegistrationPeriod createRegistrationPeriod(LocalDateTime startDate, LocalDateTime endDate) {

@@ -5,10 +5,9 @@ import Exception.MaxClassSizeException;
 import Exception.NonExistentUserException;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.*;
 
 public class Index implements Serializable {
     private int indexNumber;
@@ -16,13 +15,13 @@ public class Index implements Serializable {
     private int vacancy;
     private ArrayList<String> enrolledStudents;
     private Queue<String> waitingList;
-    private ArrayList<Date> tutorialTimings;
-    private String tutorialVenue;
-    private ArrayList<Date> laboratoryTimings;
-    private String laboratoryVenue;
+    private Hashtable<DayOfWeek, List<LocalTime>> tutorialTimings;
+    private Venue tutorialVenue;
+    private Hashtable<DayOfWeek, List<LocalTime>> laboratoryTimings;
+    private Venue laboratoryVenue;
     private static final long serialVersionUID = 1L;
 
-    public Index(int indexNumber, int maxClassSize, ArrayList<Date> tutorialTimings, String tutorialVenue, ArrayList<Date> laboratoryTimings, String laboratoryVenue) {
+    public Index(int indexNumber, int maxClassSize, Hashtable<DayOfWeek, List<LocalTime>> tutorialTimings, Venue tutorialVenue, Hashtable<DayOfWeek, List<LocalTime>> laboratoryTimings, Venue laboratoryVenue) {
         this.indexNumber = indexNumber;
         this.vacancy = this.maxClassSize = maxClassSize;
         this.enrolledStudents = new ArrayList<>();
@@ -89,35 +88,35 @@ public class Index implements Serializable {
         this.enrolledStudents = enrolledStudents;
     }
 
-    public ArrayList<Date> getTutorialTimings() {
+    public Hashtable<DayOfWeek, List<LocalTime>> getTutorialTimings() {
         return tutorialTimings;
     }
 
-    public void setTutorialTimings(ArrayList<Date> tutorialTimings) {
+    public void setTutorialTimings(Hashtable<DayOfWeek, List<LocalTime>> tutorialTimings) {
         this.tutorialTimings = tutorialTimings;
     }
 
-    public String getTutorialVenue() {
-        return tutorialVenue;
-    }
-
-    public void setTutorialVenue(String tutorialVenue) {
-        this.tutorialVenue = tutorialVenue;
-    }
-
-    public ArrayList<Date> getLaboratoryTimings() {
+    public Hashtable<DayOfWeek, List<LocalTime>> getLaboratoryTimings() {
         return laboratoryTimings;
     }
 
-    public void setLaboratoryTimings(ArrayList<Date> laboratoryTimings) {
+    public void setLaboratoryTimings(Hashtable<DayOfWeek, List<LocalTime>> laboratoryTimings) {
         this.laboratoryTimings = laboratoryTimings;
     }
 
-    public String getLaboratoryVenue() {
+    public Venue getTutorialVenue() {
+        return tutorialVenue;
+    }
+
+    public void setTutorialVenue(Venue tutorialVenue) {
+        this.tutorialVenue = tutorialVenue;
+    }
+
+    public Venue getLaboratoryVenue() {
         return laboratoryVenue;
     }
 
-    public void setLaboratoryVenue(String laboratoryVenue) {
+    public void setLaboratoryVenue(Venue laboratoryVenue) {
         this.laboratoryVenue = laboratoryVenue;
     }
 
@@ -125,6 +124,15 @@ public class Index implements Serializable {
     public String toString() {
         StringBuilder str = new StringBuilder();
         str.append("indexNumber: ").append(indexNumber).append('\t').append("enrolledStudents: ").append(enrolledStudents);
+        return str.toString();
+    }
+
+    public String allInfoToString(){
+        StringBuilder str = new StringBuilder();
+        str.append("---------------latest index info---------------");
+        str.append("\nindexNumber: ").append(indexNumber).append("\tmax class size: ").append(maxClassSize).append("\tvacancies: ").append(vacancy);
+        str.append("\ntutorial timings: ").append(tutorialTimings).append("\ttutorial venue: ").append(tutorialVenue);
+        str.append("\nlaboratory timings: ").append(laboratoryTimings).append("\tlaboratory venue: ").append(laboratoryVenue);
         return str.toString();
     }
 }
