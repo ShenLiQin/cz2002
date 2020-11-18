@@ -1,10 +1,12 @@
 package ValueObject;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class RegistrationPeriod {
+public class RegistrationPeriod implements Serializable {
     private LocalDateTime startDate, endDate;
+    private static final long serialVersionUID = 1L;
 
     public RegistrationPeriod(LocalDateTime startDate, LocalDateTime endDate) {
         this.startDate = startDate;

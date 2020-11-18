@@ -38,7 +38,7 @@ public class Student extends AbstractUser {
     }
 
     public void deregisterCourse(String courseCode) throws NonExistentCourseException {
-        if (!registeredCourses.contains(courseCode)) {
+        if (!registeredCourses.containsKey(courseCode)) {
             throw new NonExistentCourseException();
         } else {
             registeredCourses.remove(courseCode);

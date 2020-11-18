@@ -59,6 +59,10 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
         return registrationPeriod;
     }
 
+    public void setRegistrationPeriod(RegistrationPeriod registrationPeriod) {
+        this.registrationPeriod = registrationPeriod;
+    }
+
     @Override
     public void updateRegistrationPeriod(RegistrationPeriod newRegistrationPeriod) throws IdenticalRegistrationPeriodException {
         if (registrationPeriod.equals(newRegistrationPeriod)) {
@@ -104,8 +108,8 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
             throw new NonExistentRegistrationException();
         } else {
             for (RegistrationKey registrationKey1 : registrations.keySet()) {
-                if (registrationKey.compareTo(registrationKey1) == 0) {
-                    System.out.println("course already registered");
+                if (registrationKey.compareTo(registrationKey1) != 0) {
+                    System.out.println("course not registered");
                     throw new NonExistentRegistrationException();
                 }
             }
@@ -121,6 +125,7 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
             IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
             Student student = userDataAccess.getStudent(registrationKey.getMatricNumber());
             student.deregisterCourse(registrationKey.getCourseCode());
+            userDataAccess.updateStudent(student);
         }
     }
 }

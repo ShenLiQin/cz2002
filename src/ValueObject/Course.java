@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import Exception.NonExistentIndexException;
 
 public class Course implements Serializable {
     private String courseCode;
@@ -54,10 +55,10 @@ public class Course implements Serializable {
         this.AUs = AUs;
     }
 
-    public int checkVacancies(int indexNumber) throws Exception {
+    public int checkVacancies(int indexNumber) throws NonExistentIndexException {
         Index index = indexes.get(indexNumber);
         if (index == null) {
-            throw new Exception();
+            throw new NonExistentIndexException();
         } else {
             return index.getVacancy();
         }

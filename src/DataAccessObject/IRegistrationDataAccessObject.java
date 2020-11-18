@@ -9,6 +9,8 @@ import java.io.IOException;
 public interface IRegistrationDataAccessObject {
     RegistrationPeriod getRegistrationPeriod();
 
+    void setRegistrationPeriod(RegistrationPeriod registrationPeriod);
+
     void updateRegistrationPeriod(RegistrationPeriod newRegistrationPeriod) throws IdenticalRegistrationPeriodException;
 
     void addRegistration(RegistrationKey registrationKey) throws ExistingRegistrationException, IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException, MaxClassSizeException;

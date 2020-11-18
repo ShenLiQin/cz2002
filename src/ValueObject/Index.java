@@ -24,7 +24,7 @@ public class Index implements Serializable {
 
     public Index(int indexNumber, int maxClassSize, ArrayList<Date> tutorialTimings, String tutorialVenue, ArrayList<Date> laboratoryTimings, String laboratoryVenue) {
         this.indexNumber = indexNumber;
-        this.maxClassSize = maxClassSize;
+        this.vacancy = this.maxClassSize = maxClassSize;
         this.enrolledStudents = new ArrayList<>();
         this.waitingList = new LinkedList<>();
         this.tutorialTimings = tutorialTimings;
@@ -36,23 +36,24 @@ public class Index implements Serializable {
     public void enrollStudent(String matricNumber) throws ExistingUserException, MaxClassSizeException {
         if (enrolledStudents.contains(matricNumber)) {
             throw new ExistingUserException();
-        } else if (enrolledStudents.size() >= maxClassSize) {
+        } else if (vacancy == 0) {
             waitingList.add(matricNumber);
             throw new MaxClassSizeException();
         } else {
             enrolledStudents.add(matricNumber);
+            vacancy--;
         }
     }
 
     public void dropStudent(String matricNumber) throws NonExistentUserException {
         if (!enrolledStudents.contains(matricNumber)) {
             throw new NonExistentUserException();
+        } else if (!waitingList.isEmpty()) {
+            enrolledStudents.add(waitingList.remove());
         } else {
             enrolledStudents.remove(matricNumber);
-            if (!waitingList.isEmpty()) {
-                enrolledStudents.add(waitingList.remove());
-                //send email
-            }
+            vacancy++;
+            //send email
         }
     }
 
