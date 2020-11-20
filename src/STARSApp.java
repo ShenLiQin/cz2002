@@ -19,6 +19,16 @@ public class STARSApp {
        TODO think of new functionalities (implement userSession into adminSession)
        TODO fix bug: prevent user from adding course if time table clashes
         (add logic StudentCourseRegistrar.addRegistration) */
+    //  start doing report (what design patterns and principals we used, functionalities, etc)
+    // https://www.tutorialspoint.com/design_pattern/singleton_pattern.htm
+    // https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm
+    // https://www.tutorialspoint.com/design_pattern/transfer_object_pattern.htm
+    // https://www.tutorialspoint.com/design_pattern/factory_pattern.htm
+    // hashing https://github.com/defuse/password-hashing
+    // information https://crackstation.net/hashing-security.htm#properhashing
+    // update our class diagram
+    // update sequence diagram
+    // for richard (make print student list print the correct info)
 
     public static void main(String[] args) {
         IUserDataAccessObject userDataAccessObject;
