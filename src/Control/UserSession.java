@@ -272,12 +272,14 @@ public class UserSession implements ISession{
                         //peer password
 //                        System.out.println("Enter peer password:");
 //                        String peerPassword = _scanner.nextLine();
+                        String peerPassword;
                         Console console = System.console();
                         if (console == null) {
-                            System.out.println("Couldn't get Console instance");
-                            System.exit(0);
+//                    System.out.println("Couldn't get Console instance");
+                            peerPassword = _scanner.nextLine();
+                        } else {
+                            peerPassword = Arrays.toString(console.readPassword("Enter your password: "));
                         }
-                        String peerPassword = Arrays.toString(console.readPassword("Enter your password: "));
 
                         //authenticate peer
                         try {

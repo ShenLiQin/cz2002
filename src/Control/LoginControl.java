@@ -26,13 +26,15 @@ public class LoginControl {
 //                System.out.println("Enter peer password:");
 //                String passwordArray = _scanner.nextLine();
 
+                String password;
                 Console console = System.console();
                 if (console == null) {
-                    System.out.println("Couldn't get Console instance");
-                    System.exit(0);
+//                    System.out.println("Couldn't get Console instance");
+                    password = _scanner.nextLine();
+                } else {
+                    password = Arrays.toString(console.readPassword("Enter your password: "));
                 }
-                String passwordArray = Arrays.toString(console.readPassword("Enter your password: "));
-                user = userDataAccessObject.authenticate(username, passwordArray);
+                user = userDataAccessObject.authenticate(username, password);
                 if (user == null) {
                     System.out.println("wrong username/password");
                 }

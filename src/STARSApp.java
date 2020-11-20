@@ -13,6 +13,12 @@ import java.time.LocalTime;
 import java.util.*;
 
 public class STARSApp {
+    /* TODO enhance user experience (word art, press enter to continue, etc)
+       TODO change output file format to flat
+       TODO catch bugs
+       TODO think of new functionalities (implement userSession into adminSession)
+       TODO fix bug: prevent user from adding course if time table clashes
+        (add logic StudentCourseRegistrar.addRegistration) */
 
     public static void main(String[] args) {
         IUserDataAccessObject userDataAccessObject;
