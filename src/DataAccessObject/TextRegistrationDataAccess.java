@@ -73,7 +73,7 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
     }
 
     @Override
-    public void addRegistration(RegistrationKey registrationKey) throws ExistingRegistrationException, IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException, NonExistentUserException {
+    public void addRegistration(RegistrationKey registrationKey) throws ExistingRegistrationException, IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException, NonExistentUserException, MaxEnrolledStudentsException {
         if (registrations.containsKey(registrationKey)) {
             throw new ExistingRegistrationException();
         }

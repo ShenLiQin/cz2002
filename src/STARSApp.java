@@ -147,17 +147,19 @@ public class STARSApp {
             registrationDataAccessObject.setRegistrationPeriod(registrationPeriod);
 
             ISession session;
+            TextIoFactory.getTextTerminal().setBookmark("clear");
             do {
+                TextIoFactory.getTextTerminal().resetToBookmark("clear");
                 LoginControl loginControl = Factory.createLoginControl();
                 AbstractUser user = loginControl.login(Factory.getTextUserDataAccess());
-//                AbstractUser user = newA;
+//                AbstractUser user = newS1;
                 TextIoFactory.getTextTerminal().getProperties().setPromptColor("white");
                 session = Factory.createSession(user);
                 session.run();
             } while (!session.logout());
 
         } catch(IOException | ClassNotFoundException e) {
-            System.out.println("error reading files... \nexiting...");
+            TextIoFactory.getTextTerminal().println("error reading files... \nexiting...");
         } catch (Exception e) {
             e.printStackTrace();
         }

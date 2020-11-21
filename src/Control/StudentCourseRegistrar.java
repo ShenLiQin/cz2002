@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 public class StudentCourseRegistrar {
 
-    public void addRegistration(String matricNumber, String courseCode, int indexNumber) throws IOException, ClassNotFoundException, InvalidAccessPeriodException, InsufficientAUsException, ExistingCourseException, ExistingUserException, ExistingRegistrationException, NonExistentUserException, NonExistentCourseException, NonExistentIndexException {
+    public void addRegistration(String matricNumber, String courseCode, int indexNumber) throws IOException, ClassNotFoundException, InvalidAccessPeriodException, InsufficientAUsException, ExistingCourseException, ExistingUserException, ExistingRegistrationException, NonExistentUserException, NonExistentCourseException, NonExistentIndexException, MaxEnrolledStudentsException {
         IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
         ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
         IRegistrationDataAccessObject registrationDataAccess = Factory.getTextRegistrationDataAccess();

@@ -84,7 +84,7 @@ public class TextCourseDataAccess implements Serializable, ICourseDataAccessObje
 
     @Override
     public Course getCourse(String courseCode) {
-        return courses.get(courseCode);
+        return courses.get(courseCode.toLowerCase());
     }
 
     @Override

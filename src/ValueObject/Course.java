@@ -23,7 +23,7 @@ public class Course implements Serializable {
     }
 
     public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
+        this.courseCode = courseCode.toLowerCase();
     }
 
     public String getCourseName() {
@@ -77,7 +77,7 @@ public class Course implements Serializable {
 
     public boolean getStudent(String matricNumber) {
         for (Index index : indexes.values()) {
-            if (index.getEnrolledStudents().contains(matricNumber)) {
+            if (index.getEnrolledStudents().contains(matricNumber.toLowerCase())) {
                 return true;
             }
         }
@@ -89,7 +89,7 @@ public class Course implements Serializable {
         if (index == null) {
             throw new Exception();
         } else {
-            index.enrollStudent(matricNumber);
+            index.enrollStudent(matricNumber.toLowerCase());
         }
     }
 
@@ -106,7 +106,7 @@ public class Course implements Serializable {
     }
 
     public Course(String courseCode, String courseName, School school, Hashtable<DayOfWeek, List<LocalTime>> lectureTimings, Venue lectureVenue, int AUs, ArrayList<Index> indexes) {
-        this.courseCode = courseCode;
+        this.courseCode = courseCode.toLowerCase();
         this.courseName = courseName;
         this.school = school;
         this.lectureTimings = lectureTimings;

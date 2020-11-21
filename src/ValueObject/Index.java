@@ -2,6 +2,7 @@ package ValueObject;
 
 import Exception.ExistingUserException;
 import Exception.NonExistentUserException;
+import Exception.MaxEnrolledStudentsException;
 
 import java.io.Serializable;
 import java.time.DayOfWeek;
@@ -31,11 +32,12 @@ public class Index implements Serializable {
         this.laboratoryVenue = laboratoryVenue;
     }
 
-    public void enrollStudent(String matricNumber) throws ExistingUserException {
+    public void enrollStudent(String matricNumber) throws ExistingUserException, MaxEnrolledStudentsException {
         if (enrolledStudents.contains(matricNumber)) {
             throw new ExistingUserException();
         } else if (vacancy == 0) {
             waitingList.add(matricNumber);
+            throw new MaxEnrolledStudentsException();
         } else {
             enrolledStudents.add(matricNumber);
             vacancy--;

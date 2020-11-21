@@ -3,6 +3,7 @@ package Helper;
 import Control.*;
 import DataAccessObject.*;
 import ValueObject.*;
+import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 
 import java.io.IOException;
@@ -14,7 +15,8 @@ import java.util.*;
 
 public class Factory {
     public static LoginControl createLoginControl() {
-        return new LoginControl(new Scanner(System.in));
+        TextIO textIO = TextIoFactory.getTextIO();
+        return new LoginControl(textIO, textIO.getTextTerminal());
     }
 
     public static IUserDataAccessObject getTextUserDataAccess() throws IOException, ClassNotFoundException {
@@ -30,12 +32,13 @@ public class Factory {
     }
 
     public static ISession createSession(AbstractUser user) {
+        TextIO textIO = TextIoFactory.getTextIO();
         switch (user.getUserType()) {
             case ADMIN -> {
-                return new AdminSession(TextIoFactory.getTextIO(), TextIoFactory.getTextTerminal(), user);
+                return new AdminSession(textIO, textIO.getTextTerminal(), user);
             }
             case USER -> {
-                return new UserSession(TextIoFactory.getTextIO(), TextIoFactory.getTextTerminal(), user);
+                return new UserSession(textIO, textIO.getTextTerminal(), user);
             }
             default -> throw new NullPointerException();
         }
@@ -63,6 +66,10 @@ public class Factory {
 
     public static Course createCourse(String courseCode, String courseName, School school, Hashtable<DayOfWeek, List<LocalTime>> lectureTimings, Venue lectureVenue, int AUs, ArrayList<Index> indexes) {
         return new Course(courseCode, courseName, school, lectureTimings, lectureVenue, AUs, indexes);
+    }
+
+    public static Course createCourse(String courseCode, String courseName, School school, Hashtable<DayOfWeek, List<LocalTime>> lectureTimings, Venue lectureVenue, int AUs) {
+        return createCourse(courseCode, courseName, school, lectureTimings, lectureVenue, AUs, new ArrayList<>());
     }
 
     public static RegistrationPeriod createRegistrationPeriod(LocalDateTime startDate, LocalDateTime endDate) {
