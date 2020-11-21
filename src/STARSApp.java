@@ -5,6 +5,8 @@ import DataAccessObject.IRegistrationDataAccessObject;
 import DataAccessObject.IUserDataAccessObject;
 import Helper.Factory;
 import ValueObject.*;
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextIoFactory;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -146,9 +148,10 @@ public class STARSApp {
 
             ISession session;
             do {
-                LoginControl loginControl = Factory.createLoginControl();
-                AbstractUser user = loginControl.login(Factory.getTextUserDataAccess());
-
+//                LoginControl loginControl = Factory.createLoginControl();
+//                AbstractUser user = loginControl.login(Factory.getTextUserDataAccess());
+                AbstractUser user = newA;
+                TextIoFactory.getTextTerminal().getProperties().setPromptColor("white");
                 session = Factory.createSession(user);
                 session.run();
             } while (!session.logout());

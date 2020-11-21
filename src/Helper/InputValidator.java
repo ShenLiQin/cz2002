@@ -75,7 +75,7 @@ public class InputValidator {
 
     public static boolean validateNameInput(String nameStr) {
         boolean valid;
-        valid = nameStr.matches(".*\\d.*");
+        valid = !nameStr.matches(".*\\d.*");
         return valid;
     }
 

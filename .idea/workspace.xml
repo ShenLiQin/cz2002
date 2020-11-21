@@ -10,7 +10,24 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b2a96ea-68a5-4f89-8ab5-21e919bb5e30" name="Default Changelist" comment="added masking for password" />
+    <list default="true" id="0b2a96ea-68a5-4f89-8ab5-21e919bb5e30" name="Default Changelist" comment="added masking for password">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/org_beryx_text_io_3_4_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/final.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/final.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Courses.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/Courses.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Registrations.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/Registrations.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Users.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/Users.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/Control/LoginControl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Control/LoginControl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/Control/UserSession.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Control/UserSession.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/STARSApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/STARSApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Control/AdminSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/AdminSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Control/LoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/LoginControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/ICourseDataAccessObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataAccessObject/ICourseDataAccessObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/TextCourseDataAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataAccessObject/TextCourseDataAccess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Helper/Factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helper/Factory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Helper/InputValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helper/InputValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/STARSApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/STARSApp.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,14 +52,19 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/ValueObject" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/data" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.customizations" />
   </component>
   <component name="RecentsManager">
     <key name="ExtractSuperBase.RECENT_KEYS">
@@ -55,11 +77,12 @@
       <recent name="ValueObject" />
       <recent name="" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\yangc\OneDrive - Nanyang Technological University\Uni\CZ2002\Project\final\src\ValueObject" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\yangc\OneDrive - Nanyang Technological University\Uni\CZ2002\Project\final\data" />
+      <recent name="C:\Users\yangc\OneDrive - Nanyang Technological University\Uni\CZ2002\Project\final" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yangc\OneDrive - Nanyang Technological University\Uni\CZ2002\Project\final\src\ValueObject" />
     </key>
   </component>
   <component name="RunManager">
@@ -92,7 +115,8 @@
       <workItem from="1605320212777" duration="35499000" />
       <workItem from="1605507051415" duration="206000" />
       <workItem from="1605507376413" duration="210000" />
-      <workItem from="1605507850865" duration="69788000" />
+      <workItem from="1605507850865" duration="73191000" />
+      <workItem from="1605925520839" duration="15102000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1605511966758</created>
@@ -262,7 +286,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605842404580</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="added masking for password">
+      <created>1605842735038</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1605842735038</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -309,10 +340,10 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="389" y="85" key="#com.intellij.ide.macro.MacrosDialog/0.0.1200.760@0.0.1200.760" timestamp="1605507019668" />
-    <state x="521" y="129" key="#com.intellij.ide.util.MemberChooser" timestamp="1605692846060">
+    <state x="521" y="129" key="#com.intellij.ide.util.MemberChooser" timestamp="1605931969377">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="521" y="129" key="#com.intellij.ide.util.MemberChooser/0.0.1200.760@0.0.1200.760" timestamp="1605692846060" />
+    <state x="521" y="129" key="#com.intellij.ide.util.MemberChooser/0.0.1200.760@0.0.1200.760" timestamp="1605931969377" />
     <state x="341" y="157" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1605606183737">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -321,6 +352,10 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="338" y="170" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1200.760@0.0.1200.760" timestamp="1605507237641" />
+    <state x="432" y="64" key="#com.intellij.openapi.roots.ui.configuration.libraryEditor.LibraryEditorDialog" timestamp="1605923158789">
+      <screen x="0" y="0" width="1200" height="760" />
+    </state>
+    <state x="432" y="64" key="#com.intellij.openapi.roots.ui.configuration.libraryEditor.LibraryEditorDialog/0.0.1200.760@0.0.1200.760" timestamp="1605923158789" />
     <state x="385" y="271" width="448" height="218" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1605606482253">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -341,10 +376,14 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="332" y="128" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1200.760@0.0.1200.760" timestamp="1605340359431" />
-    <state x="382" y="136" key="FileChooserDialogImpl" timestamp="1605606656076">
+    <state x="336" y="243" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1605922630260">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="382" y="136" key="FileChooserDialogImpl/0.0.1200.760@0.0.1200.760" timestamp="1605606656076" />
+    <state x="336" y="243" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1200.760@0.0.1200.760" timestamp="1605922630260" />
+    <state x="382" y="136" key="FileChooserDialogImpl" timestamp="1605929478417">
+      <screen x="0" y="0" width="1200" height="760" />
+    </state>
+    <state x="382" y="136" key="FileChooserDialogImpl/0.0.1200.760@0.0.1200.760" timestamp="1605929478417" />
     <state x="409" y="261" width="383" height="311" key="Github.ShareDialog" timestamp="1605508435971">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -353,58 +392,62 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="279" y="79" key="Github.UntrackedFilesDialog/0.0.1200.760@0.0.1200.760" timestamp="1605508454475" />
-    <state width="1157" height="197" key="GridCell.Tab.0.bottom" timestamp="1605841985632">
+    <state width="1157" height="197" key="GridCell.Tab.0.bottom" timestamp="1605940541466">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1605841985632" />
-    <state width="1157" height="197" key="GridCell.Tab.0.center" timestamp="1605841985631">
+    <state width="1157" height="197" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1605940541466" />
+    <state width="1157" height="197" key="GridCell.Tab.0.center" timestamp="1605940541464">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1605841985631" />
-    <state width="1157" height="197" key="GridCell.Tab.0.left" timestamp="1605841985631">
+    <state width="1157" height="197" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1605940541464" />
+    <state width="1157" height="197" key="GridCell.Tab.0.left" timestamp="1605940541463">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1605841985631" />
-    <state width="1157" height="197" key="GridCell.Tab.0.right" timestamp="1605841985631">
+    <state width="1157" height="197" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1605940541463" />
+    <state width="1157" height="197" key="GridCell.Tab.0.right" timestamp="1605940541465">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1605841985631" />
-    <state width="1157" height="236" key="GridCell.Tab.1.bottom" timestamp="1605841980443">
+    <state width="1157" height="197" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1605940541465" />
+    <state width="1157" height="236" key="GridCell.Tab.1.bottom" timestamp="1605939686571">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="236" key="GridCell.Tab.1.bottom/0.0.1200.760@0.0.1200.760" timestamp="1605841980443" />
-    <state width="1157" height="236" key="GridCell.Tab.1.center" timestamp="1605841980442">
+    <state width="1157" height="236" key="GridCell.Tab.1.bottom/0.0.1200.760@0.0.1200.760" timestamp="1605939686571" />
+    <state width="1157" height="236" key="GridCell.Tab.1.center" timestamp="1605939686571">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="236" key="GridCell.Tab.1.center/0.0.1200.760@0.0.1200.760" timestamp="1605841980442" />
-    <state width="1157" height="236" key="GridCell.Tab.1.left" timestamp="1605841980442">
+    <state width="1157" height="236" key="GridCell.Tab.1.center/0.0.1200.760@0.0.1200.760" timestamp="1605939686571" />
+    <state width="1157" height="236" key="GridCell.Tab.1.left" timestamp="1605939686571">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="236" key="GridCell.Tab.1.left/0.0.1200.760@0.0.1200.760" timestamp="1605841980442" />
-    <state width="1157" height="236" key="GridCell.Tab.1.right" timestamp="1605841980443">
+    <state width="1157" height="236" key="GridCell.Tab.1.left/0.0.1200.760@0.0.1200.760" timestamp="1605939686571" />
+    <state width="1157" height="236" key="GridCell.Tab.1.right" timestamp="1605939686571">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="236" key="GridCell.Tab.1.right/0.0.1200.760@0.0.1200.760" timestamp="1605841980443" />
+    <state width="1157" height="236" key="GridCell.Tab.1.right/0.0.1200.760@0.0.1200.760" timestamp="1605939686571" />
     <state x="276" y="101" key="RollbackChangesDialog" timestamp="1605506844758">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="276" y="101" key="RollbackChangesDialog/0.0.1200.760@0.0.1200.760" timestamp="1605506844758" />
-    <state x="82" y="0" key="SettingsEditor" timestamp="1605507881846">
+    <state x="82" y="0" key="SettingsEditor" timestamp="1605923165503">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="82" y="0" key="SettingsEditor/0.0.1200.760@0.0.1200.760" timestamp="1605507881846" />
+    <state x="82" y="0" key="SettingsEditor/0.0.1200.760@0.0.1200.760" timestamp="1605923165503" />
     <state x="168" y="295" key="VCS.EditChangelistDialog" timestamp="1605685783627">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="168" y="295" key="VCS.EditChangelistDialog/0.0.1200.760@0.0.1200.760" timestamp="1605685783627" />
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1605842417356">
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1605842744837">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1605842417356" />
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1605842744837" />
     <state width="606" height="386" key="XDebugger.FullValuePopup" timestamp="1605511825096">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state width="606" height="386" key="XDebugger.FullValuePopup/0.0.1200.760@0.0.1200.760" timestamp="1605511825096" />
+    <state x="330" y="272" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1605922853643">
+      <screen x="0" y="0" width="1200" height="760" />
+    </state>
+    <state x="330" y="272" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1200.760@0.0.1200.760" timestamp="1605922853643" />
     <state x="411" y="295" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605679945956">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -413,10 +456,10 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="375" y="251" key="extract.method.dialog/0.0.1200.760@0.0.1200.760" timestamp="1605686894657" />
-    <state x="258" y="172" key="run.anything.popup" timestamp="1605706811036">
+    <state x="258" y="172" key="run.anything.popup" timestamp="1605931019131">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="258" y="172" key="run.anything.popup/0.0.1200.760@0.0.1200.760" timestamp="1605706811036" />
+    <state x="258" y="172" key="run.anything.popup/0.0.1200.760@0.0.1200.760" timestamp="1605931019131" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -428,7 +471,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Control/AdminSession.java</url>
-          <line>134</line>
+          <line>194</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>

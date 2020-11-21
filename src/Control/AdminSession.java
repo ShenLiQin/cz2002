@@ -8,28 +8,37 @@ import Helper.InputValidator;
 import Helper.PasswordStorage;
 import ValueObject.*;
 import Exception.*;
+import jline.Terminal;
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextIoFactory;
+import org.beryx.textio.TextTerminal;
 
+import java.awt.*;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.List;
 
 public class AdminSession implements ISession{
-    private final Scanner _scanner;
+    private TextIO _textIO;
+    private TextTerminal _terminal;
     private boolean loggedIn = true;
-    private Staff _user;
+    private final Staff _user;
+    private Scanner _scanner;
 
-
-    public AdminSession(Scanner scanner, AbstractUser user) {
-        _scanner = scanner;
+    public AdminSession(TextIO textIO, TextTerminal terminal, AbstractUser user) {
+        _textIO = textIO;
+        _terminal = terminal;
         _user = (Staff) user;
+        _scanner = new Scanner(System.in);
     }
 
     @Override
     public boolean logout() {
+        _terminal.resetToBookmark("clear");
         return loggedIn;
     }
 
@@ -38,108 +47,191 @@ public class AdminSession implements ISession{
         System.exit(0);
     }
 
+    private final String admin =
+            "    _        _           _            ___                _      _                            _ \n" +
+                    "   /_\\    __| |  _ __   (_)  _ _     |   \\   __ _   ___ | |_   | |__   ___   __ _   _ _   __| |\n" +
+                    "  / _ \\  / _` | | '  \\  | | | ' \\    | |) | / _` | (_-< | ' \\  | '_ \\ / _ \\ / _` | | '_| / _` |\n" +
+                    " /_/ \\_\\ \\__,_| |_|_|_| |_| |_||_|   |___/  \\__,_| /__/ |_||_| |_.__/ \\___/ \\__,_| |_|   \\__,_|\n" +
+                    "                                                                                               ";
+    private final String adminOptions =
+                    "1. Edit student access period\n" +
+                    "2. Add a student (name, matric number, gender, nationality, etc)\n" +
+                    "3. Add/Update a course (course code, school, its index numbers and vacancy)\n" +
+                    "4. Check available slot for an index number (vacancy in a class)\n" +
+                    "5. Print student list by index number\n" +
+                    "6. Print student list by course (all students registered for the selected course)\n" +
+                    "7. Log out\n" +
+                    "8. Exit\n";
+
     @Override
     public void run() {
         int choice;
-
+        _terminal.getProperties().setPromptBold(true);
         do {
-            System.out.println("\t\twelcome " + _user.getName());
-            System.out.println("_______Admin Dashboard_______");
-            System.out.println("1. Edit student access period");
-            System.out.println("2. Add a student (name, matric number, gender, nationality, etc)");
-            System.out.println("3. Add/Update a course (course code, school, its index numbers and vacancy)");
-            System.out.println("4. Check available slot for an index number (vacancy in a class)");
-            System.out.println("5. Print student list by index number");
-            System.out.println("6. Print student list by course (all students registered for the selected course)");
-            System.out.println("7. Log out");
-            System.out.println("8. Exit");
-
-            choice = _scanner.nextInt();
-            _scanner.nextLine();
+            _terminal.resetToBookmark("clear");
+            _terminal.println(admin);
+            _terminal.setBookmark("admin");
+            _terminal.println(adminOptions);
+            _terminal.println("\t\twelcome " + _user.getName());
+            choice = _textIO.newIntInputReader().withMinVal(1).withMaxVal(8).read("Enter your choice: ");
+            _terminal.resetToBookmark("admin");
 
             switch (choice) {
                 case 1 -> {
                     boolean validDateTime;
                     LocalDateTime startDate, endDate;
+                    _terminal.println("update registration period");
+                    _terminal.setBookmark("update registration period home screen");
                     do {
                         String startDateStr;
+                        _terminal.setBookmark("start date");
                         do {
-                            System.out.print("new start date in yy-MM-dd HH:mm format: ");
-                            startDateStr = _scanner.nextLine();
+//                            System.out.print("new start date in yy-MM-dd HH:mm format: ");
+                            startDateStr = _textIO.newStringInputReader().read("new start date in yyyy-MM-dd HH:mm format: ");
                             validDateTime = InputValidator.validateDateTimeInput(startDateStr);
+                            if (!validDateTime) {
+                                _terminal.resetToBookmark("start date");
+                                _terminal.getProperties().setPromptColor("red");
+                                _terminal.println("invalid date format");
+                                _terminal.getProperties().setPromptColor("white");
+                            }
                         } while (!validDateTime);
                         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                         startDate = LocalDateTime.parse(startDateStr, format);
 
                         String endDateStr;
+                        _terminal.setBookmark("end date");
                         do {
-                            System.out.print("new end date in yy-MM-dd HH:mm format: ");
-                            endDateStr = _scanner.nextLine();
+//                            System.out.print("new end date in yy-MM-dd HH:mm format: ");
+                            endDateStr = _textIO.newStringInputReader().read("new end date in yyyy-MM-dd HH:mm format: ");
                             validDateTime = InputValidator.validateDateTimeInput(endDateStr);
+                            if (!validDateTime) {
+                                _terminal.resetToBookmark("end date");
+                                _terminal.getProperties().setPromptColor("red");
+                                _terminal.println("invalid date format");
+                                _terminal.getProperties().setPromptColor("white");
+                            }
                         } while (!validDateTime);
                         endDate = LocalDateTime.parse(endDateStr, format);
 
                         validDateTime = startDate.compareTo(endDate) < 0;
                         if (startDate.compareTo(endDate) > 0) {
-                            System.out.println("start date should occur after end date");
+//                            System.out.println("start date should occur after end date");
+                            _terminal.resetToBookmark("update registration period home screen");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("start date should occur after end date");
+                            _terminal.getProperties().setPromptColor("white");
                         } else if (startDate.compareTo(endDate) == 0) {
-                            System.out.println("Both dates are equal");
+//                            System.out.println("Both dates are equal");
+                            _terminal.resetToBookmark("update registration period home screen");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("Both dates are equal");
+                            _terminal.getProperties().setPromptColor("white");
                         }
                     } while (!validDateTime);
                     RegistrationPeriod newRP = Factory.createRegistrationPeriod(startDate, endDate);
                     changeAccessPeriod(newRP);
+                    _terminal.getProperties().setPromptColor(Color.GREEN);
+                    _terminal.println("successfully changed access period");
+                    _terminal.getProperties().setPromptColor("white");
+                    _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
                 }
                 case 2 -> {
                     String name;
                     boolean validName;
+                    _terminal.println("add student");
+                    _terminal.setBookmark("add student home screen");
                     do {
-                        System.out.print("name: ");
-                        name = _scanner.nextLine();
+//                        System.out.print("name: ");
+//                        name = _scanner.nextLine();
+                        _terminal.setBookmark("student name");
+                        name = _textIO.newStringInputReader().withMinLength(3).read("name: ");
                         validName = InputValidator.validateNameInput(name);
                         if (!validName) {
-                            System.out.println("name cannot contain number");
+//                            System.out.println("name cannot contain number");
+                            _terminal.resetToBookmark("student name");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("name cannot contain number");
+                            _terminal.getProperties().setPromptColor("white");
                         }
                     }while (!validName);
 
-                    System.out.print("gender: ");
-                    Gender gender = getGender();
-                    System.out.print("nationality: ");
-                    Nationality nationality = getNationality();
-                    System.out.print("school: ");
-                    School school = getSchool();
+//                    System.out.print("gender: ");
+//                    Gender gender = getGender();
+//                    System.out.print("nationality: ");
+//                    Nationality nationality = getNationality();
+//                    System.out.print("school: ");
+//                    School school = getSchool();
+                    Gender gender = _textIO.newEnumInputReader(Gender.class).read("Gender: ");
+                    Nationality nationality = _textIO.newEnumInputReader(Nationality.class).read("Nationality: ");
+                    School school = _textIO.newEnumInputReader(School.class).read("School: ");
 
-                    int maxAUs = 0;
-                    do {
-                        System.out.print("maxAUs: ");
-                        try {
-                            maxAUs = _scanner.nextInt();
-                        } catch (InputMismatchException e) {
-                            System.out.println("Pls input only numbers");
-                            _scanner.nextLine();
-                        }
-                        if (maxAUs <25 && maxAUs >=0) {
-                            System.out.println("you have set MaxAUs as " + maxAUs);
-                        }
-                        else {
-                            System.out.println("Number of AUs cannot be 25 or more");
-                        }
-                    } while(maxAUs >=25 || maxAUs <= 0);
+//                    int maxAUs = 0;
+//                    do {
+//                        System.out.print("maxAUs: ");
+                        int maxAUs = _textIO.newIntInputReader().withDefaultValue(21).withMinVal(0).withMaxVal(25).read("MaxAUs: (leave blank for default 21 AUs)");
+//                        if (maxAUs <25 && maxAUs >=0) {
+//                            System.out.println("you have set MaxAUs as " + maxAUs);
+//                        }
+//                        else {
+//                            System.out.println("Number of AUs cannot be 25 or more");
+//                        }
+//                    } while(maxAUs >=25 || maxAUs <= 0);
                     try {
                         Student newStudent = Factory.createStudent(name, school, gender, nationality, maxAUs);
                         addStudent(newStudent);
+                        _terminal.getProperties().setPromptColor(Color.GREEN);
+                        _terminal.println("successfully added student");
+                        _terminal.getProperties().setPromptColor("white");
+                        _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
                     } catch (PasswordStorage.CannotPerformOperationException e) {
-                        System.out.println("error hashing password");
+//                        System.out.println("error hashing password");
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("error hashing password");
+                        _terminal.getProperties().setPromptColor("white");
+                        _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
                     }
-
                 }
                 case 3 -> {
-                    String courseCode;
+                    String courseCode = null;
+                    Course course = null;
                     String courseName;
                     School school;
 
-                    System.out.print("enter a course code to add/update: ");
-                    courseCode = getCourseCode();
-                    Course course = getCourse(courseCode);
+//
+                    _terminal.println("add/update courseSystem.out.print(\"enter a course code to add/update: \");\n" +
+                            "//                    courseCode = getCourseCode();\n" +
+                            "//                    Course course = getCourse(courseCode);");
+                    _terminal.setBookmark("add/update course home page");
+                    try {
+                        ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+                        List<String> coursesString = courseDataAccessObject.getCourses();
+                        coursesString.add("add new course");
+                        courseCode = _textIO.newStringInputReader()
+                                .withNumberedPossibleValues(coursesString)
+                                .read("select option to add/update: ");
+                        course = courseDataAccessObject.getCourse(courseCode);
+
+                        if (course == null) {
+                            boolean validCourseCode;
+                            _terminal.setBookmark("add new course");
+                            do {
+                                courseCode = _textIO.newStringInputReader().read("enter new course code");
+                                validCourseCode = InputValidator.courseStrMatcher(courseCode);
+                                if (validCourseCode) {
+                                    course = courseDataAccessObject.getCourse(courseCode);
+
+                                } else {
+                                    _terminal.resetToBookmark("add new course");
+                                    _terminal.getProperties().setPromptColor("red");
+                                    _terminal.println("invalid course code format");
+                                    _terminal.getProperties().setPromptColor("white");
+                                }
+                            } while (!validCourseCode);
+                        }
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
 
                     if (course == null) {
                         Hashtable<DayOfWeek, List<LocalTime>> lectureTimings = new Hashtable<>();
@@ -149,7 +241,6 @@ public class AdminSession implements ISession{
                         ArrayList<Index> indexes = new ArrayList<>();
 
                         try {
-                            System.out.println(courseCode + " not found in the database.");
                             System.out.println("____input the following details to add the course____"); //changed
                             System.out.print("course name: ");
                             courseName = _scanner.nextLine();

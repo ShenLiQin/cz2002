@@ -3,6 +3,7 @@ package Helper;
 import Control.*;
 import DataAccessObject.*;
 import ValueObject.*;
+import org.beryx.textio.TextIoFactory;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -31,7 +32,7 @@ public class Factory {
     public static ISession createSession(AbstractUser user) {
         switch (user.getUserType()) {
             case ADMIN -> {
-                return new AdminSession(new Scanner(System.in), user);
+                return new AdminSession(TextIoFactory.getTextIO(), TextIoFactory.getTextTerminal(), user);
             }
             case USER -> {
                 return new UserSession(new Scanner(System.in), user);

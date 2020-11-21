@@ -9,6 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class TextCourseDataAccess implements Serializable, ICourseDataAccessObject {
@@ -82,6 +85,11 @@ public class TextCourseDataAccess implements Serializable, ICourseDataAccessObje
     @Override
     public Course getCourse(String courseCode) {
         return courses.get(courseCode);
+    }
+
+    @Override
+    public List<String> getCourses() {
+        return new ArrayList<>(courses.keySet());
     }
 
     @Override
