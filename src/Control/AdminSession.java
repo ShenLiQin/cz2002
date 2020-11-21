@@ -392,7 +392,7 @@ public class AdminSession implements ISession{
                         Index index = course.getIndex(Integer.parseInt(indexNumber));
                         _terminal.getProperties().setPromptColor(Color.GREEN);
                         _terminal.println("Successfully retrieved student list");
-                        _terminal.println(index.toString());
+                        printStudentListByIndex(index);
                         _terminal.println("End of Student list");
                     } catch(IOException | ClassNotFoundException e){
                         _terminal.getProperties().setPromptColor("red");
@@ -414,7 +414,7 @@ public class AdminSession implements ISession{
 
                         _terminal.getProperties().setPromptColor(Color.GREEN);
                         _terminal.println("Successfully retrieved student list");
-                        _terminal.println(course.StudentListToString());
+                        printStudentListByCourse(course);
                         _terminal.println("End of Student list");
                         _terminal.getProperties().setPromptColor("white");
                     } catch(IOException | ClassNotFoundException e){
@@ -659,6 +659,56 @@ public class AdminSession implements ISession{
         return course;
     }
 
+    private void printStudentListByIndex(Index index){
+        try {
+            IUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess();
+            ArrayList<String> enrolledStudents = index.getEnrolledStudents();
+            Queue<String> waitingListStudents = index.getWaitingList();
+            StringBuilder str = new StringBuilder();
+            str.append("indexNumber: ").append(index.getIndexNumber()).append('\n');
+            if (enrolledStudents.isEmpty()) {
+                str.append("no enrolled students");
+            } else {
+                str.append("enrolled students: ").append('\n');
+                for (String matricNumber : enrolledStudents) {
+                    Student student = userDataAccessObject.getStudent(matricNumber);
+                    str.append("name: \t\t").append(student.getName()).append('\n');
+                    str.append("gender: \t").append(student.getGender()).append('\n');
+                    str.append("nationality: \t").append(student.getNationality()).append('\n');
+                }
+                if (waitingListStudents.isEmpty()) {
+                    str.append("no students in waiting list");
+                } else {
+                    str.append("waiting list students: ").append('\n');
+                    for (String matricNumber : waitingListStudents) {
+                        Student student = userDataAccessObject.getStudent(matricNumber);
+                        str.append("name: \t\t").append(student.getName()).append('\n');
+                        str.append("gender: \t").append(student.getGender()).append('\n');
+                        str.append("nationality: \t").append(student.getNationality()).append('\n');
+                    }
+                }
+                _terminal.getProperties().setPromptColor(Color.GREEN);
+                _terminal.println(str.toString());
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("file not found");
+        } finally {
+            _terminal.getProperties().setPromptColor("white");
+        }
+    }
+
+    private void printStudentListByCourse(Course course) {
+        _terminal.getProperties().setPromptColor(Color.GREEN);
+        _terminal.println("courseCode: " + course.getCourseCode() + ",\t" + "courseName: " + course.getCourseName());
+        for (String indexNumber : course.getIndexes()) {
+            Index index = course.getIndex(Integer.parseInt(indexNumber));
+            printStudentListByIndex(index);
+            _terminal.println();
+        }
+        _terminal.getProperties().setPromptColor("white");
+    }
+
     private List<LocalTime> getSessionTiming(String sessionType){
         List<LocalTime> startEndTime = new ArrayList<>();
         boolean proceed;
@@ -668,7 +718,7 @@ public class AdminSession implements ISession{
         int maxDuration = 4;
         int duration = _textIO.newIntInputReader()
                 .withMinVal(1).withMaxVal(maxDuration)
-                .read("enter the duration (1-5) of the " + sessionType + "(hrs): ");
+                .read("enter the duration (1-" + maxDuration + ") of the " + sessionType + "(hrs): ");
         _terminal.setBookmark("start time");
         do{
             startTime = _textIO.newStringInputReader().read("enter the start time in HH:MM(30 min interval, e.g. 16:30): ");

@@ -19,7 +19,6 @@ import java.util.List;
 public class UserSession implements ISession{
     private TextIO _textIO;
     private TextTerminal _terminal;
-    private final Scanner _scanner;
     private boolean loggedIn = false;
     private Student _user;
 
@@ -27,11 +26,11 @@ public class UserSession implements ISession{
         _textIO = textIO;
         _terminal = terminal;
         _user = (Student) user;
-        _scanner = new Scanner(System.in);
     }
 
     @Override
     public boolean logout() {
+        _terminal.resetToBookmark("clear");
         return loggedIn;
     }
 
@@ -57,7 +56,6 @@ public class UserSession implements ISession{
                     "7. Log out\n" +
                     "8. Exit\n";
 
-
     @Override
     public void run() {
         int choice;
@@ -81,8 +79,14 @@ public class UserSession implements ISession{
                     printRegisteredCourse();
                     try {
                         ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+                        List<String> coursesString = courseDataAccessObject.getCourses();
+                        if (_user.getRegisteredCourses().keySet().containsAll(coursesString)) {
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("no available courses to register");
+                            break;
+                        }
                         String courseCodeInput = _textIO.newStringInputReader()
-                                .withNumberedPossibleValues(courseDataAccessObject.getCourses())
+                                .withNumberedPossibleValues(coursesString)
                                 .read("Enter course code: ");
                         Course course = courseDataAccessObject.getCourse(courseCodeInput);
 
@@ -107,7 +111,11 @@ public class UserSession implements ISession{
                         _user = Factory.getTextUserDataAccess().getStudent(_user.getMatricNumber());
                         Hashtable<String, Integer> registered = _user.getRegisteredCourses();
                         List<String> registeredCoursesStr = new ArrayList<>(registered.keySet());
-
+                        if (registeredCoursesStr.size() == 0) {
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("no course to drop");
+                            break;
+                        }
                         String courseCodeInput = _textIO.newStringInputReader()
                                 .withNumberedPossibleValues(registeredCoursesStr)
                                 .read("Select course to drop: ");
@@ -164,7 +172,11 @@ public class UserSession implements ISession{
                         _user = Factory.getTextUserDataAccess().getStudent(_user.getMatricNumber());
                         Hashtable<String, Integer> registered = _user.getRegisteredCourses();
                         List<String> registeredCoursesStr = new ArrayList<>(registered.keySet());
-
+                        if (registeredCoursesStr.size() == 0) {
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("no course registered");
+                            break;
+                        }
                         String courseCodeInput = _textIO.newStringInputReader()
                                 .withNumberedPossibleValues(registeredCoursesStr)
                                 .read("Select course to swap: ");
@@ -204,6 +216,10 @@ public class UserSession implements ISession{
                     } catch (MaxEnrolledStudentsException e) {
                         _terminal.getProperties().setPromptColor("red");
                         _terminal.println("maximum enrolled students, added to waiting list instead");
+                    } catch (ClashingTimeTableException e) {
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("unable to add course, time table clashes");
+                        _terminal.println("deleted course with clashing timetable...");
                     } catch (Exception e) {
                         _terminal.getProperties().setPromptColor("red");
                         _terminal.println("error saving file");
@@ -221,7 +237,13 @@ public class UserSession implements ISession{
                         _user = Factory.getTextUserDataAccess().getStudent(_user.getMatricNumber());
                         Hashtable<String, Integer> registered = _user.getRegisteredCourses();
                         List<String> registeredCoursesStr = new ArrayList<>(registered.keySet());
-
+                        if (registeredCoursesStr.size() == 0) {
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("no course registered");
+                            _textIO.newStringInputReader().withDefaultValue(" ")
+                                    .read("press enter to continue");
+                            break;
+                        }
                         courseCodeInput = _textIO.newStringInputReader()
                                 .withNumberedPossibleValues(registeredCoursesStr)
                                 .read("Select course to swap: ");
@@ -237,8 +259,8 @@ public class UserSession implements ISession{
                     }
 
                     AbstractUser absPeer = null;
+                    _terminal.setBookmark("Enter peer username:");
                     do {
-                        _terminal.setBookmark("Enter peer username:");
                         String peerUsername = _textIO.newStringInputReader()
                                 .read("Enter peer username: ");
                         String peerPassword = _textIO.newStringInputReader()
@@ -248,17 +270,20 @@ public class UserSession implements ISession{
                         //authenticate peer
                         try {
                             absPeer = Factory.getTextUserDataAccess().authenticate(peerUsername, peerPassword);
-                            if (absPeer == null) {
+                            if (!(absPeer instanceof Student)) {
                                 _terminal.resetToBookmark("Enter peer username:");
                                 _terminal.getProperties().setPromptColor("red");
                                 _terminal.println("Wrong username/password. Try again.");
                             } else {
-                                _terminal.getProperties().setPromptColor(Color.green);
-                                _terminal.println("Successfully fetched peer data");
                                 //downcast peer from AbstractUser to Student
                                 Student studentPeer = (Student) absPeer;
-
                                 //change to auto fetch peer old index.
+                                if (studentPeer == _user) {
+                                    _terminal.resetToBookmark("Enter peer username:");
+                                    _terminal.getProperties().setPromptColor("red");
+                                    _terminal.println("you cant swap index with yourself");
+                                    break;
+                                }
                                 boolean containsKey = studentPeer.getRegisteredCourses().containsKey(courseCodeInput);
                                 if (!containsKey) {
                                     _terminal.getProperties().setPromptColor("red");
@@ -308,6 +333,8 @@ public class UserSession implements ISession{
                     _textIO.newStringInputReader().withDefaultValue(" ")
                             .read("press enter to continue");
                 }
+                case 7 -> loggedIn = false;
+                case 8 -> exit();
             }
         } while (choice > 0 && choice < 7);
     }
@@ -338,18 +365,18 @@ public class UserSession implements ISession{
         } catch (IOException | ClassNotFoundException e) {
             _terminal.getProperties().setPromptColor("red");
             _terminal.println("error reading file");
-        } catch (NonExistentUserException e) {
-            _terminal.getProperties().setPromptColor("red");
-            _terminal.println("no such student");
         } catch (InsufficientAUsException e) {
             _terminal.getProperties().setPromptColor("red");
             _terminal.println("Course exceeds AU limit.");
         } catch (InvalidAccessPeriodException e) {
             _terminal.getProperties().setPromptColor("red");
             _terminal.println("registration period have not started/over");
-        } catch (ExistingRegistrationException e) {
+        } catch (ExistingCourseException e) {
             _terminal.getProperties().setPromptColor("red");
             _terminal.println("course already registered");
+        } catch (ClashingTimeTableException e) {
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("unable to add course, time table clashes");
         } catch (Exception e) {
             _terminal.getProperties().setPromptColor("red");
             _terminal.println("error adding course");

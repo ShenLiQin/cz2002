@@ -15,7 +15,7 @@ import java.time.LocalTime;
 import java.util.*;
 
 public class STARSApp {
-    /* TODO enhance user experience (word art, press enter to continue, etc)
+    /*
        TODO change output file format to flat
        TODO catch bugs
        TODO think of new functionalities (implement userSession into adminSession)
@@ -83,8 +83,8 @@ public class STARSApp {
             Hashtable<DayOfWeek, List<LocalTime>> lectureTiming = new Hashtable<>();
             timing = new LinkedList<>();
             timing.add(LocalTime.of(9,0));
-            timing.add(LocalTime.of(10,0));
-            lectureTiming.put(DayOfWeek.MONDAY, timing);
+            timing.add(LocalTime.of(11,0));
+            lectureTiming.put(DayOfWeek.FRIDAY, timing);
 
             Course course1 = Factory.createCourse("cz2001", "algorithm", School.SCSE, lectureTiming, Venue.LT1, 3, indexes1);
             courseDataAccessObject.addCourse(course1);
@@ -147,13 +147,10 @@ public class STARSApp {
             registrationDataAccessObject.setRegistrationPeriod(registrationPeriod);
 
             ISession session;
-            TextIoFactory.getTextTerminal().setBookmark("clear");
             do {
-                TextIoFactory.getTextTerminal().resetToBookmark("clear");
                 LoginControl loginControl = Factory.createLoginControl();
                 AbstractUser user = loginControl.login(Factory.getTextUserDataAccess());
 //                AbstractUser user = newS1;
-                TextIoFactory.getTextTerminal().getProperties().setPromptColor("white");
                 session = Factory.createSession(user);
                 session.run();
             } while (!session.logout());

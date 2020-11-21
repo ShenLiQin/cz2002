@@ -120,11 +120,14 @@ public class Index implements Serializable {
         this.laboratoryVenue = laboratoryVenue;
     }
 
-    @Override
-    public String toString() {
+    public String studentInfoToString() {
         StringBuilder str = new StringBuilder();
         str.append("indexNumber: ").append(indexNumber).append('\t').append("enrolledStudents: ").append(enrolledStudents);
         return str.toString();
+    }
+
+    public Queue<String> getWaitingList() {
+        return waitingList;
     }
 
     public String allInfoToString(){

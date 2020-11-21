@@ -14,21 +14,24 @@ public class LoginControl {
     private final TextIO _textIO;
     private final TextTerminal _terminal;
     private final String welcome =
-            "   ___    ___    _  _   ___    ___    _      ___     ___   _____     _     ___   ___ \n" +
-            "  / __|  / _ \\  | \\| | / __|  / _ \\  | |    | __|   / __| |_   _|   /_\\   | _ \\ / __|\n" +
-            " | (__  | (_) | | .` | \\__ \\ | (_) | | |__  | _|    \\__ \\   | |    / _ \\  |   / \\__ \\\n" +
-            "  \\___|  \\___/  |_|\\_| |___/  \\___/  |____| |___|   |___/   |_|   /_/ \\_\\ |_|_\\ |___/\n" +
-            "                                                                                     ";
+            "   _____                                 _             _____   _                        \n" +
+            "  / ____|                               | |           / ____| | |                       \n" +
+            " | |        ___    _ __    ___    ___   | |   ___    | (___   | |_    __ _   _ __   ___ \n" +
+            " | |       / _ \\  | '_ \\  / __|  / _ \\  | |  / _ \\    \\___ \\  | __|  / _` | | '__| / __|\n" +
+            " | |____  | (_) | | | | | \\__ \\ | (_) | | | |  __/    ____) | | |_  | (_| | | |    \\__ \\\n" +
+            "  \\_____|  \\___/  |_| |_| |___/  \\___/  |_|  \\___|   |_____/   \\__|  \\__,_| |_|    |___/\n" +
+            "                                                                                        \n" +
+            "                                                                                        ";
 
     public LoginControl(TextIO textIO, TextTerminal terminal) {
         user = null;
         _textIO = textIO;
         _terminal = terminal;
         _terminal.getProperties().setPromptColor("white");
-        _terminal.setBookmark("clear");
     }
 
     public AbstractUser login(IUserDataAccessObject userDataAccessObject) {
+        _terminal.setBookmark("clear");
         _terminal.resetToBookmark("clear");
         try {
             _terminal.println(welcome);

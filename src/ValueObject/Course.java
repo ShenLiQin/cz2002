@@ -3,12 +3,13 @@ package ValueObject;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
 import Exception.NonExistentIndexException;
 
-public class Course implements Serializable {
+public class Course implements Serializable, Comparable<Course> {
     private String courseCode;
     private String courseName;
     private School school;
@@ -138,7 +139,7 @@ public class Course implements Serializable {
         StringBuilder str = new StringBuilder();
         str.append("courseCode: ").append(courseCode).append(",\t").append("courseName: ").append(courseName).append('\n');
         for (Index index : indexes.values()) {
-            str.append(index.toString()).append('\n');
+            str.append(index.studentInfoToString()).append('\n');
         }
         return str.toString();
     }
@@ -168,5 +169,26 @@ public class Course implements Serializable {
             str.append('\n').append(index.getIndexNumber());
         }
         return str.toString();
+    }
+
+    @Override
+    public int compareTo(Course c) {
+        for(DayOfWeek thisLectureDay: this.lectureTimings.keySet()) {
+            for(DayOfWeek thatLectureDay: c.lectureTimings.keySet()) {
+                if (thisLectureDay == thatLectureDay) {
+                    if(isOverlapping(this.lectureTimings.get(thisLectureDay).get(0),
+                            this.lectureTimings.get(thisLectureDay).get(1),
+                            c.lectureTimings.get(thatLectureDay).get(0),
+                            c.lectureTimings.get(thatLectureDay).get(1))) {
+                        return 0;
+                    }
+                }
+            }
+        }
+        return 1;
+    }
+
+    private boolean isOverlapping(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
+        return start1.isBefore(end2) && start2.isBefore(end1);
     }
 }

@@ -73,10 +73,7 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
     }
 
     @Override
-    public void addRegistration(RegistrationKey registrationKey) throws ExistingRegistrationException, IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException, NonExistentUserException, MaxEnrolledStudentsException {
-        if (registrations.containsKey(registrationKey)) {
-            throw new ExistingRegistrationException();
-        }
+    public void addRegistration(RegistrationKey registrationKey) throws IOException, ClassNotFoundException, ExistingCourseException, ExistingUserException, NonExistentUserException, MaxEnrolledStudentsException {
         registrations.put(registrationKey, new Date().getTime());
         persist();
 
@@ -95,10 +92,7 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
     }
 
     @Override
-    public void deleteRegistration(RegistrationKey registrationKey) throws NonExistentRegistrationException, IOException, ClassNotFoundException, NonExistentUserException, NonExistentCourseException {
-        if (!registrations.containsKey(registrationKey)) {
-            throw new NonExistentRegistrationException();
-        }
+    public void deleteRegistration(RegistrationKey registrationKey) throws IOException, ClassNotFoundException, NonExistentUserException, NonExistentCourseException {
         registrations.remove(registrationKey);
 
         ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
