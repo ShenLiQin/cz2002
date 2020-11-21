@@ -25,36 +25,6 @@ public class InputValidator {
         return match;
     }
 
-    public static boolean schoolStrMatcher(String schoolInput) {
-        boolean match = false;
-        for (School NTUschool : School.values()) {
-            if (schoolInput.equals(NTUschool.toString())) {
-                match = true;
-            }
-        }
-        return match;
-    }
-
-    public static boolean genderStrMatcher(String genderInput) {
-        boolean match = false;
-        for (Gender gender : Gender.values()) {
-            if (genderInput.equals(gender.toString())) {
-                match = true;
-            }
-        }
-        return match;
-    }
-
-    public static boolean nationalityStrMatcher(String nationalityInput) {
-        boolean match = false;
-        for (Nationality nationality : Nationality.values()) {
-            if (nationalityInput.equals(nationality.toString())) {
-                match = true;
-            }
-        }
-        return match;
-    }
-
     public static boolean indexStrMatcher(String indexInput) {
         boolean valid;
         valid = indexInput.matches("\\d{6}");

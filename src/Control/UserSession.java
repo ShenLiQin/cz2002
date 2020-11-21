@@ -4,11 +4,10 @@ import DataAccessObject.ICourseDataAccessObject;
 import Helper.Factory;
 import Helper.InputValidator;
 import Helper.PasswordStorage;
-import ValueObject.AbstractUser;
-import ValueObject.Course;
-import ValueObject.Index;
-import ValueObject.Student;
+import ValueObject.*;
 import Exception.*;
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextTerminal;
 
 import java.io.Console;
 import java.io.IOException;
@@ -17,13 +16,17 @@ import java.util.Hashtable;
 import java.util.Scanner;
 
 public class UserSession implements ISession{
+    private TextIO _textIO;
+    private TextTerminal _terminal;
     private final Scanner _scanner;
     private boolean loggedIn = false;
     private Student _user;
 
-    public UserSession(Scanner scanner, AbstractUser user) {
-        _scanner = scanner;
+    public UserSession(TextIO textIO, TextTerminal terminal, AbstractUser user) {
+        _textIO = textIO;
+        _terminal = terminal;
         _user = (Student) user;
+        _scanner = new Scanner(System.in);
     }
 
     @Override
@@ -36,78 +39,140 @@ public class UserSession implements ISession{
         System.exit(0);
     }
 
+    private final String user =
+            "_   _                      ___                _      _                            _ \n" +
+                    " | | | |  ___  ___   _ _    |   \\   __ _   ___ | |_   | |__   ___   __ _   _ _   __| |\n" +
+                    " | |_| | (_-< / -_) | '_|   | |) | / _` | (_-< | ' \\  | '_ \\ / _ \\ / _` | | '_| / _` |\n" +
+                    " \\___/  /__/ \\___| |_|     |___/  \\__,_| /__/ |_||_| |_.__/ \\___/ \\__,_| |_|   \\__,_|\n" +
+                    "                                                                                      ";
+
+    private final String userOptions =
+            "1. Add Course\n" +
+                    "2. Drop Course\n" +
+                    "3. Check/Print Courses Registered\n" +
+                    "4. Check Vacancies Available\n" +
+                    "5. Change Index Number of Course\n" +
+                    "6. Swap Index Number with Another Student\n" +
+                    "7. Log out\n" +
+                    "8. Exit\n";
+
+
     @Override
     public void run() {
         int choice;
+        _terminal.getProperties().setPromptBold(true);
 
         do {
-            System.out.println("\t\twelcome " + _user.getName());
-            System.out.println("_______User Dashboard_______");
-            System.out.println("1. Add Course");
-            System.out.println("2. Drop Course");
-            System.out.println("3. Check/Print Courses Registered");
-            System.out.println("4. Check Vacancies Available");
-            System.out.println("5. Change Index Number of Course");
-            System.out.println("6. Swap Index Number with Another Student");
-            System.out.println("7. Log out");
-            System.out.println("8. Exit");
+            _terminal.resetToBookmark("clear");
+            _terminal.println(user);
+            _terminal.setBookmark("user");
+            _terminal.println(userOptions);
+            _terminal.println("\t\twelcome " + _user.getName());
+            choice = _textIO.newIntInputReader().withMinVal(1).withMaxVal(8).read("Enter your choice: ");
+            _terminal.resetToBookmark("user");
 
-            choice = _scanner.nextInt();
-            _scanner.nextLine();
+            /*choice = _scanner.nextInt();
+            _scanner.nextLine();*/
 
             switch (choice) {
                 case 1 -> {
                     //get course input
-                    boolean validCourseCode;
-                    String courseCodeInput;
+                    boolean validCourseCode = false;
+                    String courseCodeInput = "";
+                    Course course = null;
+                    _terminal.println("add course");
+                    _terminal.setBookmark("add course home screen");
                     do {
+                        _terminal.setBookmark("add course -- course code");
                         try {
-                            System.out.println(Factory.getTextCourseDataAccess().toString());
-                        } catch (IOException | ClassNotFoundException e) {
-                            System.out.println("error reading file");
-                        }
-                        System.out.println("Enter course code: ");
-                        courseCodeInput = _scanner.nextLine();
+                            _terminal.println(Factory.getTextCourseDataAccess().toString());
+                            courseCodeInput = _textIO.newStringInputReader().read("Enter course code: ");
+                            validCourseCode = InputValidator.courseStrMatcher(courseCodeInput);
+                            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+                            course = courseDataAccessObject.getCourse(courseCodeInput);
 
-                        validCourseCode = InputValidator.courseStrMatcher(courseCodeInput);
-                        if (!validCourseCode) {
-                            System.out.println("Please enter a course code in its valid format.");
+                            if (!validCourseCode) {
+                                _terminal.resetToBookmark("add course home screen");
+                                _terminal.getProperties().setPromptColor("red");
+                                _terminal.println("Please enter a course code in its valid format.");
+                                _terminal.getProperties().setPromptColor("white");
+                                continue;
+                            }
+                            if (course == null) {
+                                _terminal.resetToBookmark("add course home screen");
+                                _terminal.getProperties().setPromptColor("red");
+                                _terminal.println("Course does not exist");
+                                _terminal.getProperties().setPromptColor("white");
+                                continue;
+                            }
+                        } catch (IOException | ClassNotFoundException e) {
+                            _terminal.resetToBookmark("add course home screen");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("error reading file");
+                            _terminal.getProperties().setPromptColor("white");
                         }
-                    } while (!validCourseCode);
+                        /*_terminal.println("Enter course code: ");
+                        courseCodeInput = _scanner.nextLine();*/
+                        //_terminal.setBookmark("add course -- course code");
+
+                    } while (!validCourseCode | course == null);
 
                     //get index input
                     boolean validIndex;
                     String indexInputStr;
+                    //_terminal.setBookmark("add course -- index");
                     do {
                         try {
-                            System.out.println(Factory.getTextCourseDataAccess().getCourse(courseCodeInput).toString());
+                            _terminal.println(Factory.getTextCourseDataAccess().getCourse(courseCodeInput).toString());
                         } catch (IOException | ClassNotFoundException e) {
-                            System.out.println("error reading file");
+                            _terminal.resetToBookmark("add course home screen");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("error reading file");
+                            _terminal.getProperties().setPromptColor("white");
+                            _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
+                        } catch (Exception e) {
+                            _terminal.resetToBookmark("add course home screen");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("error, please try again");
+                            _terminal.getProperties().setPromptColor("white");
+                            _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
                         }
-                        System.out.println("Enter index: ");
-                        indexInputStr = _scanner.nextLine();
+                        /*System.out.println("Enter index: ");
+                        indexInputStr = _scanner.nextLine(); */
+                        indexInputStr = _textIO.newStringInputReader().read("Enter index: ");
 
                         validIndex = InputValidator.indexStrMatcher(indexInputStr);
                         if (!validIndex) {
-                            System.out.println("Please enter an index in its valid format.");
+                            _terminal.resetToBookmark("add course home screen");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("Please enter an index in its valid format.");
+                            _terminal.getProperties().setPromptColor("white");
                         }
-                    } while (!validIndex);
+                    } while (!validIndex | course == null);
                     addCourse(courseCodeInput, Integer.parseInt(indexInputStr));
+                    _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
                 }
                 case 2 -> {
                     //get course input
                     boolean validCourseCode;
                     String courseCodeInput;
+                    _terminal.println("drop course");
+                    _terminal.setBookmark("drop course home screen");
                     do {
                         printRegisteredCourse();
-                        System.out.println("Enter course code: ");
-                        courseCodeInput = _scanner.nextLine();
+                        /*System.out.println("Enter course code: ");
+                        courseCodeInput = _scanner.nextLine(); */
+                        courseCodeInput = _textIO.newStringInputReader().read("Enter course code: ");
                         validCourseCode = InputValidator.courseStrMatcher(courseCodeInput);
                         if (!validCourseCode) {
-                            System.out.println("Please enter a course code in its valid format.");
+                            _terminal.resetToBookmark("drop course home screen");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("Please enter a course code in its valid format.");
+                            _terminal.getProperties().setPromptColor("white");
                         }
                     } while (!validCourseCode);
                     dropCourse(courseCodeInput);
+                    _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
                 }
 
                 case 3 -> //print registered course

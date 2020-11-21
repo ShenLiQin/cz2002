@@ -102,7 +102,7 @@ public class Index implements Serializable {
         this.laboratoryTimings = laboratoryTimings;
     }
 
-    public Venue getTutorialVenue() {
+    public Venue getLaboratoryTiming() {
         return tutorialVenue;
     }
 

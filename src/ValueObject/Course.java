@@ -122,6 +122,14 @@ public class Course implements Serializable {
         return indexes.get(indexNumber);
     }
 
+    public List<String> getIndexes(){
+        List<String> indexList = new ArrayList<>();
+        for (Integer indexNumber : indexes.keySet()) {
+            indexList.add(indexNumber.toString());
+        }
+        return indexList;
+    }
+
     public void updateIndex(Index index) {
         indexes.replace(index.getIndexNumber(), index);
     }

@@ -5,7 +5,9 @@ import Helper.PasswordStorage;
 import ValueObject.AbstractUser;
 import ValueObject.Gender;
 import jline.Terminal;
-import org.beryx.textio.*;
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextIoFactory;
+import org.beryx.textio.TextTerminal;
 import org.beryx.textio.system.SystemTextTerminal;
 
 import java.io.Console;

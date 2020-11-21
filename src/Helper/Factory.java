@@ -35,7 +35,7 @@ public class Factory {
                 return new AdminSession(TextIoFactory.getTextIO(), TextIoFactory.getTextTerminal(), user);
             }
             case USER -> {
-                return new UserSession(new Scanner(System.in), user);
+                return new UserSession(TextIoFactory.getTextIO(), TextIoFactory.getTextTerminal(), user);
             }
             default -> throw new NullPointerException();
         }
