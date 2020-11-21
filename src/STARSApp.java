@@ -148,9 +148,9 @@ public class STARSApp {
 
             ISession session;
             do {
-                LoginControl loginControl = Factory.createLoginControl();
-                AbstractUser user = loginControl.login(Factory.getTextUserDataAccess());
-//                AbstractUser user = newA;
+//                LoginControl loginControl = Factory.createLoginControl();
+//                AbstractUser user = loginControl.login(Factory.getTextUserDataAccess());
+                AbstractUser user = newA;
                 TextIoFactory.getTextTerminal().getProperties().setPromptColor("white");
                 session = Factory.createSession(user);
                 session.run();

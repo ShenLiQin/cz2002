@@ -31,9 +31,6 @@ public class LoginControl {
     public LoginControl(Scanner scanner) {
         this._scanner = scanner;
         user = null;
-//        SystemTextTerminal sysTerminal = new SystemTextTerminal();
-//        textIO = new TextIO(sysTerminal);
-//        terminal = textIO.getTextTerminal();
         textIO = TextIoFactory.getTextIO();
         terminal = TextIoFactory.getTextTerminal();
         terminal.getProperties().setPromptColor("white");
@@ -45,37 +42,19 @@ public class LoginControl {
     public AbstractUser login(IUserDataAccessObject userDataAccessObject) {
         terminal.resetToBookmark("beginning");
         try {
-//            terminal.resetToBookmark("welcome");
-//            terminal.setBookmark("welcome");
             do {
-//                System.out.println(welcome);
                 String username = textIO.newStringInputReader()
                         .read("enter Username:");
-
-//                System.out.print("enter username: ");
-//                String username = _scanner.nextLine();
-
-//                System.out.println("Enter peer password:");
-//                String passwordArray = _scanner.nextLine();
                 String password = textIO.newStringInputReader()
                         .withMinLength(6)
                         .withInputMasking(true)
                         .read("Enter Password: ");
-//                String password;
-//                Console console = System.console();
-//                if (console == null) {
-////                    System.out.println("Couldn't get Console instance");
-//                    password = _scanner.nextLine();
-//                } else {
-//                    password = Arrays.toString(console.readPassword("Enter your password: "));
-//                }
                 user = userDataAccessObject.authenticate(username, password);
                 terminal.resetToBookmark("beginning");
                 if (user == null) {
                     terminal.getProperties().setPromptColor("red");
                     terminal.println("wrong username/password");
                     terminal.getProperties().setPromptColor("white");
-//                    System.out.println("wrong username/password");
                 }
             } while (user == null);
         } catch (PasswordStorage.CannotPerformOperationException e) {

@@ -183,18 +183,28 @@ public class UserSession implements ISession{
                     do {
                         try {
                             ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
-                            System.out.println(courseDataAccessObject.toString());
-                            System.out.print("course code: ");
-                            String courseCode = _scanner.nextLine();
+                            _terminal.println(courseDataAccessObject.toString());
+
+                            //_terminal.print("course code: ");
+                            _terminal.setBookmark("course code: ");
+                            String courseCode = _textIO.newStringInputReader().withMinLength(6).read("course code: ");
                             //check courseCode format
                             validCourseCode = InputValidator.courseStrMatcher(courseCode);
                             course = courseDataAccessObject.getCourse(courseCode);
                             //check if course exist in database
                             if(course == null) {
-                                System.out.println("Course does not exist");
+                                //System.out.println("Course does not exist");
+                                _terminal.resetToBookmark("course code: ");
+                                _terminal.getProperties().setPromptColor("red");
+                                _terminal.println("Course does not exist");
+                                _terminal.getProperties().setPromptColor("white");
                             }
                         } catch (IOException | ClassNotFoundException e) {
-                            System.out.println("error reading the file");
+                            //System.out.println("error reading the file");
+                            _terminal.resetToBookmark("course code: ");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("error reading the file");
+                            _terminal.getProperties().setPromptColor("white");
                         }
                     } while (!validCourseCode || course == null);
 
@@ -202,24 +212,35 @@ public class UserSession implements ISession{
                     boolean validIndex;
                     Index index;
                     do {
-                        System.out.println(course.allInfoToString());
-                        System.out.print("index number: ");
-                        String indexNumber = _scanner.nextLine();
+                        _terminal.println(course.allInfoToString());
+                        //_terminal.print("index number: ");
+                        _terminal.setBookmark("index number: ");
+                        String indexNumber = _textIO.newStringInputReader().withMinLength(6).read("index number: ");
 
                         //check if index is 6 integers
                         validIndex = InputValidator.indexStrMatcher(indexNumber);
                         index = course.getIndex(Integer.parseInt(indexNumber));
                         //check if index exist in database
                         if(index == null) {
-                            System.out.println("Index does not exist");
+                            //System.out.println("Index does not exist");.
+                            _terminal.resetToBookmark("index number: ");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("Index does not exist");
+                            _terminal.getProperties().setPromptColor("white");
                         }
                     } while (!validIndex || index == null);
 
                     //print vacancy
                     try {
-                        System.out.println("Number of vacancy :" + course.checkVacancies(index.getIndexNumber()));
+                        //System.out.println("Number of vacancy :" + course.checkVacancies(index.getIndexNumber()));
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("Number of vacancy :" + course.checkVacancies(index.getIndexNumber()));
+                        _terminal.getProperties().setPromptColor("white");
                     } catch (NonExistentIndexException e) {
-                        System.out.println("no such index");
+                        //System.out.println("no such index");
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("no such index");
+                        _terminal.getProperties().setPromptColor("white");
                     }
                 }
 
@@ -234,22 +255,36 @@ public class UserSession implements ISession{
                         try {
                             //print registered courses
                             printRegisteredCourse();
-                            System.out.print("course code: ");
-                            String courseCode = _scanner.nextLine();
+                            //System.out.print("course code: ");
+                            //String courseCode = _scanner.nextLine();
+                            _terminal.setBookmark("course code: ");
+                            String courseCode = _textIO.newStringInputReader().read("course code: ");
                             //check courseCode format
                             validCourseCode = InputValidator.courseStrMatcher(courseCode);
                             course = Factory.getTextCourseDataAccess().getCourse(courseCode);
                             //check if course exist in database
                             if(course == null) {
-                                System.out.println("Course does not exist");
+                                //System.out.println("Course does not exist");
+                                _terminal.resetToBookmark("course code: ");
+                                _terminal.getProperties().setPromptColor("red");
+                                _terminal.println("Course does not exist");
+                                _terminal.getProperties().setPromptColor("white");
                             }
                             //check if user registered this course before
                             validRegisteredCourse = _user.getRegisteredCourses().containsKey(courseCode);
-                            if(validRegisteredCourse) {
-                                System.out.println("course selected is not registered");
+                            if(validRegisteredCourse == false) {
+                                //System.out.println("course selected is not registered");
+                                _terminal.resetToBookmark("course code: ");
+                                _terminal.getProperties().setPromptColor("red");
+                                _terminal.println("Course selected is not registered");
+                                _terminal.getProperties().setPromptColor("white");
                             }
                         } catch (IOException | ClassNotFoundException e) {
-                            System.out.println("error reading the file");
+                            //System.out.println("error reading the file");
+                            _terminal.resetToBookmark("course code: ");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("error reading the file");
+                            _terminal.getProperties().setPromptColor("white");
                         }
                     } while (!validCourseCode || course == null || !validRegisteredCourse);
 
@@ -264,17 +299,32 @@ public class UserSession implements ISession{
                     Index newIndexNumber;
                     do {
                         System.out.println(course.allInfoToString());
-                        System.out.print("Enter new index number: ");
-                        String indexNumber = _scanner.nextLine();
+                        //_terminal.println("Enter new index number: ");
+                        //System.out.print("Enter new index number: ");
+
+                        String indexNumber = _textIO.newStringInputReader().withMinLength(6).read("Enter new index number: ");
 
                         //check if index is 6 integers
                         validIndex = InputValidator.indexStrMatcher(indexNumber);
                         newIndexNumber = course.getIndex(Integer.parseInt(indexNumber));
                         //check if index exist in database
+
                         if(newIndexNumber == null) {
-                            System.out.println("Index does not exist");
+                            //System.out.println("Index does not exist");
+                            _terminal.resetToBookmark("Enter new index number: ");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("Index does not exist");
+                            _terminal.getProperties().setPromptColor("white");
                         }
                     } while (!validIndex || newIndexNumber == null);
+
+                    if(newIndexNumber.getIndexNumber() == currIndexNumber){
+                        //_terminal.println("You are already in the index.");
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("You are already in the index.");
+                        _terminal.getProperties().setPromptColor("white");
+                        break;
+                    }
 
                     try {
                         //delete old index
@@ -285,9 +335,16 @@ public class UserSession implements ISession{
                         studentCourseRegistrar.addRegistration(matric, course.getCourseCode(), newIndexNumber.getIndexNumber());
                         System.out.printf("successfully swapped %s from %s to %s\n", course.getCourseCode(), index.getIndexNumber(), newIndexNumber.getIndexNumber());
                     } catch (ClassNotFoundException | IOException e) {
-                        System.out.println("error reading the file");
+                        //System.out.println("error reading the file");
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("error occurred when saving");
+                        _terminal.getProperties().setPromptColor("white");
+
                     } catch (Exception e) {
-                        System.out.println("error occurred when saving");
+                        //System.out.println("error occurred when saving");
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("error reading the file");
+                        _terminal.getProperties().setPromptColor("white");
                     }
                 }
 
@@ -301,22 +358,34 @@ public class UserSession implements ISession{
                         try {
                             //print registered course
                             printRegisteredCourse();
-                            System.out.print("course code: ");
-                            String courseCode = _scanner.nextLine();
+                            //System.out.print("course code: ");
+                            _terminal.setBookmark("course code: ");
+                            String courseCode = _textIO.newStringInputReader().withMinLength(6).read("course code: ");
                             //check courseCode format
                             validCourseCode = InputValidator.courseStrMatcher(courseCode);
                             course = Factory.getTextCourseDataAccess().getCourse(courseCode);
                             //check if course exist in database
                             if(course == null) {
-                                System.out.println("Course does not exist");
+                                //System.out.println("Course does not exist");
+                                _terminal.resetToBookmark("course code: ");
+                                _terminal.getProperties().setPromptColor("red");
+                                _terminal.println("Course does not exist");
+                                _terminal.getProperties().setPromptColor("white");
                             }
                             //check if user registered this course before
                             validRegisteredCourse = _user.getRegisteredCourses().containsKey(courseCode);
-                            if(validRegisteredCourse) {
-                                System.out.println("course selected is not registered");
+                            if(validRegisteredCourse == false) {
+                                //System.out.println("course selected is not registered");
+                                _terminal.resetToBookmark("course code: ");
+                                _terminal.getProperties().setPromptColor("red");
+                                _terminal.println("course selected is not registered");
+                                _terminal.getProperties().setPromptColor("white");
                             }
                         } catch (IOException | ClassNotFoundException e) {
-                            System.out.println("error reading the file");
+                            //System.out.println("error reading the file");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("error reading the file");
+                            _terminal.getProperties().setPromptColor("white");
                         }
                     } while (!validCourseCode || course == null || !validRegisteredCourse);
 
@@ -326,47 +395,97 @@ public class UserSession implements ISession{
                     Index index = course.getIndex(currIndexNumber);
 
                     //print user current index
-                    System.out.println("User current index is: " + currIndexNumber);
+                    //System.out.println("User current index is: " + currIndexNumber);
+                    _terminal.println("User current index is: " + currIndexNumber);
 
                     //create peer
                     AbstractUser absPeer = null;
                     do {
                         //peer username
-                        System.out.println("Enter peer username:");
-                        String peerUsername = _scanner.nextLine();
+                        //System.out.println("Enter peer username:");
+                        _terminal.setBookmark("Enter peer username:");
+                        String peerUsername = _textIO.newStringInputReader().read("Enter peer username: ");
                         //peer password
 //                        System.out.println("Enter peer password:");
 //                        String peerPassword = _scanner.nextLine();
                         String peerPassword;
-                        Console console = System.console();
-                        if (console == null) {
+                        ///Console console = System.console();
+                        // if (console == null) {
 //                    System.out.println("Couldn't get Console instance");
-                            peerPassword = _scanner.nextLine();
-                        } else {
-                            peerPassword = Arrays.toString(console.readPassword("Enter your password: "));
-                        }
+                        //peerPassword = _scanner.nextLine();
+                        //} else {
+                        //peerPassword = Arrays.toString(console.readPassword("Enter your password: "));
+                        //_terminal.setBookmark("Enter peer password: ");
+                        peerPassword = _textIO.newStringInputReader().withMinLength(6).withInputMasking(true).read("Enter peer password: ");
+
+                        //}
+
 
                         //authenticate peer
                         try {
                             absPeer = Factory.getTextUserDataAccess().authenticate(peerUsername, peerPassword);
+                            if(absPeer == null){
+                                _terminal.getProperties().setPromptColor("red");
+                                _terminal.println("Wrong username/password. Try again.");
+                                _terminal.getProperties().setPromptColor("white");
+                            }
                         } catch (IOException | ClassNotFoundException e) {
-                            System.out.println("error reading file");
+                            //System.out.println("error reading file");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("error reading file");
+                            _terminal.getProperties().setPromptColor("white");
                         } catch (PasswordStorage.InvalidHashException | PasswordStorage.CannotPerformOperationException e) {
-                            System.out.println("error encountered when hashing");
+                            //System.out.println("error encountered when hashing");
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("error encountered when hashing");
+                            _terminal.getProperties().setPromptColor("white");
                         }
                     } while(absPeer == null);
+
+
                     //downcast peer from AbstractUser to Student
                     Student studentPeer = (Student) absPeer;
 
-                    //change to auto fetch peer old index
-                    int peerCurrIndex = studentPeer.getRegisteredCourses().get(course.getCourseCode());
-                    Index peerIndex = course.getIndex(peerCurrIndex);
+                    //change to auto fetch peer old index.
+                    Index peerIndex = null;
+                    int peerCurrIndex = 0;
+                    try{
+                        peerCurrIndex = studentPeer.getRegisteredCourses().get(course.getCourseCode());
+                        peerIndex = course.getIndex(peerCurrIndex);
+                    }catch(Exception e){
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("Peer is not registered for this course");
+                        _terminal.getProperties().setPromptColor("white");
+                        break;
+                    }
+
+                    //check if peer and user are already in same index
+                    if(peerCurrIndex == currIndexNumber){
+                        //_terminal.println("You are already in the index.");
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("Both of you are already in the index.");
+                        _terminal.getProperties().setPromptColor("white");
+                        break;
+                    }
+
+
                     //print peer name
-                    System.out.println("Peer name: " + studentPeer.getName());
+                    //System.out.println("Peer name: " + studentPeer.getName());
+                    _terminal.println("Peer name: " + studentPeer.getName());
                     //print peer matric number
-                    System.out.println("Peer matric number: " + studentPeer.getMatricNumber());
+                    //System.out.println("Peer matric number: " + studentPeer.getMatricNumber());
+                    _terminal.println("Peer matric number: " + studentPeer.getMatricNumber());
                     //print peer current index
-                    System.out.println("Peer current index is: " + peerCurrIndex);
+                    //System.out.println("Peer current index is: " + peerCurrIndex);
+                    _terminal.println("Peer current index is: " + peerCurrIndex);
+
+                    if(peerCurrIndex == currIndexNumber){
+                        //_terminal.println("Both of you are in the same index.");
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("Both of you are in the same index.");
+                        _terminal.getProperties().setPromptColor("white");
+                        break;
+                    }
 
                     try{
                         StudentCourseRegistrar studentCourseRegistrar = Factory.createStudentCourseRegistrar();
@@ -379,19 +498,28 @@ public class UserSession implements ISession{
                         //add course for user with peer index
                         studentCourseRegistrar.addRegistration(_user.getMatricNumber(),course.getCourseCode(),peerIndex.getIndexNumber());
                     } catch (IOException | ClassNotFoundException e) {
-                        System.out.println("error reading/writing to registration file");
+                        //System.out.println("error reading/writing to registration file");
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("error reading/writing to registration file");
+                        _terminal.getProperties().setPromptColor("white");
                     } catch (Exception e) {
-                        System.out.println("error saving registrations");
+                        //System.out.println("error saving registrations");
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("error saving registrations");
+                        _terminal.getProperties().setPromptColor("white");
                     }
-                    System.out.println("Swap successful!!");
+                    //System.out.println("Swap successful!!");
+                    _terminal.println("Swap successful!!");
 
                     int newIndex = _user.getRegisteredCourses().get(course.getCourseCode());
                     int peerNewIndex = studentPeer.getRegisteredCourses().get(course.getCourseCode());
 
                     //print user new index
-                    System.out.println("User new index is: " + newIndex);
+                    //System.out.println("User new index is: " + newIndex);
+                    _terminal.println("User new index is: " + newIndex);
                     //print peer new index
-                    System.out.println("Peer new index is: " + peerNewIndex);
+                    //System.out.println("Peer new index is: " + peerNewIndex);
+                    _terminal.println("Peer new index is: " + peerNewIndex);
                 }
                 case 7 -> loggedIn = false;
                 case 8 -> exit();
