@@ -235,6 +235,15 @@ public class AdminSession implements ISession{
                             _terminal.println("____add a day and time period for lecture session____");
                             do {
                                 lectureDay = _textIO.newEnumInputReader(DayOfWeek.class).read("Enter lecture day: ");
+                                _terminal.setBookmark("add lecture session");
+                                if (lectureTimings.containsKey(lectureDay)) { //edited
+                                    _terminal.resetToBookmark("add lecture session");
+                                    _terminal.getProperties().setPromptColor(Color.RED);
+                                    _terminal.println("there is already a lecture session on " + lectureDay + ". please select another day");
+                                    _terminal.getProperties().setPromptColor(Color.WHITE);
+                                    contAdd = false;
+                                    continue;
+                                }
                                 lectureTiming = getSessionTiming("lecture");
                                 lectureTimings.put(lectureDay, lectureTiming);
                                 contAdd = _textIO.newBooleanInputReader().read("do you wish to continue adding a lecture session?");
@@ -269,7 +278,9 @@ public class AdminSession implements ISession{
                             int option;
                             do {
                                 _terminal.resetToBookmark("add/update course home page");
+                                _terminal.getProperties().setPromptColor(Color.GREEN);
                                 _terminal.println(course.allInfoToString());
+                                _terminal.getProperties().setPromptColor("white");
                                 _terminal.println("________Select course info to add/update________\n" +
                                         "1. Update course name\n" +
                                         "2. Update school\n" +
@@ -358,12 +369,24 @@ public class AdminSession implements ISession{
                             _terminal.println("Successfully retrieved vacancies");
                             if (vacancies <= 0) {
                                 _terminal.getProperties().setPromptColor("red");
-                                _terminal.println("There is no more vacancies for " + indexNum + " of " + courseCode);
-                                _terminal.println("There are " + -vacancies + " students in the waiting list");
+                                _terminal.printf("There is 0/%d vacancy for %s of %s\n",
+                                        course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
+                                        indexNum, courseCode);
+                                if (vacancies >= -1) {
+                                    _terminal.println("There is " + -vacancies + " student in the waiting list");
+                                } else {
+                                    _terminal.println("There are " + -vacancies + " students in the waiting list");
+                                }
                             } else {
-                                _terminal.println("The vacancies for " + indexNum + " of " + courseCode + " is " + vacancies
-                                        + "/" + course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize());
-
+                                if (vacancies <= 1) {
+                                    _terminal.printf("There is %d/%d vacancy for %s of %s\n",
+                                            vacancies, course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
+                                            indexNum, courseCode);
+                                } else {
+                                    _terminal.printf("There are %d/%d vacancies for %s of %s\n",
+                                            vacancies, course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
+                                            indexNum, courseCode);
+                                }
                             }
                         } catch (IOException | ClassNotFoundException e) {
                             _terminal.getProperties().setPromptColor("red");
@@ -527,8 +550,9 @@ public class AdminSession implements ISession{
         int option;
         do{
             _terminal.resetToBookmark("add/update index");
-            _terminal.println(existingIndex.allInfoToString());
-            _terminal.setBookmark("add/update index");
+            _terminal.getProperties().setPromptColor(Color.GREEN);
+            _terminal.println(existingIndex.toString());
+            _terminal.getProperties().setPromptColor("white");
             _terminal.println("____Select index info to add/update____\n" +
                     "1. Add/Update Tutorial Timing\n" +
                     "2. Add/Update Laboratory Timing\n" +
@@ -539,7 +563,6 @@ public class AdminSession implements ISession{
             option = _textIO.newIntInputReader()
                     .withMinVal(1).withMaxVal(6)
                     .read("Enter choice: ");
-            _terminal.resetToBookmark("add/update index");
 
             switch(option){
                 case 1 ->{
@@ -729,13 +752,14 @@ public class AdminSession implements ISession{
                 .read("enter the duration (1-" + maxDuration + ") of the " + sessionType + "(hrs): ");
         _terminal.setBookmark("start time");
         do{
-            startTime = _textIO.newStringInputReader().read("enter the start time in HH:MM(30 min interval, e.g. 16:30): ");
+            startTime = _textIO.newStringInputReader().read("enter the start time in HH:MM (30 min interval, e.g. 16:30): ");
             proceed = InputValidator.validateTimeInput(startTime) &&
                     InputValidator.validateTimeInput(startTime, schoolStartTime, schoolEndTime, duration);
             if(!proceed){
                 _terminal.resetToBookmark("start time");
                 _terminal.getProperties().setPromptColor("red");
-                _terminal.println("timing is invalid. school should start earliest at 07:30 and end latest by 21:30.");
+                _terminal.println("timing is invalid. school should start earliest at 07:30 and end latest by 21:30." +
+                        "\nAND classes should start at a 30min interval");
                 _terminal.getProperties().setPromptColor("white");
             }
         }while(!proceed);

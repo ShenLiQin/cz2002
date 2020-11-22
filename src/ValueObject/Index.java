@@ -132,22 +132,62 @@ public class Index implements Serializable {
         this.laboratoryVenue = laboratoryVenue;
     }
 
-    public String studentInfoToString() {
-        StringBuilder str = new StringBuilder();
-        str.append("indexNumber: ").append(indexNumber).append('\t').append("enrolledStudents: ").append(enrolledStudents);
-        return str.toString();
-    }
-
     public Queue<String> getWaitingList() {
         return waitingList;
     }
 
-    public String allInfoToString(){
+    @Override
+    public String toString(){
         StringBuilder str = new StringBuilder();
         str.append("---------------latest index info---------------");
         str.append("\nindexNumber: ").append(indexNumber).append("\tmax class size: ").append(maxClassSize).append("\tvacancies: ").append(vacancy);
         str.append("\ntutorial timings: ").append(tutorialTimings).append("\ttutorial venue: ").append(tutorialVenue);
         str.append("\nlaboratory timings: ").append(laboratoryTimings).append("\tlaboratory venue: ").append(laboratoryVenue);
         return str.toString();
+    }
+
+    public boolean isClashing(Index i) {
+        Hashtable<DayOfWeek, List<LocalTime>> laboratoryTimings = i.getLaboratoryTimings();
+        Hashtable<DayOfWeek, List<LocalTime>> tutorialTimings = i.getTutorialTimings();
+        if (this.laboratoryTimings != null) {
+            for (DayOfWeek thisLaboratoryDay : this.laboratoryTimings.keySet()) {
+                if (isTimeTableClash(this.laboratoryTimings, laboratoryTimings, thisLaboratoryDay) ||
+                        isTimeTableClash(this.laboratoryTimings, tutorialTimings, thisLaboratoryDay)) {
+                    return true;
+                }
+            }
+        }
+        if (this.tutorialTimings != null) {
+            for (DayOfWeek thisTutorialDay : this.tutorialTimings.keySet()) {
+                if (isTimeTableClash(this.laboratoryTimings, laboratoryTimings, thisTutorialDay) ||
+                        isTimeTableClash(this.laboratoryTimings, tutorialTimings, thisTutorialDay)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isTimeTableClash(Hashtable<DayOfWeek, List<LocalTime>> thisCourseTimings,
+                                     Hashtable<DayOfWeek, List<LocalTime>> newCourseTimings,
+                                     DayOfWeek thisCourseDay) {
+        if (thisCourseDay == null || newCourseTimings == null || thisCourseTimings == null) {
+            return false;
+        }
+        for (DayOfWeek thatLectureDay : newCourseTimings.keySet()) {
+            if (thisCourseDay == thatLectureDay) {
+                if (isOverlapping(thisCourseTimings.get(thisCourseDay).get(0),
+                        thisCourseTimings.get(thisCourseDay).get(1),
+                        newCourseTimings.get(thatLectureDay).get(0),
+                        newCourseTimings.get(thatLectureDay).get(1))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isOverlapping(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
+        return start1.isBefore(end2) && start2.isBefore(end1);
     }
 }

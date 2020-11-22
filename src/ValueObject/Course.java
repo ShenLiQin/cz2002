@@ -5,8 +5,9 @@ import java.time.LocalTime;
 import java.util.*;
 
 import Exception.NonExistentIndexException;
+import Exception.ClashingTimeTableException;
 
-public class Course implements Serializable, Comparable<Course> {
+public class Course implements Serializable {
     private String courseCode;
     private String courseName;
     private School school;
@@ -132,15 +133,6 @@ public class Course implements Serializable, Comparable<Course> {
         indexes.replace(index.getIndexNumber(), index);
     }
 
-    public String StudentListToString() {
-        StringBuilder str = new StringBuilder();
-        str.append("courseCode: ").append(courseCode).append(",\t").append("courseName: ").append(courseName).append('\n');
-        for (Index index : indexes.values()) {
-            str.append(index.studentInfoToString()).append('\n');
-        }
-        return str.toString();
-    }
-
     @Override
     public String toString() {
         return "courseCode : " + courseCode + "\t\t" + "courseName: " + courseName + "\t\t" +  "school: " + school;
@@ -160,30 +152,44 @@ public class Course implements Serializable, Comparable<Course> {
         return str.toString();
     }
 
-    public String indexNumberToString() {
-        StringBuilder str = new StringBuilder();
-        str.append("courseCode : ").append(courseCode).append("\t\t").append("courseName: ").append(courseName).append("\t\t");
-        for (Index index : indexes.values()) {
-            str.append('\n').append(index.getIndexNumber());
+    public boolean isClashing(Course c) {
+        for(DayOfWeek thisLectureDay: this.lectureTimings.keySet()) {
+            if (isTimeTableClash(lectureTimings, c.lectureTimings, thisLectureDay)) {
+                return true;
+            }
         }
-        return str.toString();
+        return false;
     }
 
-    @Override
-    public int compareTo(Course c) {
-        for(DayOfWeek thisLectureDay: this.lectureTimings.keySet()) {
-            for(DayOfWeek thatLectureDay: c.lectureTimings.keySet()) {
-                if (thisLectureDay == thatLectureDay) {
-                    if(isOverlapping(this.lectureTimings.get(thisLectureDay).get(0),
-                            this.lectureTimings.get(thisLectureDay).get(1),
-                            c.lectureTimings.get(thatLectureDay).get(0),
-                            c.lectureTimings.get(thatLectureDay).get(1))) {
-                        return 0;
-                    }
+    public boolean isClashing(Index i) {
+        Hashtable<DayOfWeek, List<LocalTime>> laboratoryTimings = i.getLaboratoryTimings();
+        Hashtable<DayOfWeek, List<LocalTime>> tutorialTimings = i.getTutorialTimings();
+        for (DayOfWeek lectureDay : lectureTimings.keySet()) {
+            if (isTimeTableClash(lectureTimings, laboratoryTimings, lectureDay) ||
+                    isTimeTableClash(lectureTimings, tutorialTimings, lectureDay)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isTimeTableClash(Hashtable<DayOfWeek, List<LocalTime>> thisCourseTimings,
+                                     Hashtable<DayOfWeek, List<LocalTime>> newCourseTimings,
+                                     DayOfWeek thisCourseDay) {
+        if (thisCourseDay == null || newCourseTimings == null || thisCourseTimings == null) {
+            return false;
+        }
+        for (DayOfWeek thatLectureDay : newCourseTimings.keySet()) {
+            if (thisCourseDay == thatLectureDay) {
+                if (isOverlapping(thisCourseTimings.get(thisCourseDay).get(0),
+                        thisCourseTimings.get(thisCourseDay).get(1),
+                        newCourseTimings.get(thatLectureDay).get(0),
+                        newCourseTimings.get(thatLectureDay).get(1))) {
+                    return true;
                 }
             }
         }
-        return 1;
+        return false;
     }
 
     private boolean isOverlapping(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {

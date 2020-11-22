@@ -29,6 +29,11 @@ public class RegistrationPeriod implements Serializable {
         this.endDate = endDate;
     }
 
+    public boolean notWithinRegistrationPeriod() {
+        LocalDateTime now = LocalDateTime.now();
+        return now.isBefore(startDate) || now.isAfter(endDate);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

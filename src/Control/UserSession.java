@@ -2,15 +2,12 @@ package Control;
 
 import DataAccessObject.ICourseDataAccessObject;
 import Helper.Factory;
-import Helper.InputValidator;
 import Helper.PasswordStorage;
 import ValueObject.*;
 import Exception.*;
-import com.sun.mail.imap.protocol.INTERNALDATE;
 import org.beryx.textio.*;
 
 import java.awt.*;
-import java.io.Console;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -70,6 +67,18 @@ public class UserSession implements ISession{
             _terminal.println("Press " + keyStrokeAbort + " to go abort your current action");
             _terminal.println("You can use this key combinations at any moment during your session.");
             _terminal.println("--------------------------------------------------------------------------------");
+        }
+        try {
+            RegistrationPeriod registrationPeriod = Factory.getTextRegistrationDataAccess().getRegistrationPeriod();
+            if (registrationPeriod.notWithinRegistrationPeriod()) {
+                _terminal.getProperties().setPromptColor("red");
+                _terminal.println("It is not registration period, only checking registered courses/ course vacancies is functional");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("error accessing files");
+        } finally {
+            _terminal.getProperties().setPromptColor("white");
         }
         _terminal.setBookmark("user");
         _terminal.println(userOptions);
@@ -168,10 +177,24 @@ public class UserSession implements ISession{
                             _terminal.println("Successfully retrieved vacancies");
                             if (vacancies <= 0) {
                                 _terminal.getProperties().setPromptColor("red");
-                                _terminal.println("There is no more vacancies for " + indexNum + " of " + courseCode);
-                                _terminal.println("There are " + -vacancies + " students in the waiting list");
+                                _terminal.printf("There is 0/%d vacancy for %s of %s\n",
+                                        course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
+                                        indexNum, courseCode);
+                                if (vacancies >= -1) {
+                                    _terminal.println("There is " + -vacancies + " student in the waiting list");
+                                } else {
+                                    _terminal.println("There are " + -vacancies + " students in the waiting list");
+                                }
                             } else {
-                                _terminal.println("The vacancies for " + indexNum + " of " + courseCode + " is " + vacancies);
+                                if (vacancies <= 1) {
+                                    _terminal.printf("There is %d/%d vacancy for %s of %s\n",
+                                            vacancies, course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
+                                            indexNum, courseCode);
+                                } else {
+                                    _terminal.printf("There are %d/%d vacancies for %s of %s\n",
+                                            vacancies, course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
+                                            indexNum, courseCode);
+                                }
                             }
                         } catch (IOException | ClassNotFoundException e) {
                             _terminal.getProperties().setPromptColor("red");
@@ -214,6 +237,24 @@ public class UserSession implements ISession{
                                 _terminal.println("You are already in the index.");
                                 _terminal.getProperties().setPromptColor("white");
                                 break;
+                            }
+                            Course course = courseDataAccessObject.getCourse(courseCodeInput);
+                            Index index = course.getIndex(newIndexNumber);
+                            for (String registeredCourseCode : _user.getRegisteredCourses().keySet()) {
+                                if (registeredCourseCode.equals(courseCodeInput)) {
+                                    continue;
+                                }
+                                int registeredCourseIndexNumber = _user.getRegisteredCourses().get(registeredCourseCode);
+                                Course registeredCourse = courseDataAccessObject.getCourse(registeredCourseCode);
+                                Index registeredIndex = registeredCourse.getIndex(registeredCourseIndexNumber);
+
+                                if (registeredCourse.isClashing(course) || registeredCourse.isClashing(index) ||
+                                        registeredIndex.isClashing(index)) {
+                                    _terminal.getProperties().setPromptColor("red");
+                                    _terminal.println("Unable to swap. There are clashing timeslots");
+                                    _terminal.getProperties().setPromptColor("white");
+                                    break;
+                                }
                             }
 
                             //get user matricNumber
@@ -316,20 +357,58 @@ public class UserSession implements ISession{
                                             _terminal.getProperties().setPromptColor("red");
                                             _terminal.println("Both of you are in the same index.");
                                             _terminal.getProperties().setPromptColor("white");
-                                        } else {
-                                            StudentCourseRegistrar studentCourseRegistrar = Factory.createStudentCourseRegistrar();
-                                            //drop course for peer
-                                            studentCourseRegistrar.deleteRegistration(studentPeer.getMatricNumber(), courseCodeInput, peerIndexNumber);
-                                            //drop course for user
-                                            studentCourseRegistrar.deleteRegistration(_user.getMatricNumber(), courseCodeInput, currIndexNumber);
-                                            //add course for peer with user index
-                                            studentCourseRegistrar.addRegistration(studentPeer.getMatricNumber(), courseCodeInput, currIndexNumber);
-                                            //add course for user with peer index
-                                            studentCourseRegistrar.addRegistration(_user.getMatricNumber(), courseCodeInput, peerIndexNumber);
-                                            _terminal.getProperties().setPromptColor(Color.GREEN);
-                                            _terminal.println("Successfully swapped indexes");
-                                            _terminal.println("Your new index is: " + peerIndexNumber);
+                                            break;
                                         }
+                                        ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+                                        Course course = courseDataAccessObject.getCourse(courseCodeInput);
+                                        Index peerIndex = course.getIndex(peerIndexNumber);
+                                        Index currIndex = course.getIndex(currIndexNumber);
+
+                                        for (String registeredCourseCode : _user.getRegisteredCourses().keySet()) {
+                                            if (registeredCourseCode.equals(courseCodeInput)) {
+                                                continue;
+                                            }
+                                            int registeredCourseIndexNumber = _user.getRegisteredCourses().get(registeredCourseCode);
+                                            Course registeredCourse = courseDataAccessObject.getCourse(registeredCourseCode);
+                                            Index registeredIndex = registeredCourse.getIndex(registeredCourseIndexNumber);
+
+                                            if (registeredCourse.isClashing(course) || registeredCourse.isClashing(peerIndex) ||
+                                                    registeredIndex.isClashing(peerIndex)) {
+                                                _terminal.getProperties().setPromptColor("red");
+                                                _terminal.println("Unable to swap. There is clashing timeslot in your timetable");
+                                                _terminal.getProperties().setPromptColor("white");
+                                                break;
+                                            }
+                                        }
+                                        for (String registeredCourseCode : studentPeer.getRegisteredCourses().keySet()) {
+                                            if (registeredCourseCode.equals(courseCodeInput)) {
+                                                continue;
+                                            }
+                                            int peerRegisteredCourseIndexNumber = studentPeer.getRegisteredCourses().get(registeredCourseCode);
+                                            Course peeRegisteredCourse = courseDataAccessObject.getCourse(registeredCourseCode);
+                                            Index peerRegisteredIndex = peeRegisteredCourse.getIndex(peerRegisteredCourseIndexNumber);
+
+                                            if (peeRegisteredCourse.isClashing(course) || peeRegisteredCourse.isClashing(currIndex) ||
+                                                    peerRegisteredIndex.isClashing(currIndex)) {
+                                                _terminal.getProperties().setPromptColor("red");
+                                                _terminal.println("Unable to swap. There is clashing timeslot in peer's timetable");
+                                                _terminal.getProperties().setPromptColor("white");
+                                                break;
+                                            }
+                                        }
+
+                                        StudentCourseRegistrar studentCourseRegistrar = Factory.createStudentCourseRegistrar();
+                                        //drop course for peer
+                                        studentCourseRegistrar.deleteRegistration(studentPeer.getMatricNumber(), courseCodeInput, peerIndexNumber);
+                                        //drop course for user
+                                        studentCourseRegistrar.deleteRegistration(_user.getMatricNumber(), courseCodeInput, currIndexNumber);
+                                        //add course for peer with user index
+                                        studentCourseRegistrar.addRegistration(studentPeer.getMatricNumber(), courseCodeInput, currIndexNumber);
+                                        //add course for user with peer index
+                                        studentCourseRegistrar.addRegistration(_user.getMatricNumber(), courseCodeInput, peerIndexNumber);
+                                        _terminal.getProperties().setPromptColor(Color.GREEN);
+                                        _terminal.println("Successfully swapped indexes");
+                                        _terminal.println("Your new index is: " + peerIndexNumber);
                                     }
 
                                 }
@@ -341,6 +420,10 @@ public class UserSession implements ISession{
                                 _terminal.setBookmark("Enter peer username:");
                                 _terminal.getProperties().setPromptColor("red");
                                 _terminal.println("error encountered when hashing");
+                            } catch (InvalidAccessPeriodException e) {
+                                _terminal.setBookmark("Enter peer username:");
+                                _terminal.getProperties().setPromptColor("red");
+                                _terminal.println("registration period have not started/over");
                             } catch (Exception e) {
                                 _terminal.setBookmark("Enter peer username:");
                                 _terminal.getProperties().setPromptColor("red");
