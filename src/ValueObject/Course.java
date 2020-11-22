@@ -1,9 +1,6 @@
 package ValueObject;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -16,7 +13,7 @@ public class Course implements Serializable, Comparable<Course> {
     private Hashtable<DayOfWeek, List<LocalTime>> lectureTimings;
     private Venue lectureVenue;
     private int AUs;
-    private HashMap<Integer, Index> indexes;
+    private TreeMap<Integer, Index> indexes;
     private static final long serialVersionUID = 1L;
 
     public String getCourseCode() {
@@ -113,7 +110,7 @@ public class Course implements Serializable, Comparable<Course> {
         this.lectureTimings = lectureTimings;
         this.lectureVenue = lectureVenue;
         this.AUs = AUs;
-        this.indexes = new HashMap<>();
+        this.indexes = new TreeMap<>();
         for (Index index : indexes) {
             this.indexes.put(index.getIndexNumber(), index);
         }
@@ -156,8 +153,9 @@ public class Course implements Serializable, Comparable<Course> {
         str.append("\tschool: ").append(school);
         str.append("\nlecture timings: ").append(lectureTimings).append("\tlecture venue: ").append(lectureVenue);
         str.append("\nindex group numbers: ");
+        int i = 1;
         for (Index index : indexes.values()) {
-            str.append('\n').append(index.getIndexNumber());
+            str.append('\n').append(i++).append(") ").append(index.getIndexNumber());
         }
         return str.toString();
     }

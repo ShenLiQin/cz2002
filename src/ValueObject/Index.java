@@ -2,10 +2,8 @@ package ValueObject;
 
 import Exception.ExistingUserException;
 import Exception.NonExistentUserException;
-import Exception.MaxEnrolledStudentsException;
 
 import java.io.Serializable;
-import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -32,27 +30,40 @@ public class Index implements Serializable {
         this.laboratoryVenue = laboratoryVenue;
     }
 
-    public void enrollStudent(String matricNumber) throws ExistingUserException, MaxEnrolledStudentsException {
+    public String enrollStudent(String matricNumber) throws ExistingUserException {
         if (enrolledStudents.contains(matricNumber)) {
             throw new ExistingUserException();
-        } else if (vacancy == 0) {
+        } else if (vacancy <= 0 && !waitingList.contains(matricNumber)) {
             waitingList.add(matricNumber);
-            throw new MaxEnrolledStudentsException();
+            vacancy--;
+            return matricNumber;
+        } else if (waitingList.contains(matricNumber)) {
+            waitingList.remove(matricNumber);
+            enrolledStudents.add(matricNumber);
+            vacancy--;
+            return null;
         } else {
             enrolledStudents.add(matricNumber);
             vacancy--;
+            return null;
         }
     }
 
-    public void dropStudent(String matricNumber) throws NonExistentUserException {
-        if (!enrolledStudents.contains(matricNumber)) {
+    public String dropStudent(String matricNumber) throws NonExistentUserException {
+        if (waitingList.contains(matricNumber)) {
+            waitingList.remove(matricNumber);
+            vacancy++;
+            return null;
+        } else if (!enrolledStudents.contains(matricNumber)) {
             throw new NonExistentUserException();
-        } else if (!waitingList.isEmpty()) {
-            enrolledStudents.add(waitingList.remove());
+        } else if (!waitingList.isEmpty()){
+            enrolledStudents.remove(matricNumber);
+            vacancy+=2;
+            return waitingList.peek();
         } else {
             enrolledStudents.remove(matricNumber);
             vacancy++;
-            //send email
+            return waitingList.peek();
         }
     }
 
@@ -70,6 +81,7 @@ public class Index implements Serializable {
 
     public void setMaxClassSize(int maxClassSize) {
         this.maxClassSize = maxClassSize;
+        vacancy = maxClassSize - enrolledStudents.size();
     }
 
     public int getVacancy() {

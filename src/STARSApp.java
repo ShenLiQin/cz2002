@@ -9,7 +9,6 @@ import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 
 import java.io.IOException;
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -19,8 +18,7 @@ public class STARSApp {
        TODO change output file format to flat
        TODO catch bugs
        TODO think of new functionalities (implement userSession into adminSession)
-       TODO fix bug: prevent user from adding course if time table clashes
-        (add logic StudentCourseRegistrar.addRegistration) */
+        */
     //  start doing report (what design patterns and principals we used, functionalities, etc)
     // https://www.tutorialspoint.com/design_pattern/singleton_pattern.htm
     // https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm
@@ -40,7 +38,6 @@ public class STARSApp {
             userDataAccessObject = Factory.getTextUserDataAccess();
             Staff newA = Factory.createStaff("richard", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN);
             userDataAccessObject.addAdmin(newA);
-
             Student newS1 = Factory.createStudent("ian", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN, 23);
             newS1.setMatricNumber("U1941314D");
             userDataAccessObject.addStudent(newS1);
@@ -127,6 +124,18 @@ public class STARSApp {
             Course course2 = Factory.createCourse("cz2002", "object oriented design and programming", School.SCSE, lectureTiming, Venue.LT1, 3, indexes2);
             courseDataAccessObject.addCourse(course2);
 
+            Index index7 = Factory.createIndex(200300, 1);
+            ArrayList<Index> indexes3 = new ArrayList<>();
+            indexes3.add(index7);
+
+            lectureTiming = new Hashtable<>();
+            timing = new LinkedList<>();
+            timing.add(LocalTime.of(10,0));
+            timing.add(LocalTime.of(11,0));
+            lectureTiming.put(DayOfWeek.WEDNESDAY, timing);
+            Course course3 = Factory.createCourse("cz2003", "CGV", School.SCSE, lectureTiming, Venue.LT2, 3, indexes3);
+            courseDataAccessObject.addCourse(course3);
+
             registrationDataAccessObject = Factory.getTextRegistrationDataAccess();
             RegistrationKey registrationKey1 = Factory.createRegistrationKey(newS1.getMatricNumber(), course1.getCourseCode(), index2.getIndexNumber());
             registrationDataAccessObject.addRegistration(registrationKey1);
@@ -142,6 +151,8 @@ public class STARSApp {
             registrationDataAccessObject.addRegistration(registrationKey6);
             RegistrationKey registrationKey7 = Factory.createRegistrationKey(newS3.getMatricNumber(), course2.getCourseCode(), index6.getIndexNumber());
             registrationDataAccessObject.addRegistration(registrationKey7);
+            RegistrationKey registrationKey8 = Factory.createRegistrationKey(newS1.getMatricNumber(), course3.getCourseCode(), index7.getIndexNumber());
+            registrationDataAccessObject.addRegistration(registrationKey8);
 
             RegistrationPeriod registrationPeriod = Factory.createRegistrationPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(3));
             registrationDataAccessObject.setRegistrationPeriod(registrationPeriod);
@@ -150,7 +161,7 @@ public class STARSApp {
             do {
                 LoginControl loginControl = Factory.createLoginControl();
                 AbstractUser user = loginControl.login(Factory.getTextUserDataAccess());
-//                AbstractUser user = newS1;
+//                AbstractUser user = newA;
                 session = Factory.createSession(user);
                 session.run();
             } while (!session.logout());

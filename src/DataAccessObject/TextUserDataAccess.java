@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 public class TextUserDataAccess implements Serializable, IUserDataAccessObject {
@@ -31,7 +32,7 @@ public class TextUserDataAccess implements Serializable, IUserDataAccessObject {
     }
 
     private static void initialize() throws IOException, ClassNotFoundException {
-//        InputStream file = new FileInputStream("./data/Users.txt");
+//        InputStream file = new FileInputStream("./data/Users.ser");
 //        InputStream buffer = new BufferedInputStream(file);
 //        ObjectInput input = new ObjectInputStream(buffer);
 
@@ -43,7 +44,7 @@ public class TextUserDataAccess implements Serializable, IUserDataAccessObject {
         FileOutputStream fos;
         ObjectOutputStream out = null;
         try{
-            fos = new FileOutputStream("./data/Users.txt");
+            fos = new FileOutputStream("./data/Users.ser");
             out = new ObjectOutputStream(fos);
             out.writeObject(instance);
         } catch (IOException e) {
@@ -57,7 +58,7 @@ public class TextUserDataAccess implements Serializable, IUserDataAccessObject {
         }
     }
 
-    private HashMap<String, Student> getAllStudents() {
+    public HashMap<String, Student> getAllStudents() {
         HashMap<String, Student> students = new HashMap<>();
         for (AbstractUser user : loginInformation.values()) {
             if (user instanceof Student) {
@@ -73,7 +74,6 @@ public class TextUserDataAccess implements Serializable, IUserDataAccessObject {
         HashMap<String, Student> students = getAllStudents();
 
         if (!students.containsKey(student.getMatricNumber())) {
-            System.out.println("student do not exist");
             throw new NonExistentUserException();
         } else {
             loginInformation.put(student.getUsername(), student);

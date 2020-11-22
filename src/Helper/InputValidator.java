@@ -3,15 +3,12 @@ package Helper;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
-import java.util.List;
+import java.time.format.ResolverStyle;
+import java.time.temporal.ChronoField;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import ValueObject.Gender;
-import ValueObject.Nationality;
-import ValueObject.School;
-import ValueObject.Venue;
 
 public class InputValidator {
     public static boolean courseStrMatcher(String courseInput) {
@@ -33,9 +30,13 @@ public class InputValidator {
 
     public static boolean validateDateTimeInput(String dateTimeStr) {
         boolean valid;
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter format = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy-MM-dd HH:mm")
+                .parseDefaulting(ChronoField.ERA, 1)
+                .toFormatter()
+                .withResolverStyle(ResolverStyle.STRICT); //edited for 30/31 days checking + negative years
         try {
-            LocalDateTime.parse(dateTimeStr , format);
+            LocalDateTime.parse(dateTimeStr, format);
             valid = true;
         } catch (DateTimeParseException e) {
             valid = false;
@@ -72,23 +73,5 @@ public class InputValidator {
         valid = !classStartTime.isBefore(earliestTime) && classStartTime.isBefore(latestTime) &&
                 !classEndTime.isAfter(latestTime) && !classEndTime.isBefore(earliestTime);
         return valid;
-    }
-
-    public static boolean validateYNInput(String input) {
-        boolean valid;
-        List<String> yList = List.of("y", "Y", "yes", "Yes");
-        List<String> nList = List.of("n", "N", "no", "No");
-        valid = yList.contains(input) || nList.contains(input);
-        return valid;
-    }
-
-    public static boolean validateVenue(String venueInput) {
-        boolean match = false;
-        for (Venue NTUvenue : Venue.values()) {
-            if (venueInput.equals(NTUvenue.toString())) {
-                match = true;
-            }
-        }
-        return match;
     }
 }

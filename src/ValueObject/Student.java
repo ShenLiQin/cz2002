@@ -7,10 +7,12 @@ import Helper.PasswordStorage;
 import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Random;
+import java.util.TreeMap;
 
 public class Student extends AbstractUser {
     private String matricNumber;
-    private Hashtable<String, Integer> registeredCourses;
+    private TreeMap<String, Integer> registeredCourses;
+    private TreeMap<String, Integer> waitingListCourses;
     private int totalRegisteredAUs;
     private int maxAUs;
 
@@ -18,7 +20,8 @@ public class Student extends AbstractUser {
         super(name, school, gender, nationality, UserType.USER);
         int year = (Calendar.getInstance().get(Calendar.YEAR))%100 ;
         this.matricNumber = "U" + year + (int)(random.nextFloat() * 90000) + (char)(random.nextInt(26) + 'a');
-        this.registeredCourses = new Hashtable<>();
+        this.registeredCourses = new TreeMap<>();
+        this.waitingListCourses = new TreeMap<>();
         this.totalRegisteredAUs = 0;
         this.maxAUs = maxAUs;
     }
@@ -27,23 +30,36 @@ public class Student extends AbstractUser {
         return matricNumber;
     }
 
-    public Hashtable<String, Integer> getRegisteredCourses() {
+    public TreeMap<String, Integer> getRegisteredCourses() {
         return registeredCourses;
     }
 
     public void registerCourse(String courseCode, int indexNumber) throws ExistingCourseException {
-        if (registeredCourses.contains(courseCode)) {
+        if (registeredCourses.containsKey(courseCode)) {
             throw new ExistingCourseException();
+        } else if (waitingListCourses.containsKey(courseCode)) {
+            waitingListCourses.remove(courseCode);
+            registeredCourses.put(courseCode, indexNumber);
         } else {
             registeredCourses.put(courseCode, indexNumber);
         }
     }
 
-    public void deregisterCourse(String courseCode) throws NonExistentCourseException {
-        if (!registeredCourses.containsKey(courseCode)) {
-            throw new NonExistentCourseException();
+    public void registerWaitListCourse(String courseCode, int indexNumber) throws ExistingCourseException {
+        if (waitingListCourses.containsKey(courseCode)) {
+            throw new ExistingCourseException();
         } else {
+            waitingListCourses.put(courseCode, indexNumber);
+        }
+    }
+
+    public void deregisterCourse(String courseCode) throws NonExistentCourseException {
+        if (registeredCourses.containsKey(courseCode)) {
             registeredCourses.remove(courseCode);
+        } else if (waitingListCourses.containsKey(courseCode)) {
+            waitingListCourses.remove(courseCode);
+        } else {
+            throw new NonExistentCourseException();
         }
     }
 
@@ -55,8 +71,16 @@ public class Student extends AbstractUser {
         this.matricNumber = matricNumber;
     }
 
-    public void setRegisteredCourses(Hashtable<String, Integer> registeredCourses) {
+    public void setRegisteredCourses(TreeMap<String, Integer> registeredCourses) {
         this.registeredCourses = registeredCourses;
+    }
+
+    public TreeMap<String, Integer> getWaitingListCourses() {
+        return waitingListCourses;
+    }
+
+    public void setWaitingListCourses(TreeMap<String, Integer> waitingListCourses) {
+        this.waitingListCourses = waitingListCourses;
     }
 
     public void registerAUs(int AUs) {
@@ -72,5 +96,10 @@ public class Student extends AbstractUser {
 
     public int getMaxAUs() {
         return maxAUs;
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + super.getName() + "\t\tMatric Number: " + matricNumber;
     }
 }

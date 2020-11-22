@@ -3,6 +3,7 @@ package ValueObject;
 import Helper.PasswordStorage;
 
 import java.io.Serializable;
+import java.time.Year;
 
 public abstract class AbstractUser implements Serializable {
     private String username;
@@ -12,6 +13,7 @@ public abstract class AbstractUser implements Serializable {
     private Nationality nationality;
     private School school;
     private UserType userType;
+    private String email;
     private static final long serialVersionUID = 1L;
 
     public UserType getUserType() {
@@ -19,13 +21,29 @@ public abstract class AbstractUser implements Serializable {
     }
 
     public AbstractUser(String name, School school, Gender gender, Nationality nationality, UserType userType) throws PasswordStorage.CannotPerformOperationException {
-        this.username = name+school.toString().toLowerCase()+"2020";
-        this.hash = PasswordStorage.createHash(name+"2020");
+        this.username = name.strip().toLowerCase() +
+                school.toString().toLowerCase() +
+                Year.now().toString();
+        this.hash = PasswordStorage.createHash(name.strip().toLowerCase() +
+                Year.now().toString());
         this.gender = gender;
         this.nationality = nationality;
         this.name = name;
         this.school = school;
         this.userType = userType;
+        this.email = name.strip().toLowerCase() +
+                school.toString().toLowerCase() +
+                '.' +
+                userType.toString().toLowerCase() +
+                "@ntu.edu.sg";
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Gender getGender() {

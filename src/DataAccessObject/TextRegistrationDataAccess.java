@@ -2,6 +2,7 @@ package DataAccessObject;
 
 import Exception.*;
 import Helper.Factory;
+import Helper.IMessenger;
 import ValueObject.*;
 
 import java.io.FileOutputStream;
@@ -29,7 +30,7 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
     }
 
     private static void initialize() throws IOException, ClassNotFoundException {
-//        InputStream file = new FileInputStream("./data/Registrations.txt");
+//        InputStream file = new FileInputStream("./data/Registrations.ser");
 //        InputStream buffer = new BufferedInputStream(file);
 //        ObjectInput input = new ObjectInputStream(buffer);
 //
@@ -40,7 +41,7 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
         FileOutputStream fos;
         ObjectOutputStream out = null;
         try{
-            fos = new FileOutputStream("./data/Registrations.txt");
+            fos = new FileOutputStream("./data/Registrations.ser");
             out = new ObjectOutputStream(fos);
             out.writeObject(instance);
         } catch (IOException e) {
@@ -77,35 +78,64 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
         registrations.put(registrationKey, new Date().getTime());
         persist();
 
+        //enroll student
         ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
         Course course = courseDataAccessObject.getCourse(registrationKey.getCourseCode());
         Index index = course.getIndex(registrationKey.getIndexNumber());
-        index.enrollStudent(registrationKey.getMatricNumber());
+        String waitingListStudent =  index.enrollStudent(registrationKey.getMatricNumber());
+
         course.updateIndex(index);
         courseDataAccessObject.updateCourse(course);
-
         IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
         Student student = userDataAccess.getStudent(registrationKey.getMatricNumber());
-        student.registerCourse(registrationKey.getCourseCode(), registrationKey.getIndexNumber());
-        student.registerAUs(course.getAUs());
-        userDataAccess.updateStudent(student);
+
+        if (waitingListStudent != null) {
+
+            //update student info
+            student.registerWaitListCourse(registrationKey.getCourseCode(), registrationKey.getIndexNumber());
+            userDataAccess.updateStudent(student);
+            throw new MaxEnrolledStudentsException();
+        } else {
+
+            //update student info
+            student.registerCourse(registrationKey.getCourseCode(), registrationKey.getIndexNumber());
+            student.registerAUs(course.getAUs());
+            userDataAccess.updateStudent(student);
+        }
     }
 
     @Override
-    public void deleteRegistration(RegistrationKey registrationKey) throws IOException, ClassNotFoundException, NonExistentUserException, NonExistentCourseException {
+    public void deleteRegistration(RegistrationKey registrationKey) throws IOException, ClassNotFoundException, NonExistentUserException, NonExistentCourseException, ExistingCourseException, MaxEnrolledStudentsException, ExistingUserException {
         registrations.remove(registrationKey);
 
         ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
         Course course = courseDataAccessObject.getCourse(registrationKey.getCourseCode());
         Index index = course.getIndex(registrationKey.getIndexNumber());
-        index.dropStudent(registrationKey.getMatricNumber());
+
+        String waitingListStudentMatricNumber = index.dropStudent(registrationKey.getMatricNumber());
         course.updateIndex(index);
         courseDataAccessObject.updateCourse(course);
 
-        IUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess();
-        Student student = userDataAccess.getStudent(registrationKey.getMatricNumber());
+        //update student
+        IUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess();
+        Student student = userDataAccessObject.getStudent(registrationKey.getMatricNumber());
         student.deregisterCourse(registrationKey.getCourseCode());
         student.deregisterAUs(course.getAUs());
-        userDataAccess.updateStudent(student);
+        userDataAccessObject.updateStudent(student);
+
+        //add course for waiting list student
+        if (waitingListStudentMatricNumber != null) {
+            RegistrationKey newRegistrationKey = Factory.createRegistrationKey(waitingListStudentMatricNumber,
+                    registrationKey.getCourseCode(),
+                    registrationKey.getIndexNumber());
+            addRegistration(newRegistrationKey);
+
+            String waitingListStudentEmail = userDataAccessObject.getStudent(waitingListStudentMatricNumber).getEmail();
+            IMessenger messenger = Factory.createEmailMessenger(waitingListStudentEmail);
+            messenger.addRecipientEmail(student.getEmail());
+            messenger.sendMessage("Course registered",
+                    "Waiting list course " + course.getCourseCode() + ' ' +  course.getCourseName() + " index: "
+                            + index.getIndexNumber() + " successfully added.\nPlease log in to check your STARS");
+        }
     }
 }

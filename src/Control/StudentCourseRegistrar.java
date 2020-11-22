@@ -7,11 +7,11 @@ import Helper.Factory;
 import ValueObject.Course;
 import ValueObject.Index;
 import ValueObject.RegistrationKey;
+import ValueObject.DayOfWeek;
 import Exception.*;
 import ValueObject.Student;
 
 import java.io.IOException;
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -35,9 +35,6 @@ public class StudentCourseRegistrar {
         if (student.getMaxAUs() - student.getTotalRegisteredAUs() < course.getAUs()) {
             throw new InsufficientAUsException();
         }
-        if (student.getRegisteredCourses().containsKey(courseCode)) {
-            throw new ExistingCourseException();
-        }
         for (String registeredCourseCode : student.getRegisteredCourses().keySet()) {
             int registeredCourseIndexNumber = student.getRegisteredCourses().get(registeredCourseCode);
             Hashtable<DayOfWeek, List<LocalTime>> registeredIndexLaboratoryTimings = courseDataAccessObject.getCourse(registeredCourseCode)
@@ -58,21 +55,28 @@ public class StudentCourseRegistrar {
                 checkTimeTableClash(registeredCourseLectureTimings, newIndexLaboratoryTimings, thisLectureDay);
                 checkTimeTableClash(registeredCourseLectureTimings, newIndexTutorialTimings, thisLectureDay);
             }
-            for (DayOfWeek thisLaboratoryDay : registeredIndexLaboratoryTimings.keySet()) {
-                checkTimeTableClash(registeredIndexLaboratoryTimings, newCourseLectureTimings, thisLaboratoryDay);
-                checkTimeTableClash(registeredIndexLaboratoryTimings, newIndexLaboratoryTimings, thisLaboratoryDay);
-                checkTimeTableClash(registeredIndexLaboratoryTimings, newIndexTutorialTimings, thisLaboratoryDay);
+            if (registeredIndexLaboratoryTimings != null) {
+                for (DayOfWeek thisLaboratoryDay : registeredIndexLaboratoryTimings.keySet()) {
+                    checkTimeTableClash(registeredIndexLaboratoryTimings, newCourseLectureTimings, thisLaboratoryDay);
+                    checkTimeTableClash(registeredIndexLaboratoryTimings, newIndexLaboratoryTimings, thisLaboratoryDay);
+                    checkTimeTableClash(registeredIndexLaboratoryTimings, newIndexTutorialTimings, thisLaboratoryDay);
+                }
             }
-            for (DayOfWeek thisTutorialDay : registeredIndexTutorialTimings.keySet()) {
-                checkTimeTableClash(registeredIndexTutorialTimings, newCourseLectureTimings, thisTutorialDay);
-                checkTimeTableClash(registeredIndexTutorialTimings, newIndexLaboratoryTimings, thisTutorialDay);
-                checkTimeTableClash(registeredIndexTutorialTimings, newIndexTutorialTimings, thisTutorialDay);
+            if (registeredIndexTutorialTimings != null) {
+                for (DayOfWeek thisTutorialDay : registeredIndexTutorialTimings.keySet()) {
+                    checkTimeTableClash(registeredIndexTutorialTimings, newCourseLectureTimings, thisTutorialDay);
+                    checkTimeTableClash(registeredIndexTutorialTimings, newIndexLaboratoryTimings, thisTutorialDay);
+                    checkTimeTableClash(registeredIndexTutorialTimings, newIndexTutorialTimings, thisTutorialDay);
+                }
             }
         }
         registrationDataAccess.addRegistration(registrationKey);
     }
 
     private void checkTimeTableClash(Hashtable<DayOfWeek, List<LocalTime>> registeredCourseTimings, Hashtable<DayOfWeek, List<LocalTime>> newCourseTimings, DayOfWeek registeredCourseDay) throws ClashingTimeTableException {
+        if (registeredCourseDay == null || newCourseTimings == null || registeredCourseTimings == null) {
+            return;
+        }
         for (DayOfWeek thatLectureDay : newCourseTimings.keySet()) {
             if (registeredCourseDay == thatLectureDay) {
                 if (isOverlapping(registeredCourseTimings.get(registeredCourseDay).get(0),
@@ -89,7 +93,7 @@ public class StudentCourseRegistrar {
         return start1.isBefore(end2) && start2.isBefore(end1);
     }
 
-    public void deleteRegistration(String matricNumber, String courseCode, int indexNumber) throws IOException, ClassNotFoundException, InvalidAccessPeriodException, NonExistentRegistrationException, NonExistentUserException, NonExistentCourseException, NonExistentIndexException {
+    public void deleteRegistration(String matricNumber, String courseCode, int indexNumber) throws IOException, ClassNotFoundException, InvalidAccessPeriodException, NonExistentRegistrationException, NonExistentUserException, NonExistentCourseException, NonExistentIndexException, ExistingCourseException, MaxEnrolledStudentsException, ExistingUserException {
         ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
         IRegistrationDataAccessObject registrationDataAccess = Factory.getTextRegistrationDataAccess();
 
@@ -101,13 +105,18 @@ public class StudentCourseRegistrar {
         }
         RegistrationKey registrationKey = Factory.createRegistrationKey(matricNumber, courseCode, indexNumber);
         Course course = courseDataAccessObject.getCourse(courseCode);
-        course.getIndex(indexNumber);
-        course = courseDataAccessObject.getCourse(courseCode);
-        if (course == null) {
-            throw new NonExistentCourseException();
-        } else if (course.getIndex(indexNumber) == null){
-            throw new NonExistentIndexException();
+        Index index = course.getIndex(indexNumber);
+        if (index.getWaitingList().contains(matricNumber)) {
+            index.dropStudent(matricNumber);
+            course.updateIndex(index);
+            courseDataAccessObject.updateCourse(course);
+
+            IUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess();
+            Student student = userDataAccessObject.getStudent(matricNumber);
+            student.deregisterCourse(courseCode);
+            userDataAccessObject.updateStudent(student);
+        } else {
+            registrationDataAccess.deleteRegistration(registrationKey);
         }
-        registrationDataAccess.deleteRegistration(registrationKey);
     }
 }

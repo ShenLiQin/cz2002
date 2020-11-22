@@ -7,7 +7,6 @@ import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 
 import java.io.IOException;
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -80,8 +79,8 @@ public class Factory {
         return new RegistrationKey(matricNumber, courseCode, indexNumber);
     }
 
-    public static IMessanger createEmailMessanger(String senderEmail, String recipientEmail) {
-        return new EmailMessanger(senderEmail, recipientEmail);
+    public static IMessenger createEmailMessenger(String recipientEmail) {
+        return new EmailMessenger(recipientEmail);
     }
 
     public static StudentCourseRegistrar createStudentCourseRegistrar() {

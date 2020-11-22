@@ -11,7 +11,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeMap;
 
 public class TextCourseDataAccess implements Serializable, ICourseDataAccessObject {
@@ -31,7 +30,7 @@ public class TextCourseDataAccess implements Serializable, ICourseDataAccessObje
     }
 
     private static void initialize() throws IOException, ClassNotFoundException {
-//        InputStream file = new FileInputStream("./data/Courses.txt");
+//        InputStream file = new FileInputStream("./data/Courses.ser");
 //        InputStream buffer = new BufferedInputStream(file);
 //        ObjectInput input = new ObjectInputStream(buffer);
 //
@@ -42,7 +41,7 @@ public class TextCourseDataAccess implements Serializable, ICourseDataAccessObje
         FileOutputStream fos;
         ObjectOutputStream out = null;
         try{
-            fos = new FileOutputStream("./data/Courses.txt");
+            fos = new FileOutputStream("./data/Courses.ser");
             out = new ObjectOutputStream(fos);
             out.writeObject(instance);
         } catch (IOException e) {

@@ -1,4 +1,4 @@
 package Exception;
 
-public class MaxEnrolledStudentsException extends Exception{
+public class MaxEnrolledStudentsException extends Exception {
 }
