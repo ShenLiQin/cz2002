@@ -21,5 +21,5 @@ public interface IUserDataAccessObject {
 
     Student getStudent(String matricNumber);
 
-    HashMap<String, Student> getAllStudents();
+    String studentsInfoToString();
 }

@@ -4,10 +4,7 @@ import DataAccessObject.IUserDataAccessObject;
 import Helper.PasswordStorage;
 import ValueObject.AbstractUser;
 import org.beryx.textio.TextIO;
-import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;
-
-import java.util.Scanner;
 
 public class LoginControl {
     AbstractUser user;

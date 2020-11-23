@@ -10,7 +10,6 @@ import ValueObject.*;
 import Exception.*;
 import org.beryx.textio.*;
 
-import javax.swing.text.StyledEditorKit;
 import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -87,474 +86,20 @@ public class AdminSession implements ISession {
                         .read("Enter your choice: ");
                 _terminal.resetToBookmark("admin");
                 switch (choice) {
-                    case 1 -> {
-                        boolean validDateTime;
-                        LocalDateTime startDate, endDate;
-                        _terminal.println("update registration period");
-                        _terminal.setBookmark("update registration period home screen");
-                        do {
-                            String startDateStr;
-                            _terminal.setBookmark("start date");
-                            do {
-                                startDateStr = _textIO.newStringInputReader().read("new start date in yyyy-MM-dd HH:mm format: ");
-                                validDateTime = InputValidator.validateDateTimeInput(startDateStr);
-                                if (!validDateTime) {
-                                    _terminal.resetToBookmark("start date");
-                                    _terminal.getProperties().setPromptColor("red");
-                                    _terminal.println("invalid date format");
-                                    _terminal.getProperties().setPromptColor("white");
-                                }
-                            } while (!validDateTime);
-                            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                            startDate = LocalDateTime.parse(startDateStr, format);
+                    case 1 -> changeAccessPeriodMenu();
+                    case 2 -> addStudentMenu();
+                    case 3 -> addUpdateDropCourseMenu();
+                    case 4 -> checkIndexVacanciesMenu();
+                    case 5 -> printStudentListByIndexMenu();
 
-                            String endDateStr;
-                            _terminal.setBookmark("end date");
-                            do {
-                                endDateStr = _textIO.newStringInputReader().read("new end date in yyyy-MM-dd HH:mm format: ");
-                                validDateTime = InputValidator.validateDateTimeInput(endDateStr);
-                                if (!validDateTime) {
-                                    _terminal.resetToBookmark("end date");
-                                    _terminal.getProperties().setPromptColor("red");
-                                    _terminal.println("invalid date format");
-                                    _terminal.getProperties().setPromptColor("white");
-                                }
-                            } while (!validDateTime);
-                            endDate = LocalDateTime.parse(endDateStr, format);
-
-                            validDateTime = startDate.compareTo(endDate) < 0;
-                            if (startDate.compareTo(endDate) > 0) {
-                                _terminal.resetToBookmark("update registration period home screen");
-                                _terminal.getProperties().setPromptColor("red");
-                                _terminal.println("start date should occur after end date");
-                                _terminal.getProperties().setPromptColor("white");
-                            } else if (startDate.compareTo(endDate) == 0) {
-                                _terminal.resetToBookmark("update registration period home screen");
-                                _terminal.getProperties().setPromptColor("red");
-                                _terminal.println("Both dates are equal");
-                                _terminal.getProperties().setPromptColor("white");
-                            }
-                        } while (!validDateTime);
-                        RegistrationPeriod newRP = Factory.createRegistrationPeriod(startDate, endDate);
-                        changeAccessPeriod(newRP);
-                        _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
-                    }
-                    case 2 -> {
-                        String name;
-                        boolean validName;
-                        _terminal.println("add student");
-                        _terminal.setBookmark("add student home screen");
-                        do {
-                            _terminal.setBookmark("student name");
-                            name = _textIO.newStringInputReader().withMinLength(3).read("name: ");
-                            validName = InputValidator.validateNameInput(name);
-                            if (!validName) {
-                                _terminal.resetToBookmark("student name");
-                                _terminal.getProperties().setPromptColor("red");
-                                _terminal.println("name cannot contain number");
-                                _terminal.getProperties().setPromptColor("white");
-                            }
-                        } while (!validName);
-
-                        Gender gender = _textIO.newEnumInputReader(Gender.class).read("Gender: ");
-                        Nationality nationality = _textIO.newEnumInputReader(Nationality.class).read("Nationality: ");
-                        School school = _textIO.newEnumInputReader(School.class).read("School: ");
-
-                        int maxAUs = _textIO.newIntInputReader()
-                                .withDefaultValue(21).withMinVal(0).withMaxVal(25)
-                                .read("MaxAUs: (leave blank for default 21 AUs)");
-                        try {
-                            Student newStudent = Factory.createStudent(name, school, gender, nationality, maxAUs);
-                            addStudent(newStudent);
-                        } catch (PasswordStorage.CannotPerformOperationException e) {
-                            _terminal.getProperties().setPromptColor("red");
-                            _terminal.println("error hashing password");
-                        } finally {
-                            _terminal.getProperties().setPromptColor("white");
-                            _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
-                        }
-                    }
-                    case 3 -> {
-                        String courseCode = null;
-                        Course course = null;
-                        String courseName;
-                        School school;
-
-                        _terminal.println("add/update/delete course");
-                        _terminal.setBookmark("add/update course home page");
-                        try {
-                            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
-                            List<String> coursesString = courseDataAccessObject.getCourses();
-                            coursesString.add("add new course");
-                            courseCode = _textIO.newStringInputReader()
-                                    .withNumberedPossibleValues(coursesString)
-                                    .read("select course to add/update/delete: ");
-                            course = courseDataAccessObject.getCourse(courseCode);
-
-                            if (course == null) {
-                                boolean validCourseCode;
-                                _terminal.setBookmark("add new course");
-                                do {
-                                    courseCode = _textIO.newStringInputReader().read("enter new course code");
-                                    _terminal.resetToBookmark("add/update course home page");
-                                    validCourseCode = InputValidator.courseStrMatcher(courseCode);
-                                    if (validCourseCode) {
-                                        course = courseDataAccessObject.getCourse(courseCode);
-                                        if (course != null) {
-                                            _terminal.getProperties().setPromptColor("red");
-                                            _terminal.println("Course already exist\nupdating course instead of adding...");
-                                            _terminal.getProperties().setPromptColor("white");
-                                            _terminal.setBookmark("add/update course home page");
-                                        }
-                                    } else {
-                                        _terminal.resetToBookmark("add new course");
-                                        _terminal.getProperties().setPromptColor("red");
-                                        _terminal.println("invalid course code format");
-                                        _terminal.getProperties().setPromptColor("white");
-                                    }
-                                } while (!validCourseCode);
-                            }
-                        } catch (IOException | ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-
-                        if (course == null) {
-                            Hashtable<DayOfWeek, List<LocalTime>> lectureTimings = new Hashtable<>();
-                            DayOfWeek lectureDay;
-                            List<LocalTime> lectureTiming;
-                            int AUs;
-                            _terminal.setBookmark("add/update course home page");
-                            _terminal.setBookmark("add course details");
-                            _terminal.println("____input the following details to add the course____");
-                            courseName = _textIO.newStringInputReader()
-                                    .withMinLength(3)
-                                    .read("course name: ");
-                            school = _textIO.newEnumInputReader(School.class).read("school: ");
-                            AUs = _textIO.newIntInputReader().withMinVal(1).withMaxVal(4)
-                                    .read("number of AUs (1-4): ");
-
-                            boolean contAdd;
-                            _terminal.println("____add a day and time period for lecture session____");
-                            _terminal.setBookmark("add lecture session");
-                            do {
-                                lectureDay = _textIO.newEnumInputReader(DayOfWeek.class).
-                                        read("Enter lecture day: ");
-                                if (lectureTimings.containsKey(lectureDay)) { //edited
-                                    _terminal.resetToBookmark("add lecture session");
-                                    _terminal.getProperties().setPromptColor(Color.RED);
-                                    _terminal.println("there is already a lecture session on " + lectureDay +
-                                            ". please select another day");
-                                    _terminal.getProperties().setPromptColor(Color.WHITE);
-                                    contAdd = true;
-                                    continue;
-                                }
-                                lectureTiming = getSessionTiming("lecture");
-                                lectureTimings.put(lectureDay, lectureTiming);
-                                contAdd = _textIO.newBooleanInputReader().
-                                        read("do you wish to continue adding a lecture session?");
-                            } while (contAdd);
-
-                            Venue lectureVenue = _textIO.newEnumInputReader(Venue.class)
-                                    .read("add the venue for the lecture session(s): ");
-
-                            _terminal.resetToBookmark("add course details");
-                            course = Factory.createCourse(courseCode, courseName, school, lectureTimings, lectureVenue, AUs);
-                            _terminal.getProperties().setPromptColor(Color.GREEN);
-                            _terminal.println("course details have been recorded.");
-                            _terminal.getProperties().setPromptColor("white");
-
-                            String newIndexGroupsubStr = courseCode.substring(2); //get the 4 digits
-                            int newIndexGroup = Integer.parseInt(newIndexGroupsubStr) * 100;
-                            _terminal.setBookmark("add index info");
-                            do {
-                                _terminal.resetToBookmark("add index info");
-                                course = addUpdateIndex(course, newIndexGroup);
-                                contAdd = _textIO.newBooleanInputReader().
-                                        read("Do you wish to continue adding another index?");
-                                if (contAdd) {
-                                    newIndexGroup++;
-                                }
-                            } while (contAdd);
-
-                            addCourse(course);
-                            _textIO.newStringInputReader()
-                                    .withDefaultValue(" ").
-                                    read("press enter to continue");
-                        } else {
-                            int option;
-                            do {
-                                if (course.getIndexes().size() == 0) {
-                                    _terminal.getProperties().setPromptColor("red");
-                                    _terminal.println("course has no more index, deleting course...");
-                                    _terminal.getProperties().setPromptColor("white");
-                                    option = 5;
-                                } else {
-                                    _terminal.resetToBookmark("add/update/delete course home page");
-                                    _terminal.getProperties().setPromptColor(Color.GREEN);
-                                    _terminal.println(course.allInfoToString());
-                                    _terminal.getProperties().setPromptColor("white");
-                                    _terminal.println("________Select course info to add/update________\n" +
-                                            "1. Update course name\n" +
-                                            "2. Update school\n" +
-                                            "3. Update Lecture Venue\n" +
-                                            "4. Add/Update/Delete index group\n" +
-                                            "5. Delete course\n" +
-                                            "6. Exit function");
-
-                                    option = _textIO.newIntInputReader().
-                                            withMinVal(1).withMaxVal(6).
-                                            read("Enter your choice");
-                                }
-
-                                _terminal.setBookmark("update course details");
-
-                                switch (option) {
-                                    case 1 -> {
-                                        String newCourseName = _textIO.newStringInputReader()
-                                                .read("enter new course name: ");
-                                        course.setCourseName(newCourseName);
-                                        updateCourse(course);
-                                        _terminal.getProperties().setPromptColor(Color.GREEN);
-                                        _terminal.println("Successfully updated course name");
-                                        _terminal.getProperties().setPromptColor("white");
-                                        _textIO.newStringInputReader().withDefaultValue(" ")
-                                                .read("press enter to continue");
-                                    }
-                                    case 2 -> {
-                                        school = _textIO.newEnumInputReader(School.class)
-                                                .read("enter new school: ");
-                                        course.setSchool(school);
-                                        updateCourse(course);
-                                        _terminal.getProperties().setPromptColor(Color.GREEN);
-                                        _terminal.println("Successfully updated school");
-                                        _terminal.getProperties().setPromptColor("white");
-                                        _textIO.newStringInputReader().withDefaultValue(" ")
-                                                .read("press enter to continue");
-                                    }
-                                    case 3 -> {
-                                        Venue lectureVenue = _textIO.newEnumInputReader(Venue.class)
-                                                .read("enter new venue for the lecture session(s): ");
-                                        course.setLectureVenue(lectureVenue);
-                                        updateCourse(course);
-                                        _terminal.getProperties().setPromptColor(Color.GREEN);
-                                        _terminal.println("Successfully updated lecture venue");
-                                        _terminal.getProperties().setPromptColor("white");
-                                        _textIO.newStringInputReader().withDefaultValue(" ").
-                                                read("press enter to continue");
-                                    }
-                                    case 4 -> {
-                                        List<String> indexesString = course.getIndexes();
-                                        indexesString.add("add new index");
-                                        String indexInput = _textIO.newStringInputReader()
-                                                .withNumberedPossibleValues(indexesString).read("select index to add/update/delete:");
-                                        boolean validIndexNumber;
-                                        _terminal.resetToBookmark("add/update course home page");
-                                        _terminal.setBookmark("add new index number");
-                                        if (!InputValidator.indexStrMatcher(indexInput)) {
-                                            do {
-                                                _terminal.setBookmark("add new index number");
-                                                indexInput = _textIO.newStringInputReader()
-                                                        .read("enter new index number: ");
-                                                validIndexNumber = InputValidator.indexStrMatcher(indexInput);
-                                                if (!validIndexNumber) {
-                                                    _terminal.resetToBookmark("add new index number");
-                                                    _terminal.getProperties().setPromptColor("red");
-                                                    _terminal.println("invalid course code format");
-                                                    _terminal.getProperties().setPromptColor("white");
-                                                }
-                                            } while (!validIndexNumber);
-                                        }
-                                        course = addUpdateIndex(course, Integer.parseInt(indexInput));
-                                        updateCourse(course);
-                                    }
-                                    case 5 -> {
-                                        try {
-                                            IRegistrationDataAccessObject registrationDataAccessObject = Factory.getTextRegistrationDataAccess();
-                                            List<String> indexNumbers = course.getIndexes();
-                                            for (Iterator<String> indexNumberIterator = indexNumbers.iterator(); indexNumberIterator.hasNext();) {
-                                                String indexNumber = indexNumberIterator.next();
-                                                Index index = course.getIndex(Integer.parseInt(indexNumber));
-                                                ArrayList<String> enrolledStudents = index.getEnrolledStudents();
-                                                Queue<String> waitingList = index.getWaitingList();
-                                                ArrayList<String> allStudents = new ArrayList<>();
-                                                allStudents.addAll(enrolledStudents);
-                                                allStudents.addAll(waitingList);
-
-                                                for (int i = 0; i < allStudents.size(); i++) {
-                                                    String student = allStudents.get(i);
-                                                    RegistrationKey registrationKey = Factory.createRegistrationKey(student,
-                                                            courseCode, Integer.parseInt(indexNumber));
-                                                    try {
-                                                        registrationDataAccessObject.deleteRegistration(registrationKey);
-                                                    } catch (IOException | ClassNotFoundException e) {
-                                                        _terminal.println("file not found");
-                                                    } catch (Exception e) {
-                                                        _terminal.println("Error deleting registration");
-                                                    }
-                                                }
-                                            }
-                                            Factory.getTextCourseDataAccess().deleteCourse(course);
-                                            _terminal.getProperties().setPromptColor(Color.green);
-                                            _terminal.println("Course deleted");
-                                        } catch (IOException | ClassNotFoundException e) {
-                                            _terminal.getProperties().setPromptColor("red");
-                                            _terminal.println("Error reading file");
-                                        } catch (NonExistentCourseException ignore) {
-                                        } finally {
-                                            _terminal.getProperties().setPromptColor("white");
-                                            _textIO.newStringInputReader().withDefaultValue(" ").
-                                                    read("press enter to continue");
-                                        }
-                                    }
-                                }
-                            } while (option != 5 && option != 6);
-                        }
-                    }
-
-                    case 4 -> {
-                        try {
-                            _terminal.println("Check index vacancies");
-                            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
-                            List<String> coursesString = courseDataAccessObject.getCourses();
-                            String courseCode = _textIO.newStringInputReader()
-                                    .withNumberedPossibleValues(coursesString)
-                                    .read("select course to check vacancies for: ");
-                            Course course = courseDataAccessObject.getCourse(courseCode);
-                            List<String> indexString = course.getIndexes();
-                            String indexNum = _textIO.newStringInputReader()
-                                    .withNumberedPossibleValues(indexString)
-                                    .read("select index to check vacancies for: ");
-                            int vacancies = course.checkVacancies(Integer.parseInt(indexNum));
-                            _terminal.getProperties().setPromptColor(Color.GREEN);
-                            _terminal.println("Successfully retrieved vacancies");
-                            if (vacancies <= 0) {
-                                _terminal.getProperties().setPromptColor("red");
-                                _terminal.printf("There is 0/%d vacancy for %s of %s\n",
-                                        course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
-                                        indexNum, courseCode);
-                                if (vacancies >= -1) {
-                                    _terminal.println("There is " + -vacancies + " student in the waiting list");
-                                } else {
-                                    _terminal.println("There are " + -vacancies + " students in the waiting list");
-                                }
-                            } else {
-                                if (vacancies <= 1) {
-                                    _terminal.printf("There is %d/%d vacancy for %s of %s\n",
-                                            vacancies, course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
-                                            indexNum, courseCode);
-                                } else {
-                                    _terminal.printf("There are %d/%d vacancies for %s of %s\n",
-                                            vacancies, course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
-                                            indexNum, courseCode);
-                                }
-                            }
-                        } catch (IOException | ClassNotFoundException e) {
-                            _terminal.getProperties().setPromptColor("red");
-                            _terminal.println("file not found");
-                        } catch (NonExistentIndexException e) {
-                            _terminal.getProperties().setPromptColor("red");
-                            _terminal.println("no such index");
-                        } finally {
-                            _terminal.getProperties().setPromptColor("white");
-                            _textIO.newStringInputReader().withDefaultValue(" ").
-                                    read("press enter to continue");
-                        }
-                    }
-
-                    case 5 -> {
-                        try {
-                            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
-                            String courseCode = _textIO.newStringInputReader()
-                                    .withNumberedPossibleValues(courseDataAccessObject.getCourses())
-                                    .read("print student list by index");
-                            Course course = courseDataAccessObject.getCourse(courseCode);
-
-                            String indexNumber = _textIO.newStringInputReader()
-                                    .withNumberedPossibleValues(course.getIndexes()).read("index number: ");
-                            Index index = course.getIndex(Integer.parseInt(indexNumber));
-                            _terminal.getProperties().setPromptColor(Color.GREEN);
-                            _terminal.println("Successfully retrieved student list");
-                            printStudentListByIndex(index);
-                            _terminal.println("End of Student list");
-                        } catch (IOException | ClassNotFoundException e) {
-                            _terminal.getProperties().setPromptColor("red");
-                            _terminal.println("file not found");
-                        } finally {
-                            _terminal.getProperties().setPromptColor("white");
-                            _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
-                        }
-                    }
-
-                    case 6 -> {
-                        try {
-                            String courseCode;
-                            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
-                            courseCode = _textIO.newStringInputReader()
-                                    .withNumberedPossibleValues(courseDataAccessObject.getCourses())
-                                    .read("print student list by course");
-                            Course course = courseDataAccessObject.getCourse(courseCode);
-
-                            _terminal.getProperties().setPromptColor(Color.GREEN);
-                            _terminal.println("Successfully retrieved student list");
-                            printStudentListByCourse(course);
-                            _terminal.println("End of Student list");
-                            _terminal.getProperties().setPromptColor("white");
-                        } catch (IOException | ClassNotFoundException e) {
-                            _terminal.getProperties().setPromptColor("red");
-                            _terminal.println("file not found");
-                        } finally {
-                            _terminal.getProperties().setPromptColor("white");
-                            _textIO.newStringInputReader().withDefaultValue(" ")
-                                    .read("press enter to continue");
-                        }
-                    }
+                    case 6 -> printStudentListByCourseMenu();
                     case 7 -> {
-                        try {
-                            _terminal.setBookmark("log in as student");
-                            _terminal.println("Update user courses/ Sign in as student");
-                            String username = _textIO.newStringInputReader()
-                                    .read("Enter Username:");
-                            String password = _textIO.newStringInputReader()
-                                    .withMinLength(6)
-                                    .withInputMasking(true)
-                                    .read("Enter Password: ");
-                            AbstractUser abstractUser = Factory.getTextUserDataAccess().authenticate(username, password);
-                            if (abstractUser == null || abstractUser.getUserType() == UserType.ADMIN) {
-                                _terminal.getProperties().setPromptColor("red");
-                                _terminal.println("Invalid User");
-                            } else {
-                                IRegistrationDataAccessObject registrationDataAccessObject = Factory.getTextRegistrationDataAccess();
-                                RegistrationPeriod temporaryRegistrationPeriod = Factory.createRegistrationPeriod(LocalDateTime.now().minusDays(2),
-                                        LocalDateTime.now().plusDays(2));
-                                RegistrationPeriod currentRegistrationPeriod = registrationDataAccessObject.getRegistrationPeriod();
-                                registrationDataAccessObject.setRegistrationPeriod(temporaryRegistrationPeriod);
-                                ISession session = Factory.createSession(abstractUser);
-                                try {
-                                    session.run();
-                                } catch (SecurityException ignored) {
-                                }
-                                registrationDataAccessObject.setRegistrationPeriod(currentRegistrationPeriod);
-                                _terminal.getProperties().setPromptColor(Color.GREEN);
-                                _terminal.println("Successfully logged out");
-                            }
-                        } catch (IOException | ClassNotFoundException e) {
-                            _terminal.getProperties().setPromptColor("red");
-                            _terminal.println("Error reading file");
-                        } catch (PasswordStorage.CannotPerformOperationException | PasswordStorage.InvalidHashException e) {
-                            _terminal.getProperties().setPromptColor("red");
-                            _terminal.println("Error unhashing password");
-                        } finally {
-                            _terminal.getProperties().setPromptColor("white");
-                            _textIO.newStringInputReader().withDefaultValue(" ")
-                                    .read("press enter to continue");
-                            _terminal.resetToBookmark("clear");
-                            _terminal.println(admin);
-                            if (registeredAbort) {
-                                _terminal.println("--------------------------------------------------------------------------------");
-                                _terminal.println("Press " + keyStrokeAbort + " to go abort your current action");
-                                _terminal.println("You can use this key combinations at any moment during your session.");
-                                _terminal.println("--------------------------------------------------------------------------------");
-                            }
+                        loginAsStudentMenu();
+                        if (registeredAbort) {
+                            _terminal.println("--------------------------------------------------------------------------------");
+                            _terminal.println("Press " + keyStrokeAbort + " to go abort your current action");
+                            _terminal.println("You can use this key combinations at any moment during your session.");
+                            _terminal.println("--------------------------------------------------------------------------------");
                         }
                     }
                     case 8 -> loggedIn = false;
@@ -565,7 +110,55 @@ public class AdminSession implements ISession {
         } while (choice >= 0 && choice < 8);
     }
 
-    private void changeAccessPeriod(RegistrationPeriod newRP) {
+    private void changeAccessPeriodMenu() {
+        boolean validDateTime;
+        LocalDateTime startDate, endDate;
+        _terminal.println("update registration period");
+        _terminal.setBookmark("update registration period home screen");
+        do {
+            String startDateStr;
+            _terminal.setBookmark("start date");
+            do {
+                startDateStr = _textIO.newStringInputReader().read("new start date in yyyy-MM-dd HH:mm format: ");
+                validDateTime = InputValidator.validateDateTimeInput(startDateStr);
+                if (!validDateTime) {
+                    _terminal.resetToBookmark("start date");
+                    _terminal.getProperties().setPromptColor("red");
+                    _terminal.println("invalid date format");
+                    _terminal.getProperties().setPromptColor("white");
+                }
+            } while (!validDateTime);
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            startDate = LocalDateTime.parse(startDateStr, format);
+
+            String endDateStr;
+            _terminal.setBookmark("end date");
+            do {
+                endDateStr = _textIO.newStringInputReader().read("new end date in yyyy-MM-dd HH:mm format: ");
+                validDateTime = InputValidator.validateDateTimeInput(endDateStr);
+                if (!validDateTime) {
+                    _terminal.resetToBookmark("end date");
+                    _terminal.getProperties().setPromptColor("red");
+                    _terminal.println("invalid date format");
+                    _terminal.getProperties().setPromptColor("white");
+                }
+            } while (!validDateTime);
+            endDate = LocalDateTime.parse(endDateStr, format);
+
+            validDateTime = startDate.compareTo(endDate) < 0;
+            if (startDate.compareTo(endDate) > 0) {
+                _terminal.resetToBookmark("update registration period home screen");
+                _terminal.getProperties().setPromptColor("red");
+                _terminal.println("Start period should occur after end period");
+                _terminal.getProperties().setPromptColor("white");
+            } else if (startDate.compareTo(endDate) == 0) {
+                _terminal.resetToBookmark("update registration period home screen");
+                _terminal.getProperties().setPromptColor("red");
+                _terminal.println("Start and end period cannot be equal");
+                _terminal.getProperties().setPromptColor("white");
+            }
+        } while (!validDateTime);
+        RegistrationPeriod newRP = Factory.createRegistrationPeriod(startDate, endDate);
         try {
             IRegistrationDataAccessObject registrationDataAccessObject = Factory.getTextRegistrationDataAccess();
             registrationDataAccessObject.updateRegistrationPeriod(newRP);
@@ -580,66 +173,363 @@ public class AdminSession implements ISession {
         } finally {
             _terminal.getProperties().setPromptColor("white");
         }
+        _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
     }
 
-    private void addStudent(Student student) {
+    private void addStudentMenu() {
+        String name;
+        boolean validName;
+        _terminal.println("add student");
+        _terminal.setBookmark("add student home screen");
+        do {
+            _terminal.setBookmark("student name");
+            name = _textIO.newStringInputReader().withMinLength(3).read("name: ");
+            validName = InputValidator.validateNameInput(name);
+            if (!validName) {
+                _terminal.resetToBookmark("student name");
+                _terminal.getProperties().setPromptColor("red");
+                _terminal.println("name cannot contain number");
+                _terminal.getProperties().setPromptColor("white");
+            }
+        } while (!validName);
+
+        Gender gender = _textIO.newEnumInputReader(Gender.class).read("Gender: ");
+        Nationality nationality = _textIO.newEnumInputReader(Nationality.class).read("Nationality: ");
+        School school = _textIO.newEnumInputReader(School.class).read("School: ");
+
+        int maxAUs = _textIO.newIntInputReader()
+                .withDefaultValue(21).withMinVal(0).withMaxVal(25)
+                .read("MaxAUs: (leave blank for default 21 AUs)");
         try {
+            Student newStudent = Factory.createStudent(name, school, gender, nationality, maxAUs);
             IUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess();
-            userDataAccessObject.addStudent(student);
+            userDataAccessObject.addStudent(newStudent);
             _terminal.getProperties().setPromptColor(Color.GREEN);
             _terminal.println("successfully added student");
             _terminal.println("list of all students:");
-            HashMap<String, Student> students = userDataAccessObject.getAllStudents();
-            for (Student existingStudent : students.values()) {
-                _terminal.println(existingStudent.toString());
-            }
+
+            userDataAccessObject = Factory.getTextUserDataAccess();
+            _terminal.println(userDataAccessObject.studentsInfoToString());
         } catch (ExistingUserException e) {
             _terminal.getProperties().setPromptColor("red");
             _terminal.println("Student already exists");
         } catch (IOException | ClassNotFoundException e) {
             _terminal.getProperties().setPromptColor("red");
             _terminal.println("Error reading file");
+        } catch (PasswordStorage.CannotPerformOperationException e) {
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("error hashing password");
         } finally {
             _terminal.getProperties().setPromptColor("white");
+            _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
         }
     }
 
-    private void addCourse(Course newCourse) {
+    private void checkIndexVacanciesMenu() {
         try {
+            _terminal.println("Check index vacancies");
             ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
-            courseDataAccessObject.addCourse(newCourse);
+            List<String> coursesString = courseDataAccessObject.getAllCourseCodes();
+            String courseCode = _textIO.newStringInputReader()
+                    .withNumberedPossibleValues(coursesString)
+                    .read("select course to check vacancies for: ");
+            Course course = courseDataAccessObject.getCourse(courseCode);
+            List<String> indexString = course.getListOfIndexNumbers();
+            String indexNum = _textIO.newStringInputReader()
+                    .withNumberedPossibleValues(indexString)
+                    .read("select index to check vacancies for: ");
+            int vacancies = course.checkVacancies(Integer.parseInt(indexNum));
             _terminal.getProperties().setPromptColor(Color.GREEN);
-            _terminal.println("Successfully added course");
-            List<String> courses = courseDataAccessObject.getCourses();
-            for (String courseCode : courses) {
-                _terminal.println(courseDataAccessObject.getCourse(courseCode).toString());
+            _terminal.println("Successfully retrieved vacancies");
+            if (vacancies <= 0) {
+                _terminal.getProperties().setPromptColor("red");
+                _terminal.printf("There is 0/%d vacancy for %s of %s\n",
+                        course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
+                        indexNum, courseCode);
+                if (vacancies >= -1) {
+                    _terminal.println("There is " + -vacancies + " student in the waiting list");
+                } else {
+                    _terminal.println("There are " + -vacancies + " students in the waiting list");
+                }
+            } else {
+                if (vacancies <= 1) {
+                    _terminal.printf("There is %d/%d vacancy for %s of %s\n",
+                            vacancies, course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
+                            indexNum, courseCode);
+                } else {
+                    _terminal.printf("There are %d/%d vacancies for %s of %s\n",
+                            vacancies, course.getIndex(Integer.parseInt(indexNum)).getMaxClassSize(),
+                            indexNum, courseCode);
+                }
             }
         } catch (IOException | ClassNotFoundException e) {
             _terminal.getProperties().setPromptColor("red");
             _terminal.println("file not found");
-        } catch (ExistingCourseException e) {
+        } catch (NonExistentIndexException e) {
             _terminal.getProperties().setPromptColor("red");
-            _terminal.println("existing course");
+            _terminal.println("no such index");
         } finally {
             _terminal.getProperties().setPromptColor("white");
+            _textIO.newStringInputReader().withDefaultValue(" ").
+                    read("press enter to continue");
         }
     }
 
-    private void updateCourse(Course newCourse) {
+    private void addUpdateDropCourseMenu() {
+        String selectedCourseCode = null;
+        Course selectedCourse = null;
+        String courseName;
+        School school;
+
+        _terminal.println("add/update/delete course");
+        _terminal.setBookmark("add/update course home page");
         try {
             ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
-            courseDataAccessObject.updateCourse(newCourse);
-            _terminal.getProperties().setPromptColor(Color.GREEN);
-            _terminal.println("Successfully updated course");
+            List<String> coursesString = courseDataAccessObject.getAllCourseCodes();
+            coursesString.add("add new course");
+            selectedCourseCode = _textIO.newStringInputReader()
+                    .withNumberedPossibleValues(coursesString)
+                    .read("select course to add/update/delete: ");
+            selectedCourse = courseDataAccessObject.getCourse(selectedCourseCode);
+
+            if (selectedCourse == null) {
+                boolean validCourseCode;
+                _terminal.setBookmark("add new course");
+                do {
+                    selectedCourseCode = _textIO.newStringInputReader().read("enter new course code");
+                    _terminal.resetToBookmark("add/update course home page");
+                    validCourseCode = InputValidator.courseStrMatcher(selectedCourseCode);
+                    if (validCourseCode) {
+                        selectedCourse = courseDataAccessObject.getCourse(selectedCourseCode);
+                        if (selectedCourse != null) {
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("Course already exist\nupdating course instead of adding...");
+                            _terminal.getProperties().setPromptColor("white");
+                            _terminal.setBookmark("add/update course home page");
+                        }
+                    } else {
+                        _terminal.resetToBookmark("add new course");
+                        _terminal.getProperties().setPromptColor("red");
+                        _terminal.println("invalid course code format");
+                        _terminal.getProperties().setPromptColor("white");
+                    }
+                } while (!validCourseCode);
+            }
         } catch (IOException | ClassNotFoundException e) {
-            _terminal.getProperties().setPromptColor("red");
-            _terminal.println("file not found");
-        } finally {
+            e.printStackTrace();
+        }
+
+        if (selectedCourse == null) {
+            Hashtable<DayOfWeek, List<LocalTime>> lectureTimings = new Hashtable<>();
+            DayOfWeek lectureDay;
+            List<LocalTime> lectureTiming;
+            int AUs;
+            _terminal.setBookmark("add/update course home page");
+            _terminal.setBookmark("add course details");
+            _terminal.println("____input the following details to add the course____");
+            courseName = _textIO.newStringInputReader()
+                    .withMinLength(3)
+                    .read("course name: ");
+            school = _textIO.newEnumInputReader(School.class).read("school: ");
+            AUs = _textIO.newIntInputReader().withMinVal(1).withMaxVal(4)
+                    .read("number of AUs (1-4): ");
+
+            boolean contAdd;
+            _terminal.println("____add a day and time period for lecture session____");
+            _terminal.setBookmark("add lecture session");
+            do {
+                lectureDay = _textIO.newEnumInputReader(DayOfWeek.class).
+                        read("Enter lecture day: ");
+                if (lectureTimings.containsKey(lectureDay)) { //edited
+                    _terminal.resetToBookmark("add lecture session");
+                    _terminal.getProperties().setPromptColor(Color.RED);
+                    _terminal.println("there is already a lecture session on " + lectureDay +
+                            ". please select another day");
+                    _terminal.getProperties().setPromptColor(Color.WHITE);
+                    contAdd = true;
+                    continue;
+                }
+                lectureTiming = getValidTimeInput("lecture");
+                lectureTimings.put(lectureDay, lectureTiming);
+                contAdd = _textIO.newBooleanInputReader().
+                        read("do you wish to continue adding a lecture session?");
+            } while (contAdd);
+
+            Venue lectureVenue = _textIO.newEnumInputReader(Venue.class)
+                    .read("add the venue for the lecture session(s): ");
+
+            _terminal.resetToBookmark("add course details");
+            selectedCourse = Factory.createCourse(selectedCourseCode, courseName, school, lectureTimings, lectureVenue, AUs);
+            _terminal.getProperties().setPromptColor(Color.GREEN);
+            _terminal.println("course details have been recorded.");
             _terminal.getProperties().setPromptColor("white");
+
+            String newIndexGroupsubStr = selectedCourseCode.substring(2); //get the 4 digits
+            int newIndexGroup = Integer.parseInt(newIndexGroupsubStr) * 100;
+            _terminal.setBookmark("add index info");
+            do {
+                _terminal.resetToBookmark("add index info");
+                selectedCourse = addUpdateDropIndexMenu(selectedCourse, newIndexGroup);
+                contAdd = _textIO.newBooleanInputReader().
+                        read("Do you wish to continue adding another index?");
+                if (contAdd) {
+                    newIndexGroup++;
+                }
+            } while (contAdd);
+
+            try {
+                ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+                courseDataAccessObject.addCourse(selectedCourse);
+                _terminal.getProperties().setPromptColor(Color.GREEN);
+                _terminal.println("Successfully added course");
+                List<String> courses = courseDataAccessObject.getAllCourseCodes();
+                for (String courseCode : courses) {
+                    _terminal.println(courseDataAccessObject.getCourse(courseCode).toString());
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                _terminal.getProperties().setPromptColor("red");
+                _terminal.println("file not found");
+            } catch (ExistingCourseException e) {
+                _terminal.getProperties().setPromptColor("red");
+                _terminal.println("existing course");
+            } finally {
+                _terminal.getProperties().setPromptColor("white");
+            }
+            _textIO.newStringInputReader()
+                    .withDefaultValue(" ").
+                    read("press enter to continue");
+        } else {
+            int option;
+            do {
+                if (selectedCourse.getListOfIndexNumbers().size() == 0) {
+                    _terminal.getProperties().setPromptColor("red");
+                    _terminal.println("course has no more index, deleting course...");
+                    _terminal.getProperties().setPromptColor("white");
+                    option = 5;
+                } else {
+                    _terminal.resetToBookmark("add/update/delete course home page");
+                    _terminal.getProperties().setPromptColor(Color.GREEN);
+                    _terminal.println(selectedCourse.allInfoToString());
+                    _terminal.getProperties().setPromptColor("white");
+                    _terminal.println("________Select course info to add/update________\n" +
+                            "1. Update course name\n" +
+                            "2. Update school\n" +
+                            "3. Update Lecture Venue\n" +
+                            "4. Add/Update/Delete index group\n" +
+                            "5. Delete course\n" +
+                            "6. Exit function");
+
+                    option = _textIO.newIntInputReader().
+                            withMinVal(1).withMaxVal(6).
+                            read("Enter your choice");
+                }
+
+                _terminal.setBookmark("update course details");
+
+                switch (option) {
+                    case 1 -> {
+                        String newCourseName = _textIO.newStringInputReader()
+                                .read("enter new course name: ");
+                        selectedCourse.setCourseName(newCourseName);
+                        updateCourse(selectedCourse);
+                        _terminal.getProperties().setPromptColor(Color.GREEN);
+                        _terminal.println("Successfully updated course name");
+                        _terminal.getProperties().setPromptColor("white");
+                        _textIO.newStringInputReader().withDefaultValue(" ")
+                                .read("press enter to continue");
+                    }
+                    case 2 -> {
+                        school = _textIO.newEnumInputReader(School.class)
+                                .read("enter new school: ");
+                        selectedCourse.setSchool(school);
+                        updateCourse(selectedCourse);
+                        _terminal.getProperties().setPromptColor(Color.GREEN);
+                        _terminal.println("Successfully updated school");
+                        _terminal.getProperties().setPromptColor("white");
+                        _textIO.newStringInputReader().withDefaultValue(" ")
+                                .read("press enter to continue");
+                    }
+                    case 3 -> {
+                        Venue lectureVenue = _textIO.newEnumInputReader(Venue.class)
+                                .read("enter new venue for the lecture session(s): ");
+                        selectedCourse.setLectureVenue(lectureVenue);
+                        updateCourse(selectedCourse);
+                        _terminal.getProperties().setPromptColor(Color.GREEN);
+                        _terminal.println("Successfully updated lecture venue");
+                        _terminal.getProperties().setPromptColor("white");
+                        _textIO.newStringInputReader().withDefaultValue(" ").
+                                read("press enter to continue");
+                    }
+                    case 4 -> {
+                        List<String> indexesString = selectedCourse.getListOfIndexNumbers();
+                        indexesString.add("add new index");
+                        String indexInput = _textIO.newStringInputReader()
+                                .withNumberedPossibleValues(indexesString).read("select index to add/update/delete:");
+                        boolean validIndexNumber;
+                        _terminal.resetToBookmark("add/update course home page");
+                        _terminal.setBookmark("add new index number");
+                        if (!InputValidator.indexStrMatcher(indexInput)) {
+                            do {
+                                _terminal.setBookmark("add new index number");
+                                indexInput = _textIO.newStringInputReader()
+                                        .read("enter new index number: ");
+                                validIndexNumber = InputValidator.indexStrMatcher(indexInput);
+                                if (!validIndexNumber) {
+                                    _terminal.resetToBookmark("add new index number");
+                                    _terminal.getProperties().setPromptColor("red");
+                                    _terminal.println("invalid course code format");
+                                    _terminal.getProperties().setPromptColor("white");
+                                }
+                            } while (!validIndexNumber);
+                        }
+                        selectedCourse = addUpdateDropIndexMenu(selectedCourse, Integer.parseInt(indexInput));
+                        updateCourse(selectedCourse);
+                    }
+                    case 5 -> {
+                        try {
+                            IRegistrationDataAccessObject registrationDataAccessObject = Factory.getTextRegistrationDataAccess();
+                            List<String> indexNumbers = selectedCourse.getListOfIndexNumbers();
+                            for (Iterator<String> indexNumberIterator = indexNumbers.iterator(); indexNumberIterator.hasNext();) {
+                                String indexNumber = indexNumberIterator.next();
+                                Index index = selectedCourse.getIndex(Integer.parseInt(indexNumber));
+                                ArrayList<String> enrolledStudents = index.getEnrolledStudents();
+                                Queue<String> waitingList = index.getWaitingList();
+                                ArrayList<String> allStudents = new ArrayList<>();
+                                allStudents.addAll(enrolledStudents);
+                                allStudents.addAll(waitingList);
+
+                                for (int i = 0; i < allStudents.size(); i++) {
+                                    String student = allStudents.get(i);
+                                    RegistrationKey registrationKey = Factory.createRegistrationKey(student,
+                                            selectedCourseCode, Integer.parseInt(indexNumber));
+                                    try {
+                                        registrationDataAccessObject.deleteRegistration(registrationKey);
+                                    } catch (IOException | ClassNotFoundException e) {
+                                        _terminal.println("file not found");
+                                    } catch (Exception e) {
+                                        _terminal.println("Error deleting registration");
+                                    }
+                                }
+                            }
+                            Factory.getTextCourseDataAccess().deleteCourse(selectedCourse);
+                            _terminal.getProperties().setPromptColor(Color.green);
+                            _terminal.println("Course deleted");
+                        } catch (IOException | ClassNotFoundException e) {
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("Error reading file");
+                        } catch (NonExistentCourseException ignore) {
+                        } finally {
+                            _terminal.getProperties().setPromptColor("white");
+                            _textIO.newStringInputReader().withDefaultValue(" ").
+                                    read("press enter to continue");
+                        }
+                    }
+                }
+            } while (option != 5 && option != 6);
         }
     }
 
-    private Course addUpdateIndex(Course course, int index) {
+    private Course addUpdateDropIndexMenu(Course course, int index) {
         Index existingIndex = course.getIndex(index);
         _terminal.setBookmark("add/update/delete index");
         if (existingIndex == null) {
@@ -685,7 +575,7 @@ public class AdminSession implements ISession {
                     newTutorialTimings = Objects.requireNonNullElseGet(originalTutorialTimings, Hashtable::new);
                     DayOfWeek sessionDay = _textIO.newEnumInputReader(DayOfWeek.class)
                             .read("Enter tutorial day: ");
-                    List<LocalTime> sessionTiming = getSessionTiming("tutorial");
+                    List<LocalTime> sessionTiming = getValidTimeInput("tutorial");
                     newTutorialTimings.put(sessionDay, sessionTiming);
 
                     existingIndex.setTutorialTimings(newTutorialTimings);
@@ -724,7 +614,7 @@ public class AdminSession implements ISession {
                     newLaboratoryTimings = Objects.requireNonNullElseGet(originalLaboratoryTimings, Hashtable::new);
                     DayOfWeek sessionDay = _textIO.newEnumInputReader(DayOfWeek.class)
                             .read("Enter Laboratory day: ");
-                    List<LocalTime> sessionTiming = getSessionTiming("laboratory");
+                    List<LocalTime> sessionTiming = getValidTimeInput("laboratory");
                     newLaboratoryTimings.put(sessionDay, sessionTiming);
 
                     existingIndex.setTutorialTimings(newLaboratoryTimings);
@@ -774,7 +664,7 @@ public class AdminSession implements ISession {
                         newTutorialTimings = Objects.requireNonNullElseGet(originalTutorialTimings, Hashtable::new);
                         DayOfWeek sessionDay = _textIO.newEnumInputReader(DayOfWeek.class)
                                 .read("Enter tutorial day: ");
-                        List<LocalTime> sessionTiming = getSessionTiming("tutorial");
+                        List<LocalTime> sessionTiming = getValidTimeInput("tutorial");
                         newTutorialTimings.put(sessionDay, sessionTiming);
 
                         existingIndex.setTutorialTimings(newTutorialTimings);
@@ -813,7 +703,7 @@ public class AdminSession implements ISession {
                         newLaboratoryTimings = Objects.requireNonNullElseGet(originalLaboratoryTimings, Hashtable::new);
                         DayOfWeek sessionDay = _textIO.newEnumInputReader(DayOfWeek.class)
                                 .read("Enter Laboratory day: ");
-                        List<LocalTime> sessionTiming = getSessionTiming("laboratory");
+                        List<LocalTime> sessionTiming = getValidTimeInput("laboratory");
                         newLaboratoryTimings.put(sessionDay, sessionTiming);
 
                         existingIndex.setTutorialTimings(newLaboratoryTimings);
@@ -835,10 +725,19 @@ public class AdminSession implements ISession {
                             .read("press enter to continue");
                 }
                 case 5 -> {
-                    int maxClassSize = _textIO.newIntInputReader()
-                            .withMinVal(1)
-                            .read("update maximum class size to: ");
-                    existingIndex.setMaxClassSize(maxClassSize);
+                    int newMaxClassSize;
+                    int currentMaxClassSize = existingIndex.getMaxClassSize();
+                    do {
+                        newMaxClassSize = _textIO.newIntInputReader()
+                                .withMinVal(1)
+                                .read("update maximum class size to: ");
+                        if (newMaxClassSize < currentMaxClassSize) {
+                            _terminal.getProperties().setPromptColor("red");
+                            _terminal.println("New class size cannot be smaller than the original");
+                            _terminal.getProperties().setPromptColor("white");
+                        }
+                    } while (newMaxClassSize < currentMaxClassSize);
+                    existingIndex.setMaxClassSize(newMaxClassSize);
                     _terminal.getProperties().setPromptColor(Color.GREEN);
                     _terminal.println("Successfully updated maximum class size");
                     _terminal.getProperties().setPromptColor("white");
@@ -848,11 +747,11 @@ public class AdminSession implements ISession {
                 case 6 -> {
                     try {
                         IRegistrationDataAccessObject registrationDataAccessObject = Factory.getTextRegistrationDataAccess();
-                            ArrayList<String> enrolledStudents = existingIndex.getEnrolledStudents();
-                            Queue<String> waitingList = existingIndex.getWaitingList();
-                            ArrayList<String> allStudents = new ArrayList<>();
-                            allStudents.addAll(enrolledStudents);
-                            allStudents.addAll(waitingList);
+                        ArrayList<String> enrolledStudents = existingIndex.getEnrolledStudents();
+                        Queue<String> waitingList = existingIndex.getWaitingList();
+                        ArrayList<String> allStudents = new ArrayList<>();
+                        allStudents.addAll(enrolledStudents);
+                        allStudents.addAll(waitingList);
 
                         for (String student : allStudents) {
                             RegistrationKey registrationKey = Factory.createRegistrationKey(student,
@@ -884,12 +783,123 @@ public class AdminSession implements ISession {
         return course;
     }
 
-    private void printStudentListByIndex(Index index) {
+    private void printStudentListByIndexMenu() {
+        try {
+            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+            String courseCode = _textIO.newStringInputReader()
+                    .withNumberedPossibleValues(courseDataAccessObject.getAllCourseCodes())
+                    .read("print student list by index");
+            Course course = courseDataAccessObject.getCourse(courseCode);
+
+            String indexNumber = _textIO.newStringInputReader()
+                    .withNumberedPossibleValues(course.getListOfIndexNumbers()).read("index number: ");
+            Index index = course.getIndex(Integer.parseInt(indexNumber));
+            _terminal.getProperties().setPromptColor(Color.GREEN);
+            _terminal.println("Successfully retrieved student list");
+            _terminal.println(getStudentListByIndexString(index));
+            _terminal.println("End of Student list");
+        } catch (IOException | ClassNotFoundException e) {
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("file not found");
+        } finally {
+            _terminal.getProperties().setPromptColor("white");
+            _textIO.newStringInputReader().withDefaultValue(" ").read("press enter to continue");
+        }
+    }
+
+    private void printStudentListByCourseMenu() {
+        try {
+            String courseCode;
+            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+            courseCode = _textIO.newStringInputReader()
+                    .withNumberedPossibleValues(courseDataAccessObject.getAllCourseCodes())
+                    .read("print student list by course");
+            Course course = courseDataAccessObject.getCourse(courseCode);
+            _terminal.getProperties().setPromptColor(Color.GREEN);
+            _terminal.println("Successfully retrieved student list");
+            _terminal.println("courseCode: " + course.getCourseCode() + ",\t" + "courseName: " + course.getCourseName());
+            for (String indexNumber : course.getListOfIndexNumbers()) {
+                Index index = course.getIndex(Integer.parseInt(indexNumber));
+                _terminal.println(getStudentListByIndexString(index));
+                _terminal.println();
+            }
+            _terminal.getProperties().setPromptColor("white");
+            _terminal.println("End of Student list");
+            _terminal.getProperties().setPromptColor("white");
+        } catch (IOException | ClassNotFoundException e) {
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("file not found");
+        } finally {
+            _terminal.getProperties().setPromptColor("white");
+            _textIO.newStringInputReader().withDefaultValue(" ")
+                    .read("press enter to continue");
+        }
+    }
+
+    private void loginAsStudentMenu() {
+        try {
+            _terminal.setBookmark("log in as student");
+            _terminal.println("Update user courses/ Sign in as student");
+            String username = _textIO.newStringInputReader()
+                    .read("Enter Username:");
+            String password = _textIO.newStringInputReader()
+                    .withMinLength(6)
+                    .withInputMasking(true)
+                    .read("Enter Password: ");
+            AbstractUser abstractUser = Factory.getTextUserDataAccess().authenticate(username, password);
+            if (abstractUser == null || abstractUser.getUserType() == UserType.ADMIN) {
+                _terminal.getProperties().setPromptColor("red");
+                _terminal.println("Invalid User");
+            } else {
+                IRegistrationDataAccessObject registrationDataAccessObject = Factory.getTextRegistrationDataAccess();
+                RegistrationPeriod temporaryRegistrationPeriod = Factory.createRegistrationPeriod(LocalDateTime.now().minusDays(2),
+                        LocalDateTime.now().plusDays(2));
+                RegistrationPeriod currentRegistrationPeriod = registrationDataAccessObject.getRegistrationPeriod();
+                registrationDataAccessObject.setRegistrationPeriod(temporaryRegistrationPeriod);
+                ISession session = Factory.createSession(abstractUser);
+                try {
+                    session.run();
+                } catch (SecurityException ignored) {
+                }
+                registrationDataAccessObject.setRegistrationPeriod(currentRegistrationPeriod);
+                _terminal.getProperties().setPromptColor(Color.GREEN);
+                _terminal.println("Successfully logged out");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("Error reading file");
+        } catch (PasswordStorage.CannotPerformOperationException | PasswordStorage.InvalidHashException e) {
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("Error unhashing password");
+        } finally {
+            _terminal.getProperties().setPromptColor("white");
+            _textIO.newStringInputReader().withDefaultValue(" ")
+                    .read("press enter to continue");
+            _terminal.resetToBookmark("clear");
+            _terminal.println(admin);
+        }
+    }
+
+    private void updateCourse(Course newCourse) {
+        try {
+            ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
+            courseDataAccessObject.updateCourse(newCourse);
+            _terminal.getProperties().setPromptColor(Color.GREEN);
+            _terminal.println("Successfully updated course");
+        } catch (IOException | ClassNotFoundException e) {
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("file not found");
+        } finally {
+            _terminal.getProperties().setPromptColor("white");
+        }
+    }
+
+    private String getStudentListByIndexString(Index index) {
+        StringBuilder str = new StringBuilder();
         try {
             IUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess();
             ArrayList<String> enrolledStudents = index.getEnrolledStudents();
             Queue<String> waitingListStudents = index.getWaitingList();
-            StringBuilder str = new StringBuilder();
             str.append("indexNumber: ").append(index.getIndexNumber()).append('\n');
             if (enrolledStudents.isEmpty()) {
                 str.append("no enrolled students");
@@ -912,29 +922,16 @@ public class AdminSession implements ISession {
                         str.append("nationality: \t").append(student.getNationality()).append('\n');
                     }
                 }
-                _terminal.getProperties().setPromptColor(Color.GREEN);
-                _terminal.println(str.toString());
             }
         } catch (IOException | ClassNotFoundException e) {
             _terminal.getProperties().setPromptColor("red");
             _terminal.println("file not found");
-        } finally {
-            _terminal.getProperties().setPromptColor("white");
+            str.append(" ");
         }
+        return str.toString();
     }
 
-    private void printStudentListByCourse(Course course) {
-        _terminal.getProperties().setPromptColor(Color.GREEN);
-        _terminal.println("courseCode: " + course.getCourseCode() + ",\t" + "courseName: " + course.getCourseName());
-        for (String indexNumber : course.getIndexes()) {
-            Index index = course.getIndex(Integer.parseInt(indexNumber));
-            printStudentListByIndex(index);
-            _terminal.println();
-        }
-        _terminal.getProperties().setPromptColor("white");
-    }
-
-    private List<LocalTime> getSessionTiming(String sessionType) {
+    private List<LocalTime> getValidTimeInput(String sessionType) {
         List<LocalTime> startEndTime = new ArrayList<>();
         boolean proceed;
         String startTime;

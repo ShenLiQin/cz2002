@@ -9,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.TreeMap;
 
@@ -38,7 +37,7 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
 //        instance = (RegistrationDatabase) input.readObject();
     }
 
-    public static void persist(){
+    private static void persist(){
         FileOutputStream fos;
         ObjectOutputStream out = null;
         try{

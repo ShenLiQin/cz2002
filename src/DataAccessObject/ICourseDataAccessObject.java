@@ -16,5 +16,5 @@ public interface ICourseDataAccessObject {
 
     Course getCourse(String courseCode);
 
-    List<String> getCourses();
+    List<String> getAllCourseCodes();
 }

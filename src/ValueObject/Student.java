@@ -14,12 +14,15 @@ public class Student extends AbstractUser {
     private TreeMap<String, Integer> registeredCourses;
     private TreeMap<String, Integer> waitingListCourses;
     private int totalRegisteredAUs;
+    private static int count = 0;
     private int maxAUs;
 
     public Student(String name, School school, Gender gender, Nationality nationality, int maxAUs, Random random) throws PasswordStorage.CannotPerformOperationException {
         super(name, school, gender, nationality, UserType.USER);
         int year = (Calendar.getInstance().get(Calendar.YEAR))%100 ;
-        this.matricNumber = "U" + year + (int)(random.nextFloat() * 90000) + (char)(random.nextInt(26) + 'A');
+        this.matricNumber = "U" + year +
+                String.format("%05d", count++) +
+                (char)(random.nextInt(26) + 'A');
         this.registeredCourses = new TreeMap<>();
         this.waitingListCourses = new TreeMap<>();
         this.totalRegisteredAUs = 0;
@@ -30,8 +33,8 @@ public class Student extends AbstractUser {
         return matricNumber;
     }
 
-    public TreeMap<String, Integer> getRegisteredCourses() {
-        return registeredCourses;
+    public void setMatricNumber(String matricNumber) {
+        this.matricNumber = matricNumber;
     }
 
     public void registerCourse(String courseCode, int indexNumber) throws ExistingCourseException {
@@ -45,14 +48,6 @@ public class Student extends AbstractUser {
         }
     }
 
-    public void registerWaitListCourse(String courseCode, int indexNumber) throws ExistingCourseException {
-        if (waitingListCourses.containsKey(courseCode)) {
-            throw new ExistingCourseException();
-        } else {
-            waitingListCourses.put(courseCode, indexNumber);
-        }
-    }
-
     public void deregisterCourse(String courseCode) throws NonExistentCourseException {
         if (registeredCourses.containsKey(courseCode)) {
             registeredCourses.remove(courseCode);
@@ -63,39 +58,36 @@ public class Student extends AbstractUser {
         }
     }
 
-    public int getTotalRegisteredAUs() {
-        return totalRegisteredAUs;
+    public void registerWaitListCourse(String courseCode, int indexNumber) throws ExistingCourseException {
+        if (waitingListCourses.containsKey(courseCode)) {
+            throw new ExistingCourseException();
+        } else {
+            waitingListCourses.put(courseCode, indexNumber);
+        }
     }
 
-    public void setMatricNumber(String matricNumber) {
-        this.matricNumber = matricNumber;
-    }
-
-    public void setRegisteredCourses(TreeMap<String, Integer> registeredCourses) {
-        this.registeredCourses = registeredCourses;
+    public TreeMap<String, Integer> getRegisteredCourses() {
+        return registeredCourses;
     }
 
     public TreeMap<String, Integer> getWaitingListCourses() {
         return waitingListCourses;
     }
 
-    public void setWaitingListCourses(TreeMap<String, Integer> waitingListCourses) {
-        this.waitingListCourses = waitingListCourses;
-    }
-
     public void registerAUs(int AUs) {
         this.totalRegisteredAUs -= AUs;
     }
+
     public void deregisterAUs(int AUs) {
         this.totalRegisteredAUs += AUs;
     }
 
-    public void setMaxAUs(int maxAUs) {
-        this.maxAUs = maxAUs;
-    }
-
     public int getMaxAUs() {
         return maxAUs;
+    }
+
+    public int getTotalRegisteredAUs() {
+        return totalRegisteredAUs;
     }
 
     @Override

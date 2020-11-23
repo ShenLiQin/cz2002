@@ -37,7 +37,7 @@ public class TextCourseDataAccess implements Serializable, ICourseDataAccessObje
 //        instance = (CourseDatabase) input.readObject();
     }
 
-    public static void persist(){
+    private static void persist(){
         FileOutputStream fos;
         ObjectOutputStream out = null;
         try{
@@ -87,7 +87,7 @@ public class TextCourseDataAccess implements Serializable, ICourseDataAccessObje
     }
 
     @Override
-    public List<String> getCourses() {
+    public List<String> getAllCourseCodes() {
         return new ArrayList<>(courses.keySet());
     }
 

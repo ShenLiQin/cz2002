@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.TreeMap;
 
 public class TextUserDataAccess implements Serializable, IUserDataAccessObject {
@@ -37,10 +36,9 @@ public class TextUserDataAccess implements Serializable, IUserDataAccessObject {
 //        ObjectInput input = new ObjectInputStream(buffer);
 
 //        instance = (UserDatabase) input.readObject();
-        // hash password
     }
 
-    public static void persist(){
+    private static void persist(){
         FileOutputStream fos;
         ObjectOutputStream out = null;
         try{
@@ -56,17 +54,6 @@ public class TextUserDataAccess implements Serializable, IUserDataAccessObject {
                 e.printStackTrace();
             }
         }
-    }
-
-    public HashMap<String, Student> getAllStudents() {
-        HashMap<String, Student> students = new HashMap<>();
-        for (AbstractUser user : loginInformation.values()) {
-            if (user instanceof Student) {
-                Student s = (Student) user;
-                students.put(s.getMatricNumber(), s);
-            }
-        }
-        return students;
     }
 
     @Override
@@ -119,5 +106,26 @@ public class TextUserDataAccess implements Serializable, IUserDataAccessObject {
     public Student getStudent(String matricNumber) {
         HashMap<String, Student> students = getAllStudents();
         return students.get(matricNumber);
+    }
+
+    @Override
+    public String studentsInfoToString() {
+        StringBuilder str = new StringBuilder();
+        HashMap<String, Student> students = getAllStudents();
+        for (Student existingStudent : students.values()) {
+            str.append(existingStudent.toString()).append('\n');
+        }
+        return str.toString();
+    }
+
+    private HashMap<String, Student> getAllStudents() {
+        HashMap<String, Student> students = new HashMap<>();
+        for (AbstractUser user : loginInformation.values()) {
+            if (user instanceof Student) {
+                Student s = (Student) user;
+                students.put(s.getMatricNumber(), s);
+            }
+        }
+        return students;
     }
 }

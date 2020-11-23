@@ -4,6 +4,7 @@ import Helper.PasswordStorage;
 
 import java.io.Serializable;
 import java.time.Year;
+import java.util.Random;
 
 public abstract class AbstractUser implements Serializable {
     private String username;
@@ -21,21 +22,24 @@ public abstract class AbstractUser implements Serializable {
     }
 
     public AbstractUser(String name, School school, Gender gender, Nationality nationality, UserType userType) throws PasswordStorage.CannotPerformOperationException {
-        this.username = name.strip().toLowerCase() +
-                school.toString().toLowerCase() +
-                Year.now().toString();
         this.hash = PasswordStorage.createHash(name.strip().toLowerCase() +
                 Year.now().toString());
+        this.username = name.strip().toLowerCase().substring(name.length() - 3) +
+                school.toString().toLowerCase() +
+                String.format("%04d", new Random().nextInt(1000));
         this.gender = gender;
         this.nationality = nationality;
         this.name = name;
         this.school = school;
         this.userType = userType;
-        this.email = name.strip().toLowerCase() +
+        this.email = name.strip().toLowerCase().substring(name.length() - 3) +
+                String.format("%04d", hash.hashCode()) +
                 school.toString().toLowerCase() +
                 '.' +
                 userType.toString().toLowerCase() +
                 "@ntu.edu.sg";
+        System.out.println(username + ": " + name.strip().toLowerCase() +
+                Year.now().toString());
     }
 
     public String getEmail() {

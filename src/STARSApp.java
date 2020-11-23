@@ -1,5 +1,6 @@
 import Control.ISession;
 import Control.LoginControl;
+import Control.StudentCourseRegistrar;
 import DataAccessObject.ICourseDataAccessObject;
 import DataAccessObject.IRegistrationDataAccessObject;
 import DataAccessObject.IUserDataAccessObject;
@@ -34,7 +35,6 @@ public class STARSApp {
     public static void main(String[] args) {
         IUserDataAccessObject userDataAccessObject;
         ICourseDataAccessObject courseDataAccessObject;
-        IRegistrationDataAccessObject registrationDataAccessObject;
         try {
             userDataAccessObject = Factory.getTextUserDataAccess();
             Staff newA = Factory.createStaff("Richard", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN);
@@ -87,24 +87,52 @@ public class STARSApp {
 
             courseDataAccessObject = Factory.getTextCourseDataAccess();
             Index index1 = Factory.createIndex(200100, 10);
+            Hashtable<DayOfWeek, List<LocalTime>> index1Date = new Hashtable<>();
+            List<LocalTime> timing = new LinkedList<>();
+            timing.add(LocalTime.of(10,0));
+            timing.add(LocalTime.of(12,0));
+            index1Date.put(DayOfWeek.MONDAY, timing);
+            index1.setLaboratoryTimings(index1Date);
+            index1.setLaboratoryVenue(Venue.HWL2);
+            timing = new LinkedList<>();
+            index1Date = new Hashtable<>();
+            timing.add(LocalTime.of(10,0));
+            timing.add(LocalTime.of(11,0));
+            index1Date.put(DayOfWeek.TUESDAY, timing);
+            index1.setTutorialTimings(index1Date);
+            index1.setTutorialVenue(Venue.TR1);
 
             Index index2 = Factory.createIndex(200101, 10);
             Hashtable<DayOfWeek, List<LocalTime>> index2Date = new Hashtable<>();
-            List<LocalTime> timing = new LinkedList<>();
+            timing = new LinkedList<>();
             timing.add(LocalTime.of(10,0));
-            timing.add(LocalTime.of(11,0));
+            timing.add(LocalTime.of(12,0));
             index2Date.put(DayOfWeek.TUESDAY, timing);
             index2.setLaboratoryTimings(index2Date);
             index2.setLaboratoryVenue(Venue.HWL2);
+            timing = new LinkedList<>();
+            index2Date = new Hashtable<>();
+            timing.add(LocalTime.of(15,0));
+            timing.add(LocalTime.of(16,0));
+            index2Date.put(DayOfWeek.WEDNESDAY, timing);
+            index2.setTutorialTimings(index2Date);
+            index2.setTutorialVenue(Venue.TR1);
 
             Index index3 = Factory.createIndex(200102, 10);
             Hashtable<DayOfWeek, List<LocalTime>> index3Date = new Hashtable<>();
             timing = new LinkedList<>();
             timing.add(LocalTime.of(10,0));
-            timing.add(LocalTime.of(11,0));
+            timing.add(LocalTime.of(12,0));
             index3Date.put(DayOfWeek.THURSDAY, timing);
             index3.setLaboratoryTimings(index3Date);
             index3.setLaboratoryVenue(Venue.HWL1);
+            timing = new LinkedList<>();
+            index3Date = new Hashtable<>();
+            timing.add(LocalTime.of(11,0));
+            timing.add(LocalTime.of(12,0));
+            index3Date.put(DayOfWeek.FRIDAY, timing);
+            index3.setTutorialTimings(index3Date);
+            index3.setTutorialVenue(Venue.TR1);
 
             ArrayList<Index> indexes1 = new ArrayList<>();
             indexes1.add(index1);
@@ -122,24 +150,52 @@ public class STARSApp {
 
 
             Index index4 = Factory.createIndex(200200, 10);
+            Hashtable<DayOfWeek, List<LocalTime>> index4Date = new Hashtable<>();
+            timing = new LinkedList<>();
+            timing.add(LocalTime.of(14,0));
+            timing.add(LocalTime.of(16,0));
+            index4Date.put(DayOfWeek.WEDNESDAY, timing);
+            index4.setLaboratoryTimings(index4Date);
+            index4.setLaboratoryVenue(Venue.SWL2);
+            timing = new LinkedList<>();
+            index4Date = new Hashtable<>();
+            timing.add(LocalTime.of(9,0));
+            timing.add(LocalTime.of(10,0));
+            index4Date.put(DayOfWeek.TUESDAY, timing);
+            index4.setTutorialTimings(index4Date);
+            index4.setTutorialVenue(Venue.TR3);
 
             Index index5 = Factory.createIndex(200201, 10);
             Hashtable<DayOfWeek, List<LocalTime>> index5Date = new Hashtable<>();
             timing = new LinkedList<>();
-            timing.add(LocalTime.of(15,0));
+            timing.add(LocalTime.of(14,0));
             timing.add(LocalTime.of(16,0));
             index5Date.put(DayOfWeek.WEDNESDAY, timing);
             index5.setLaboratoryTimings(index5Date);
             index5.setLaboratoryVenue(Venue.SWL1);
+            timing = new LinkedList<>();
+            index5Date = new Hashtable<>();
+            timing.add(LocalTime.of(9,0));
+            timing.add(LocalTime.of(10,0));
+            index5Date.put(DayOfWeek.TUESDAY, timing);
+            index5.setTutorialTimings(index5Date);
+            index5.setTutorialVenue(Venue.TR4);
 
             Index index6 = Factory.createIndex(200202, 10);
             Hashtable<DayOfWeek, List<LocalTime>> index6Date = new Hashtable<>();
             timing = new LinkedList<>();
-            timing.add(LocalTime.of(10,0));
+            timing.add(LocalTime.of(9,0));
             timing.add(LocalTime.of(11,0));
             index6Date.put(DayOfWeek.FRIDAY, timing);
             index6.setLaboratoryTimings(index6Date);
             index6.setLaboratoryVenue(Venue.SWL2);
+            timing = new LinkedList<>();
+            index6Date = new Hashtable<>();
+            timing.add(LocalTime.of(10,0));
+            timing.add(LocalTime.of(11,0));
+            index6Date.put(DayOfWeek.TUESDAY, timing);
+            index6.setTutorialTimings(index6Date);
+            index6.setTutorialVenue(Venue.TR4);
 
             ArrayList<Index> indexes2 = new ArrayList<>();
             indexes2.add(index4);
@@ -158,7 +214,7 @@ public class STARSApp {
             Course course2 = Factory.createCourse("cz2002", "object oriented design and programming", School.SCSE, lectureTiming, Venue.LT1, 3, indexes2);
             courseDataAccessObject.addCourse(course2);
 
-            Index index7 = Factory.createIndex(200300, 1);
+            Index index7 = Factory.createIndex(100100, 10);
             ArrayList<Index> indexes3 = new ArrayList<>();
             indexes3.add(index7);
 
@@ -167,29 +223,41 @@ public class STARSApp {
             timing.add(LocalTime.of(10,0));
             timing.add(LocalTime.of(11,0));
             lectureTiming.put(DayOfWeek.WEDNESDAY, timing);
-            Course course3 = Factory.createCourse("cz2003", "CGV", School.SCSE, lectureTiming, Venue.LT2, 3, indexes3);
+            Course course3 = Factory.createCourse("et0001", "ENTERPRISE & INNOVATION", School.NBS, lectureTiming, Venue.LT3, 1, indexes3);
             courseDataAccessObject.addCourse(course3);
 
-            registrationDataAccessObject = Factory.getTextRegistrationDataAccess();
-            RegistrationKey registrationKey1 = Factory.createRegistrationKey(newS1.getMatricNumber(), course1.getCourseCode(), index2.getIndexNumber());
-            registrationDataAccessObject.addRegistration(registrationKey1);
-            RegistrationKey registrationKey2 = Factory.createRegistrationKey(newS2.getMatricNumber(), course1.getCourseCode(), index2.getIndexNumber());
-            registrationDataAccessObject.addRegistration(registrationKey2);
-            RegistrationKey registrationKey3 = Factory.createRegistrationKey(newS3.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
-            registrationDataAccessObject.addRegistration(registrationKey3);
-            RegistrationKey registrationKey4 = Factory.createRegistrationKey(newS4.getMatricNumber(), course1.getCourseCode(), index3.getIndexNumber());
-            registrationDataAccessObject.addRegistration(registrationKey4);
-            RegistrationKey registrationKey5 = Factory.createRegistrationKey(newS1.getMatricNumber(), course2.getCourseCode(), index4.getIndexNumber());
-            registrationDataAccessObject.addRegistration(registrationKey5);
-            RegistrationKey registrationKey6 = Factory.createRegistrationKey(newS2.getMatricNumber(), course2.getCourseCode(), index5.getIndexNumber());
-            registrationDataAccessObject.addRegistration(registrationKey6);
-            RegistrationKey registrationKey7 = Factory.createRegistrationKey(newS3.getMatricNumber(), course2.getCourseCode(), index6.getIndexNumber());
-            registrationDataAccessObject.addRegistration(registrationKey7);
-            RegistrationKey registrationKey8 = Factory.createRegistrationKey(newS1.getMatricNumber(), course3.getCourseCode(), index7.getIndexNumber());
-            registrationDataAccessObject.addRegistration(registrationKey8);
+            Index index8 = Factory.createIndex(190100, 10);
+            ArrayList<Index> indexes4 = new ArrayList<>();
+            Hashtable<DayOfWeek, List<LocalTime>> index8Date = new Hashtable<>();
+            timing = new LinkedList<>();
+            index8Date = new Hashtable<>();
+            timing.add(LocalTime.of(10,0));
+            timing.add(LocalTime.of(11,0));
+            index8Date.put(DayOfWeek.TUESDAY, timing);
+            index8.setTutorialTimings(index8Date);
+            index8.setTutorialVenue(Venue.TR2);
+            indexes4.add(index8);
+
+            lectureTiming = new Hashtable<>();
+            timing = new LinkedList<>();
+            timing.add(LocalTime.of(9,30));
+            timing.add(LocalTime.of(11,30));
+            lectureTiming.put(DayOfWeek.THURSDAY, timing);
+            Course course4 = Factory.createCourse("he0901", "PRINCIPLES OF ECONOMICS", School.NBS, lectureTiming, Venue.LT3, 3, indexes4);
+            courseDataAccessObject.addCourse(course4);
 
             RegistrationPeriod registrationPeriod = Factory.createRegistrationPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(3));
-            registrationDataAccessObject.setRegistrationPeriod(registrationPeriod);
+            Factory.getTextRegistrationDataAccess().setRegistrationPeriod(registrationPeriod);
+
+            StudentCourseRegistrar studentCourseRegistrar = Factory.createStudentCourseRegistrar();
+            studentCourseRegistrar.addRegistration(newS1.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS2.getMatricNumber(), course1.getCourseCode(), index2.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS3.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS4.getMatricNumber(), course1.getCourseCode(), index3.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS1.getMatricNumber(), course3.getCourseCode(), index7.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS2.getMatricNumber(), course3.getCourseCode(), index7.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS4.getMatricNumber(), course4.getCourseCode(), index8.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS5.getMatricNumber(), course3.getCourseCode(), index7.getIndexNumber());
 
             ISession session;
             do {
