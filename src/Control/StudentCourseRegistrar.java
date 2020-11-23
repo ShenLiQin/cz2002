@@ -11,6 +11,7 @@ import Exception.*;
 import ValueObject.Student;
 
 import java.io.IOException;
+import java.util.Set;
 
 public class StudentCourseRegistrar {
 
@@ -31,7 +32,9 @@ public class StudentCourseRegistrar {
             throw new InsufficientAUsException();
         }
 
-        for (String registeredCourseCode : student.getRegisteredCourses().keySet()) {
+        Set<String> allRegisteredCourses = student.getRegisteredCourses().keySet();
+        allRegisteredCourses.addAll(student.getWaitingListCourses().keySet());
+        for (String registeredCourseCode : allRegisteredCourses) {
             int registeredCourseIndexNumber = student.getRegisteredCourses().get(registeredCourseCode);
             Course registeredCourse = courseDataAccessObject.getCourse(registeredCourseCode);
             Index registeredIndex = registeredCourse.getIndex(registeredCourseIndexNumber);

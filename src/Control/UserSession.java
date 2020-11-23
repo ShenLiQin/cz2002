@@ -103,7 +103,9 @@ public class UserSession implements ISession{
         try {
             ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
             List<String> coursesString = courseDataAccessObject.getAllCourseCodes();
-            if (_user.getRegisteredCourses().keySet().containsAll(coursesString)) {
+            Set<String> allCoursesRegistered = _user.getRegisteredCourses().keySet();
+            allCoursesRegistered.addAll(_user.getWaitingListCourses().keySet());
+            if (allCoursesRegistered.containsAll(coursesString)) {
                 _terminal.getProperties().setPromptColor("red");
                 _terminal.println("no available courses to register");
                 return;

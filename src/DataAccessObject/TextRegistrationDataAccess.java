@@ -111,7 +111,6 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
         ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
         Course course = courseDataAccessObject.getCourse(registrationKey.getCourseCode());
         Index index = course.getIndex(registrationKey.getIndexNumber());
-
         String waitingListStudentMatricNumber = index.dropStudent(registrationKey.getMatricNumber());
         course.updateIndex(index);
         courseDataAccessObject.updateCourse(course);
@@ -132,7 +131,6 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
 
             String waitingListStudentEmail = userDataAccessObject.getStudent(waitingListStudentMatricNumber).getEmail();
             IMessenger messenger = Factory.createEmailMessenger(waitingListStudentEmail);
-            messenger.addRecipientEmail(student.getEmail());
             messenger.sendMessage("Course registered",
                     "Waiting list course " + course.getCourseCode() + ' ' +  course.getCourseName() + " index: "
                             + index.getIndexNumber() + " successfully added.\nPlease log in to check your STARS");
