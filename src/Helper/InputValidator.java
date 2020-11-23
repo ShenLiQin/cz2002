@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class InputValidator {
     public static boolean courseStrMatcher(String courseInput) {
         boolean match = false;
-        final String regex = "[a-zA-Z]\\d";
+        final String regex = "[a-zA-Z]{2}\\d";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(courseInput);
         if (m.find() && courseInput.length() == 6) {

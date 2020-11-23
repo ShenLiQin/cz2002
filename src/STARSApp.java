@@ -9,6 +9,7 @@ import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 
 import java.io.IOException;
+import java.rmi.activation.ActivationGroup_Stub;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -36,20 +37,53 @@ public class STARSApp {
         IRegistrationDataAccessObject registrationDataAccessObject;
         try {
             userDataAccessObject = Factory.getTextUserDataAccess();
-            Staff newA = Factory.createStaff("richard", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN);
+            Staff newA = Factory.createStaff("Richard", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN);
             userDataAccessObject.addAdmin(newA);
-            Student newS1 = Factory.createStudent("ian", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN, 23);
+            Student newS1 = Factory.createStudent("Ian", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN, 23);
             newS1.setMatricNumber("U1941314D");
             userDataAccessObject.addStudent(newS1);
-            Student newS2 = Factory.createStudent("noah", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN);
+            Student newS2 = Factory.createStudent("Noah", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN);
             newS2.setMatricNumber("U1921314F");
             userDataAccessObject.addStudent(newS2);
-            Student newS3 = Factory.createStudent("liqin", School.SCSE, Gender.FEMALE, Nationality.SINGAPOREAN);
+            Student newS3 = Factory.createStudent("Liqin", School.SCSE, Gender.FEMALE, Nationality.SINGAPOREAN);
             newS3.setMatricNumber("U1941315R");
             userDataAccessObject.addStudent(newS3);
-            Student newS4 = Factory.createStudent("selvira", School.SCSE, Gender.FEMALE, Nationality.SINGAPOREAN);
+            Student newS4 = Factory.createStudent("Selvira", School.SCSE, Gender.FEMALE, Nationality.SINGAPOREAN);
             newS4.setMatricNumber("U1951316D");
             userDataAccessObject.addStudent(newS4);
+            Student newS5 = Factory.createStudent("Jefferson", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN);
+            newS5.setMatricNumber("U1952356D");
+            userDataAccessObject.addStudent(newS5);
+            Student newS6 = Factory.createStudent("Shannon", School.NBS, Gender.FEMALE, Nationality.SINGAPOREAN);
+            newS6.setMatricNumber("U2052356A");
+            userDataAccessObject.addStudent(newS6);
+            Student newS7 = Factory.createStudent("Wilson", School.NBS, Gender.MALE, Nationality.MALAYSIAN);
+            newS7.setMatricNumber("U2059876B");
+            userDataAccessObject.addStudent(newS7);
+            Student newS8 = Factory.createStudent("Isaac", School.NBS, Gender.MALE, Nationality.MALAYSIAN);
+            newS8.setMatricNumber("U2073516A");
+            userDataAccessObject.addStudent(newS8);
+            Student newS9 = Factory.createStudent("Ben", School.NBS, Gender.MALE, Nationality.MALAYSIAN);
+            newS9.setMatricNumber("U2096716F");
+            userDataAccessObject.addStudent(newS9);
+            Student newS10 = Factory.createStudent("Jerald", School.NBS, Gender.MALE, Nationality.MALAYSIAN);
+            newS10.setMatricNumber("U2090621F");
+            userDataAccessObject.addStudent(newS10);
+            Student newS11 = Factory.createStudent("Cedric", School.EEE, Gender.MALE, Nationality.MALAYSIAN);
+            newS11.setMatricNumber("U1997771F");
+            userDataAccessObject.addStudent(newS11);
+            Student newS12 = Factory.createStudent("Sandra", School.EEE, Gender.FEMALE, Nationality.MALAYSIAN);
+            newS12.setMatricNumber("U1951118F");
+            userDataAccessObject.addStudent(newS12);
+            Student newS13 = Factory.createStudent("Cheryl", School.EEE, Gender.FEMALE, Nationality.SINGAPOREAN);
+            newS13.setMatricNumber("U1928018T");
+            userDataAccessObject.addStudent(newS13);
+            Student newS14 = Factory.createStudent("Andrea", School.EEE, Gender.FEMALE, Nationality.MALAYSIAN);
+            newS14.setMatricNumber("U1948483F");
+            userDataAccessObject.addStudent(newS14);
+            Student newS15 = Factory.createStudent("Jennifer", School.EEE, Gender.FEMALE, Nationality.MALAYSIAN);
+            newS15.setMatricNumber("U1949800W");
+            userDataAccessObject.addStudent(newS15);
 
             courseDataAccessObject = Factory.getTextCourseDataAccess();
             Index index1 = Factory.createIndex(200100, 10);
@@ -168,6 +202,8 @@ public class STARSApp {
 
         } catch(IOException | ClassNotFoundException e) {
             TextIoFactory.getTextTerminal().println("error reading files... \nexiting...");
+        } catch (SecurityException e) {
+            System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
         }

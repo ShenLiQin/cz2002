@@ -32,13 +32,12 @@ public class LoginControl {
 
     public AbstractUser login(IUserDataAccessObject userDataAccessObject) {
         _terminal.setBookmark("clear");
-        _terminal.resetToBookmark("clear");
         try {
             _terminal.println(welcome);
             _terminal.setBookmark("prompt");
             do {
                 String username = _textIO.newStringInputReader()
-                        .read("enter Username:");
+                        .read("Enter Username:");
                 String password = _textIO.newStringInputReader()
                         .withMinLength(6)
                         .withInputMasking(true)

@@ -10,7 +10,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b2a96ea-68a5-4f89-8ab5-21e919bb5e30" name="Default Changelist" comment="added console cancel action functionality&#10;bug fixes">
+    <list default="true" id="0b2a96ea-68a5-4f89-8ab5-21e919bb5e30" name="Default Changelist" comment="prevent student from adding courses that causes time table clashes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/Courses.ser" beforeDir="false" afterPath="$PROJECT_DIR$/data/Courses.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/Registrations.ser" beforeDir="false" afterPath="$PROJECT_DIR$/data/Registrations.ser" afterDir="false" />
@@ -18,16 +18,21 @@
       <change beforePath="$PROJECT_DIR$/out/production/final/Control/AdminSession.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Control/AdminSession.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/final/Control/StudentCourseRegistrar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Control/StudentCourseRegistrar.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/final/Control/UserSession.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Control/UserSession.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextRegistrationDataAccess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextRegistrationDataAccess.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/InputValidator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Helper/InputValidator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/STARSApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/STARSApp.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/Course.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/ValueObject/Course.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/Index.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/ValueObject/Index.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/Student.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/ValueObject/Student.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/RegistrationPeriod.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/ValueObject/RegistrationPeriod.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Control/AdminSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/AdminSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Control/LoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/LoginControl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Control/StudentCourseRegistrar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/StudentCourseRegistrar.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Control/UserSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/UserSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/TextRegistrationDataAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataAccessObject/TextRegistrationDataAccess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Helper/InputValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helper/InputValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/STARSApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/STARSApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ValueObject/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ValueObject/Course.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ValueObject/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ValueObject/Index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueObject/RegistrationPeriod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ValueObject/RegistrationPeriod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueObject/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ValueObject/Student.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +65,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JAVA" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/activation.jar!/" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -87,7 +93,7 @@
       <recent name="C:\Users\yangc\OneDrive - Nanyang Technological University\Uni\CZ2002\Project\final\src\ValueObject" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="STARSApp" />
       <module name="final" />
@@ -98,9 +104,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Scratch" type="Java Scratch" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Scratch" />
+      <option name="SCRATCH_FILE_URL" value="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Java Scratch.Scratch" />
       </list>
     </recent_temporary>
   </component>
@@ -119,7 +133,7 @@
       <workItem from="1605507376413" duration="210000" />
       <workItem from="1605507850865" duration="73191000" />
       <workItem from="1605925520839" duration="68909000" />
-      <workItem from="1606029593812" duration="21452000" />
+      <workItem from="1606029593812" duration="35983000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1605511966758</created>
@@ -373,7 +387,21 @@
       <option name="project" value="LOCAL" />
       <updated>1606043387492</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="banana">
+      <created>1606057410208</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1606057410208</updated>
+    </task>
+    <task id="LOCAL-00038" summary="prevent student from adding courses that causes time table clashes">
+      <created>1606057506924</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1606057506924</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -404,7 +432,9 @@
     <MESSAGE value="incorporated text.io" />
     <MESSAGE value="fixed bugs" />
     <MESSAGE value="added console cancel action functionality&#10;bug fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="added console cancel action functionality&#10;bug fixes" />
+    <MESSAGE value="banana" />
+    <MESSAGE value="prevent student from adding courses that causes time table clashes" />
+    <option name="LAST_COMMIT_MESSAGE" value="prevent student from adding courses that causes time table clashes" />
   </component>
   <component name="WindowStateProjectService">
     <state x="299" y="0" width="616" height="760" key="#Main" timestamp="1605507032156">
@@ -479,38 +509,38 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="279" y="79" key="Github.UntrackedFilesDialog/0.0.1200.760@0.0.1200.760" timestamp="1605508454475" />
-    <state width="1157" height="197" key="GridCell.Tab.0.bottom" timestamp="1606055522965">
+    <state width="1157" height="197" key="GridCell.Tab.0.bottom" timestamp="1606123811494">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606055522965" />
-    <state width="1157" height="197" key="GridCell.Tab.0.center" timestamp="1606055522964">
+    <state width="1157" height="197" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606123811494" />
+    <state width="1157" height="197" key="GridCell.Tab.0.center" timestamp="1606123811494">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1606055522964" />
-    <state width="1157" height="197" key="GridCell.Tab.0.left" timestamp="1606055522964">
+    <state width="1157" height="197" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1606123811494" />
+    <state width="1157" height="197" key="GridCell.Tab.0.left" timestamp="1606123811493">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1606055522964" />
-    <state width="1157" height="197" key="GridCell.Tab.0.right" timestamp="1606055522964">
+    <state width="1157" height="197" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1606123811493" />
+    <state width="1157" height="197" key="GridCell.Tab.0.right" timestamp="1606123811494">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1606055522964" />
-    <state width="1157" height="234" key="GridCell.Tab.1.bottom" timestamp="1606042462710">
+    <state width="1157" height="197" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1606123811494" />
+    <state width="1157" height="234" key="GridCell.Tab.1.bottom" timestamp="1606122978096">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606042462710" />
-    <state width="1157" height="234" key="GridCell.Tab.1.center" timestamp="1606042462710">
+    <state width="1157" height="234" key="GridCell.Tab.1.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606122978096" />
+    <state width="1157" height="234" key="GridCell.Tab.1.center" timestamp="1606122978096">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.center/0.0.1200.760@0.0.1200.760" timestamp="1606042462710" />
-    <state width="1157" height="234" key="GridCell.Tab.1.left" timestamp="1606042462710">
+    <state width="1157" height="234" key="GridCell.Tab.1.center/0.0.1200.760@0.0.1200.760" timestamp="1606122978096" />
+    <state width="1157" height="234" key="GridCell.Tab.1.left" timestamp="1606122978096">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.left/0.0.1200.760@0.0.1200.760" timestamp="1606042462710" />
-    <state width="1157" height="234" key="GridCell.Tab.1.right" timestamp="1606042462710">
+    <state width="1157" height="234" key="GridCell.Tab.1.left/0.0.1200.760@0.0.1200.760" timestamp="1606122978096" />
+    <state width="1157" height="234" key="GridCell.Tab.1.right" timestamp="1606122978096">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.right/0.0.1200.760@0.0.1200.760" timestamp="1606042462710" />
+    <state width="1157" height="234" key="GridCell.Tab.1.right/0.0.1200.760@0.0.1200.760" timestamp="1606122978096" />
     <state x="276" y="101" key="RollbackChangesDialog" timestamp="1605506844758">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -523,10 +553,10 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="168" y="295" key="VCS.EditChangelistDialog/0.0.1200.760@0.0.1200.760" timestamp="1605685783627" />
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1606043407389">
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1606110439293">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1606043407389" />
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1606110439293" />
     <state width="606" height="386" key="XDebugger.FullValuePopup" timestamp="1605511825096">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -539,10 +569,10 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="411" y="295" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1200.760@0.0.1200.760" timestamp="1605679945956" />
-    <state x="375" y="251" key="extract.method.dialog" timestamp="1605977752279">
+    <state x="477" y="311" key="extract.method.dialog" timestamp="1606118867191">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="375" y="251" key="extract.method.dialog/0.0.1200.760@0.0.1200.760" timestamp="1605977752279" />
+    <state x="477" y="311" key="extract.method.dialog/0.0.1200.760@0.0.1200.760" timestamp="1606118867191" />
     <state x="309" y="0" width="582" height="760" key="find.popup" timestamp="1606015932880">
       <screen x="0" y="0" width="1200" height="760" />
     </state>

@@ -11,7 +11,6 @@ import Exception.*;
 import ValueObject.Student;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 public class StudentCourseRegistrar {
 
@@ -48,14 +47,11 @@ public class StudentCourseRegistrar {
 
     public void deleteRegistration(String matricNumber, String courseCode, int indexNumber) throws IOException, ClassNotFoundException, InvalidAccessPeriodException, NonExistentRegistrationException, NonExistentUserException, NonExistentCourseException, NonExistentIndexException, ExistingCourseException, MaxEnrolledStudentsException, ExistingUserException {
         ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
-        IRegistrationDataAccessObject registrationDataAccess = Factory.getTextRegistrationDataAccess();
-
-        LocalDateTime startDate = registrationDataAccess.getRegistrationPeriod().getStartDate();
-        LocalDateTime endDate = registrationDataAccess.getRegistrationPeriod().getEndDate();
-        LocalDateTime now = LocalDateTime.now();
-        if (now.isBefore(startDate) || now.isAfter(endDate)) {
+        IRegistrationDataAccessObject registrationDataAccessObject = Factory.getTextRegistrationDataAccess();
+        if (registrationDataAccessObject.getRegistrationPeriod().notWithinRegistrationPeriod()) {
             throw new InvalidAccessPeriodException();
         }
+
         RegistrationKey registrationKey = Factory.createRegistrationKey(matricNumber, courseCode, indexNumber);
         Course course = courseDataAccessObject.getCourse(courseCode);
         Index index = course.getIndex(indexNumber);
@@ -69,7 +65,7 @@ public class StudentCourseRegistrar {
             student.deregisterCourse(courseCode);
             userDataAccessObject.updateStudent(student);
         } else {
-            registrationDataAccess.deleteRegistration(registrationKey);
+            registrationDataAccessObject.deleteRegistration(registrationKey);
         }
     }
 }

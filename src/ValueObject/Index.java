@@ -116,7 +116,7 @@ public class Index implements Serializable {
         this.laboratoryTimings = laboratoryTimings;
     }
 
-    public Venue getLaboratoryTiming() {
+    public Venue getTutorialVenue() {
         return tutorialVenue;
     }
 

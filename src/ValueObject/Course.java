@@ -96,9 +96,9 @@ public class Course implements Serializable {
         indexes.put(index.getIndexNumber(), index);
     }
 
-    public void deleteIndex(int indexNumber) throws Exception {
+    public void deleteIndex(int indexNumber) throws NonExistentIndexException {
         if (!indexes.containsKey(indexNumber)) {
-            throw new Exception();
+            throw new NonExistentIndexException();
         } else {
             indexes.remove(indexNumber);
         }
@@ -135,15 +135,13 @@ public class Course implements Serializable {
 
     @Override
     public String toString() {
-        return "courseCode : " + courseCode + "\t\t" + "courseName: " + courseName + "\t\t" +  "school: " + school;
+        return "courseCode : " + courseCode + "\tcourseName: " + courseName + "\tschool: " + school +
+                "\nlecture timings: " + lectureTimings + "\tlecture venue: " + lectureVenue;
     }
 
     public String allInfoToString(){
         StringBuilder str = new StringBuilder();
-        str.append("---------------latest course info---------------");
-        str.append("\ncourseCode: ").append(courseCode).append("\tcourseName: ").append(courseName);
-        str.append("\tschool: ").append(school);
-        str.append("\nlecture timings: ").append(lectureTimings).append("\tlecture venue: ").append(lectureVenue);
+        str.append("---------------latest course info---------------\n").append(toString());
         str.append("\nindex group numbers: ");
         int i = 1;
         for (Index index : indexes.values()) {

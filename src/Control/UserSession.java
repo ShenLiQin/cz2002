@@ -17,6 +17,7 @@ public class UserSession implements ISession{
     private TextTerminal _terminal;
     private boolean loggedIn = false;
     private Student _user;
+    private boolean withinRegistrationPeriod;
 
     public UserSession(TextIO textIO, TextTerminal terminal, AbstractUser user) {
         _textIO = textIO;
@@ -32,7 +33,7 @@ public class UserSession implements ISession{
 
     @Override
     public void exit() {
-        System.exit(0);
+        throw new SecurityException();
     }
 
     private final String user =
@@ -42,7 +43,7 @@ public class UserSession implements ISession{
                     "  \\___/  /__/ \\___| |_|     |___/  \\__,_| /__/ |_||_| |_.__/ \\___/ \\__,_| |_|   \\__,_|\n" +
                     "                                                                                      ";
 
-    private final String userOptions =
+    private final String registrationPeriodUserOptions =
             "1. Add Course\n" +
                     "2. Drop Course\n" +
                     "3. Check/Print Courses Registered\n" +
@@ -68,27 +69,12 @@ public class UserSession implements ISession{
             _terminal.println("You can use this key combinations at any moment during your session.");
             _terminal.println("--------------------------------------------------------------------------------");
         }
-        try {
-            RegistrationPeriod registrationPeriod = Factory.getTextRegistrationDataAccess().getRegistrationPeriod();
-            if (registrationPeriod.notWithinRegistrationPeriod()) {
-                _terminal.getProperties().setPromptColor("red");
-                _terminal.println("It is not registration period, only checking registered courses/ course vacancies is functional");
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            _terminal.getProperties().setPromptColor("red");
-            _terminal.println("error accessing files");
-        } finally {
-            _terminal.getProperties().setPromptColor("white");
-        }
         _terminal.setBookmark("user");
-        _terminal.println(userOptions);
-        _terminal.println("\t\twelcome " + _user.getName());
-
+        printUserOptions();
         do {
             try {
                 _terminal.resetToBookmark("user");
-                _terminal.println(userOptions);
-                _terminal.println("\t\twelcome " + _user.getName());
+                printUserOptions();
                 choice = _textIO.newIntInputReader()
                         .withMinVal(1).withMaxVal(8)
                         .read("Enter your choice: ");
@@ -251,7 +237,7 @@ public class UserSession implements ISession{
                                 if (registeredCourse.isClashing(course) || registeredCourse.isClashing(index) ||
                                         registeredIndex.isClashing(index)) {
                                     _terminal.getProperties().setPromptColor("red");
-                                    _terminal.println("Unable to swap. There are clashing timeslots");
+                                    _terminal.println("Unable to swap. There is clashing timeslot in your timetable");
                                     _terminal.getProperties().setPromptColor("white");
                                     break;
                                 }
@@ -279,7 +265,6 @@ public class UserSession implements ISession{
                         } catch (ClashingTimeTableException e) {
                             _terminal.getProperties().setPromptColor("red");
                             _terminal.println("unable to add course, time table clashes");
-                            _terminal.println("deleted course with clashing timetable...");
                         } catch (Exception e) {
                             _terminal.getProperties().setPromptColor("red");
                             _terminal.println("error saving file");
@@ -441,6 +426,40 @@ public class UserSession implements ISession{
             } catch (ReadAbortedException ignored) {
             }
         } while (choice >= 0 && choice < 7);
+    }
+
+    private void printUserOptions() {
+        try {
+            RegistrationPeriod registrationPeriod = Factory.getTextRegistrationDataAccess().getRegistrationPeriod();
+            withinRegistrationPeriod = !registrationPeriod.notWithinRegistrationPeriod();
+            if (!withinRegistrationPeriod) {
+                _terminal.getProperties().setPromptColor("red");
+                _terminal.println("It is not registration period, only checking registered courses/ course vacancies is functional");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("error accessing files");
+        } finally {
+            _terminal.getProperties().setPromptColor("white");
+        }
+        if (withinRegistrationPeriod) {
+            _terminal.println(registrationPeriodUserOptions);
+        } else {
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("1. Add Course\n" +
+                    "2. Drop Course");
+            _terminal.getProperties().setPromptColor("white");
+            _terminal.println("3. Check/Print Courses Registered\n" +
+                    "4. Check Vacancies Available");
+            _terminal.getProperties().setPromptColor("red");
+            _terminal.println("5. Change Index Number of Course\n" +
+                    "6. Swap Index Number with Another Student");
+            _terminal.getProperties().setPromptColor("white");
+            _terminal.println("7. Log out\n" +
+                    "8. Exit");
+            _terminal.getProperties().setPromptColor("white");
+        }
+        _terminal.println("\t\twelcome " + _user.getName());
     }
 
     private void printRegisteredCourse() {
