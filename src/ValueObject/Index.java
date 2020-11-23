@@ -255,10 +255,14 @@ public class Index implements Serializable {
         return str.toString();
     }
 
-    /**
+    /** Determines if there is a clash in timings between the laboratory or tutorial sessions (if any) of a given index
+     * and the laboratory and tutorial sessions (if any) timings of the other index.
+     * Loops through the lecture days in the Lecture Timings TreeMap
+     * to check if there is an overlap in timings with the laboratory or tutorial sessions
+     * of a given index on any particular day.
      *
-     * @param i
-     * @return
+     * @return A boolean that is true if there is a clash in timings
+     * @see #clashingTimetable(Hashtable, Hashtable, DayOfWeek)
      */
     public boolean isClashing(Index i) {
         Hashtable<DayOfWeek, List<LocalTime>> laboratoryTimings = i.getLaboratoryTimings();
@@ -283,24 +287,25 @@ public class Index implements Serializable {
     }
 
     /**
+     * Determines if two time slots overlap.
      *
-     * @param thisCourseTimings
-     * @param newCourseTimings
-     * @param thisCourseDay
-     * @return
+     * @param thisIndexTimings start time and end time of current index laboratory/ tutorial
+     * @param newIndexTimings start and end time of new index laboratory/ tutorial
+     * @param thisIndexDay day of current index laboratory/ tutorial
+     * @return A boolean that is true if and only if there is a clash in timings.
      */
-    private boolean clashingTimetable(Hashtable<DayOfWeek, List<LocalTime>> thisCourseTimings,
-                                      Hashtable<DayOfWeek, List<LocalTime>> newCourseTimings,
-                                      DayOfWeek thisCourseDay) {
-        if (thisCourseDay == null || newCourseTimings == null || thisCourseTimings == null) {
+    private boolean clashingTimetable(Hashtable<DayOfWeek, List<LocalTime>> thisIndexTimings,
+                                      Hashtable<DayOfWeek, List<LocalTime>> newIndexTimings,
+                                      DayOfWeek thisIndexDay) {
+        if (thisIndexDay == null || newIndexTimings == null || thisIndexTimings == null) {
             return false;
         }
-        for (DayOfWeek thatLectureDay : newCourseTimings.keySet()) {
-            if (thisCourseDay == thatLectureDay) {
-                if (overlappingTimeslot(thisCourseTimings.get(thisCourseDay).get(0),
-                        thisCourseTimings.get(thisCourseDay).get(1),
-                        newCourseTimings.get(thatLectureDay).get(0),
-                        newCourseTimings.get(thatLectureDay).get(1))) {
+        for (DayOfWeek thatLectureDay : newIndexTimings.keySet()) {
+            if (thisIndexDay == thatLectureDay) {
+                if (overlappingTimeslot(thisIndexTimings.get(thisIndexDay).get(0),
+                        thisIndexTimings.get(thisIndexDay).get(1),
+                        newIndexTimings.get(thatLectureDay).get(0),
+                        newIndexTimings.get(thatLectureDay).get(1))) {
                     return true;
                 }
             }
@@ -308,13 +313,15 @@ public class Index implements Serializable {
         return false;
     }
 
-    /**
+    /** Determines if two timings overlap.
+     * Timings overlap if a session starts before the other session ends and
+     * if the session also ends after the other session starts.
      *
-     * @param start1
-     * @param end1
-     * @param start2
-     * @param end2
-     * @return
+     * @param start1 LocalTime object that contains the start time of a session
+     * @param end1 LocalTime object that contains the end time of a session
+     * @param start2 LocalTime object that contains the start time of the other session
+     * @param end2 LocalTime object that contains the end time of the other session
+     * @return A boolean that is true if there is an overlap in two timings
      */
     private boolean overlappingTimeslot(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
         return start1.isBefore(end2) && start2.isBefore(end1);

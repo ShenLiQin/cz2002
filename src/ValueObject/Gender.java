@@ -1,5 +1,16 @@
 package ValueObject;
 
+/**
+ * Gender type
+ *
+ */
 public enum Gender {
-    MALE, FEMALE
+    /**
+     * Male
+     */
+    MALE,
+    /**
+     * Female
+     */
+    FEMALE
 }

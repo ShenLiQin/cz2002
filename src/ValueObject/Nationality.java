@@ -1,5 +1,20 @@
 package ValueObject;
 
+/**
+ * Nationality of users
+ *
+ */
 public enum Nationality {
-    SINGAPOREAN, MALAYSIAN, OTHERS
+    /**
+     * Singaporean
+     */
+    SINGAPOREAN,
+    /**
+     * Malaysian
+     */
+    MALAYSIAN,
+    /**
+     * Other nationalities not listed within this enum
+     */
+    OTHERS
 }

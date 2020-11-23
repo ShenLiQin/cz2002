@@ -144,9 +144,10 @@ public class Course implements Serializable {
         indexes.put(index.getIndexNumber(), index);
     }
 
-    /** Delete index from the indexes Treemap.
-     * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-     * Please in
+    /** Deletes an index object from the indexes TreeMap.
+     *
+     * @param indexNumber An integer representing the index group number
+     * @throws NonExistentIndexException Throws Exception when there is a non existent index
      */
     public void deleteIndex(int indexNumber) throws NonExistentIndexException {
         if (!indexes.containsKey(indexNumber)) {
@@ -177,9 +178,11 @@ public class Course implements Serializable {
         return indexList;
     }
 
-    /** Update Index in the indexes Treemap.
-     * AAAAAAAAAAAAAAAAAAAAAAAA
-     * Please fill in
+    /** Updates the information of an existing index object.
+     * Replaces the existing Index object in the indexes TreeMap
+     * with an Index object containing updated information on the index group.
+     *
+     * @param index object with update information
      */
     public void updateIndex(Index index) {
         indexes.replace(index.getIndexNumber(), index);
@@ -189,6 +192,7 @@ public class Course implements Serializable {
      * Loops through the lecture days in the Lecture Timings TreeMap
      * to check if there is an overlap in lecture timings with another course on any particular day.
      *
+     * @param c course to check against
      * @return A boolean that is true if there is a clash in lecture timings
      * @see #clashingTimetable(Hashtable, Hashtable, DayOfWeek)
      */
@@ -201,12 +205,13 @@ public class Course implements Serializable {
         return false;
     }
 
-    /** Determines if there is a clash in timings between the laboratory or tutorial sessions of a given index
+    /** Determines if there is a clash in timings between the laboratory and tutorial sessions (if any) of a given index
      * and the lecture timings of the course.
      * Loops through the lecture days in the Lecture Timings TreeMap
      * to check if there is an overlap in timings with the laboratory or tutorial sessions
      * of a given index on any particular day.
      *
+     * @param i index to check against
      * @return A boolean that is true if there is a clash in timings
      * @see #clashingTimetable(Hashtable, Hashtable, DayOfWeek)
      */
@@ -222,8 +227,12 @@ public class Course implements Serializable {
         return false;
     }
 
-    /** ?????
-     * Fill in please
+    /**
+     * Determines if two time slots overlap.
+     *
+     * @param thisCourseTimings start time and end time of current index lecture/ laboratory/ tutorial
+     * @param newCourseTimings start and end time of new index laboratory/ tutorial
+     * @param thisCourseDay day of current course lecture/ laboratory/ tutorial
      * @return A boolean that is true if and only if there is a clash in timings.
      */
     private boolean clashingTimetable(Hashtable<DayOfWeek, List<LocalTime>> thisCourseTimings,

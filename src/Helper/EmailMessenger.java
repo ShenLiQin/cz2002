@@ -45,9 +45,9 @@ public class EmailMessenger implements IMessenger {
             message.setSubject(subject);
             message.setText(text);
 
-//            Transport.send(message);
+            Transport.send(message);
 
-            System.out.println("Email sent to " + recipientEmail + '\n' + text);
+//            System.out.println("Email sent to " + recipientEmail + '\n' + text);
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);

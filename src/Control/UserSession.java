@@ -208,6 +208,9 @@ public class UserSession implements ISession{
                 _terminal.getProperties().setPromptColor("red");
                 _terminal.println("non existent registration");
             } catch (MaxEnrolledStudentsException ignored) {
+            } catch (RuntimeException e) {
+                _terminal.getProperties().setPromptColor("red");
+                _terminal.println("error sending email, course dropped nonetheless");
             } catch (Exception e) {
                 _terminal.getProperties().setPromptColor("red");
                 _terminal.println("error dropping course");

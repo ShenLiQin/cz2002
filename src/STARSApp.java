@@ -2,15 +2,12 @@ import Control.ISession;
 import Control.LoginControl;
 import Control.StudentCourseRegistrar;
 import DataAccessObject.ICourseDataAccessObject;
-import DataAccessObject.IRegistrationDataAccessObject;
 import DataAccessObject.IUserDataAccessObject;
 import Helper.Factory;
 import ValueObject.*;
-import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 
 import java.io.IOException;
-import java.rmi.activation.ActivationGroup_Stub;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -228,7 +225,7 @@ public class STARSApp {
 
             Index index8 = Factory.createIndex(190100, 10);
             ArrayList<Index> indexes4 = new ArrayList<>();
-            Hashtable<DayOfWeek, List<LocalTime>> index8Date = new Hashtable<>();
+            Hashtable<DayOfWeek, List<LocalTime>> index8Date;
             timing = new LinkedList<>();
             index8Date = new Hashtable<>();
             timing.add(LocalTime.of(10,0));
@@ -251,13 +248,15 @@ public class STARSApp {
 
             StudentCourseRegistrar studentCourseRegistrar = Factory.createStudentCourseRegistrar();
             studentCourseRegistrar.addRegistration(newS1.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
-            studentCourseRegistrar.addRegistration(newS2.getMatricNumber(), course1.getCourseCode(), index2.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS2.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
             studentCourseRegistrar.addRegistration(newS3.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
-            studentCourseRegistrar.addRegistration(newS4.getMatricNumber(), course1.getCourseCode(), index3.getIndexNumber());
-            studentCourseRegistrar.addRegistration(newS1.getMatricNumber(), course3.getCourseCode(), index7.getIndexNumber());
-            studentCourseRegistrar.addRegistration(newS2.getMatricNumber(), course3.getCourseCode(), index7.getIndexNumber());
-            studentCourseRegistrar.addRegistration(newS4.getMatricNumber(), course4.getCourseCode(), index8.getIndexNumber());
-            studentCourseRegistrar.addRegistration(newS5.getMatricNumber(), course3.getCourseCode(), index7.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS4.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS5.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS6.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS7.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS8.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS9.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
+            studentCourseRegistrar.addRegistration(newS10.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());
 
             ISession session;
             do {

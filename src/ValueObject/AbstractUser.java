@@ -6,21 +6,44 @@ import java.io.Serializable;
 import java.time.Year;
 import java.util.Random;
 
+/**
+ * class for implementing a user
+ *
+ */
 public abstract class AbstractUser implements Serializable {
-    private String username;
-    private String hash;
-    private String name;
-    private Gender gender;
-    private Nationality nationality;
+    private final String username;
+    private final String hash;
+    private final String name;
+    private final Gender gender;
+    private final Nationality nationality;
     private School school;
     private UserType userType;
     private String email;
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Gets user type
+     * @return userType An enum that represents user type
+     * @see ValueObject.UserType
+     */
     public UserType getUserType() {
         return userType;
     }
 
+    /**
+     * Creates user containing specific information.
+     *
+     * @param name A String that represents user name
+     * @param school An Enum value of the user's school
+     * @param gender An Enum value of the user's gender
+     * @param nationality An Enum value of the user's nationality
+     * @param userType An Enum value of user's type
+     * @throws PasswordStorage.CannotPerformOperationException
+     * @see ValueObject.School
+     * @see ValueObject.Gender
+     * @see ValueObject.Nationality
+     * @see ValueObject.UserType
+     */
     public AbstractUser(String name, School school, Gender gender, Nationality nationality, UserType userType) throws PasswordStorage.CannotPerformOperationException {
         this.hash = PasswordStorage.createHash(name.strip().toLowerCase() +
                 Year.now().toString());
@@ -42,63 +65,53 @@ public abstract class AbstractUser implements Serializable {
                 Year.now().toString());
     }
 
+    /**
+     * Gets user's email.
+     * @return String that represents user's email
+     */
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    /**
+     * Gets user's gender.
+     * @return gender that represent user's gender
+     * @see ValueObject.Gender
+     */
     public Gender getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
+    /**
+     * Gets user's nationality
+     * @return nationality An enum representing user's nationality
+     * @see ValueObject.Nationality
+     */
     public Nationality getNationality() {
         return nationality;
     }
 
-    public void setNationality(Nationality nationality) {
-        this.nationality = nationality;
-    }
-
+    /**
+     * Gets user's username
+     * @return username A String representing user's username
+     */
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
+    /**
+     * Gets hashed password
+     * @return hash A String representing hashed password
+     */
     public String getHash() {
         return hash;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
-
+    /**
+     * Gets name of user
+     * @return name A String which represents user's name
+     */
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public School getSchool() {
-        return school;
-    }
-
-    public void setSchool(School school) {
-        this.school = school;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
     }
 }
