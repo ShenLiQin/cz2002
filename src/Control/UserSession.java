@@ -103,9 +103,12 @@ public class UserSession implements ISession{
         try {
             ICourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess();
             List<String> coursesString = courseDataAccessObject.getAllCourseCodes();
-            Set<String> allCoursesRegistered = _user.getRegisteredCourses().keySet();
-            allCoursesRegistered.addAll(_user.getWaitingListCourses().keySet());
-            if (allCoursesRegistered.containsAll(coursesString)) {
+            Set<String> coursesRegistered = _user.getRegisteredCourses().keySet();
+            Set<String> waitinglistCourses = _user.getRegisteredCourses().keySet();
+            ArrayList<String> allRegisteredCourses = new ArrayList<>();
+            allRegisteredCourses.addAll(coursesRegistered);
+            allRegisteredCourses.addAll(waitinglistCourses);
+            if (allRegisteredCourses.containsAll(coursesString)) {
                 _terminal.getProperties().setPromptColor("red");
                 _terminal.println("no available courses to register");
                 return;
@@ -334,7 +337,12 @@ public class UserSession implements ISession{
             boolean clashingTimeTable = false;
             Course course = courseDataAccessObject.getCourse(courseCodeInput);
             Index index = course.getIndex(newIndexNumber);
-            for (String registeredCourseCode : _user.getRegisteredCourses().keySet()) {
+            Set<String> registeredCourses = _user.getRegisteredCourses().keySet();
+            Set<String> waitlist = _user.getWaitingListCourses().keySet();
+            ArrayList<String> allRegisteredCourses = new ArrayList<>();
+            allRegisteredCourses.addAll(registeredCourses);
+            allRegisteredCourses.addAll(waitlist);
+            for (String registeredCourseCode : allRegisteredCourses) {
                 if (registeredCourseCode.equals(courseCodeInput)) {
                     continue;
                 }
@@ -462,7 +470,12 @@ public class UserSession implements ISession{
                         Index peerIndex = course.getIndex(peerIndexNumber);
                         Index currIndex = course.getIndex(currIndexNumber);
 
-                        for (String registeredCourseCode : _user.getRegisteredCourses().keySet()) {
+                        Set<String> userRegisteredCourses = _user.getRegisteredCourses().keySet();
+                        Set<String> userWaitlist = _user.getWaitingListCourses().keySet();
+                        ArrayList<String> userAllRegisteredCourses = new ArrayList<>();
+                        userAllRegisteredCourses.addAll(userRegisteredCourses);
+                        userAllRegisteredCourses.addAll(userWaitlist);
+                        for (String registeredCourseCode : userAllRegisteredCourses) {
                             if (registeredCourseCode.equals(courseCodeInput)) {
                                 continue;
                             }
@@ -480,7 +493,12 @@ public class UserSession implements ISession{
                             }
                         }
                         if (!clashingTimeTable) {
-                            for (String registeredCourseCode : studentPeer.getRegisteredCourses().keySet()) {
+                            Set<String> peerRegisteredCourses = _user.getRegisteredCourses().keySet();
+                            Set<String> peerWaitlist = _user.getWaitingListCourses().keySet();
+                            ArrayList<String> peerAllRegisteredCourses = new ArrayList<>();
+                            peerAllRegisteredCourses.addAll(peerRegisteredCourses);
+                            peerAllRegisteredCourses.addAll(peerWaitlist);
+                            for (String registeredCourseCode : peerAllRegisteredCourses) {
                                 if (registeredCourseCode.equals(courseCodeInput)) {
                                     continue;
                                 }

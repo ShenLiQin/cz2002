@@ -5,10 +5,7 @@ import Helper.Factory;
 import Helper.IMessenger;
 import ValueObject.*;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.Date;
 import java.util.TreeMap;
 
@@ -30,11 +27,11 @@ public class TextRegistrationDataAccess implements Serializable, IRegistrationDa
     }
 
     private static void initialize() throws IOException, ClassNotFoundException {
-//        InputStream file = new FileInputStream("./data/Registrations.ser");
-//        InputStream buffer = new BufferedInputStream(file);
-//        ObjectInput input = new ObjectInputStream(buffer);
-//
-//        instance = (RegistrationDatabase) input.readObject();
+        InputStream file = new FileInputStream("./data/Registrations.ser");
+        InputStream buffer = new BufferedInputStream(file);
+        ObjectInput input = new ObjectInputStream(buffer);
+
+        instance = (TextRegistrationDataAccess) input.readObject();
     }
 
     private static void persist(){

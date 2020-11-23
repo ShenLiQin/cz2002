@@ -7,10 +7,7 @@ import ValueObject.AbstractUser;
 import ValueObject.Staff;
 import ValueObject.Student;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -31,11 +28,11 @@ public class TextUserDataAccess implements Serializable, IUserDataAccessObject {
     }
 
     private static void initialize() throws IOException, ClassNotFoundException {
-//        InputStream file = new FileInputStream("./data/Users.ser");
-//        InputStream buffer = new BufferedInputStream(file);
-//        ObjectInput input = new ObjectInputStream(buffer);
+        InputStream file = new FileInputStream("./data/Users.ser");
+        InputStream buffer = new BufferedInputStream(file);
+        ObjectInput input = new ObjectInputStream(buffer);
 
-//        instance = (UserDatabase) input.readObject();
+        instance = (TextUserDataAccess) input.readObject();
     }
 
     private static void persist(){

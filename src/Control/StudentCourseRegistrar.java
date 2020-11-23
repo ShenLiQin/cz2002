@@ -11,6 +11,7 @@ import Exception.*;
 import ValueObject.Student;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class StudentCourseRegistrar {
@@ -32,10 +33,18 @@ public class StudentCourseRegistrar {
             throw new InsufficientAUsException();
         }
 
-        Set<String> allRegisteredCourses = student.getRegisteredCourses().keySet();
-        allRegisteredCourses.addAll(student.getWaitingListCourses().keySet());
+        Set<String> registeredCourses = student.getRegisteredCourses().keySet();
+        Set<String> waitlist = student.getWaitingListCourses().keySet();
+        ArrayList<String> allRegisteredCourses = new ArrayList<>();
+        allRegisteredCourses.addAll(registeredCourses);
+        allRegisteredCourses.addAll(waitlist);
         for (String registeredCourseCode : allRegisteredCourses) {
-            int registeredCourseIndexNumber = student.getRegisteredCourses().get(registeredCourseCode);
+            int registeredCourseIndexNumber;
+            if (student.getRegisteredCourses() == null || !student.getRegisteredCourses().containsKey(registeredCourseCode)) {
+                registeredCourseIndexNumber = student.getWaitingListCourses().get(registeredCourseCode);
+            } else {
+                registeredCourseIndexNumber = student.getRegisteredCourses().get(registeredCourseCode);
+            }
             Course registeredCourse = courseDataAccessObject.getCourse(registeredCourseCode);
             Index registeredIndex = registeredCourse.getIndex(registeredCourseIndexNumber);
 

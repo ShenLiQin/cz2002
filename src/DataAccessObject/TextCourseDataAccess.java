@@ -5,10 +5,7 @@ import Exception.NonExistentCourseException;
 import ValueObject.Course;
 import ValueObject.Index;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -30,11 +27,11 @@ public class TextCourseDataAccess implements Serializable, ICourseDataAccessObje
     }
 
     private static void initialize() throws IOException, ClassNotFoundException {
-//        InputStream file = new FileInputStream("./data/Courses.ser");
-//        InputStream buffer = new BufferedInputStream(file);
-//        ObjectInput input = new ObjectInputStream(buffer);
-//
-//        instance = (CourseDatabase) input.readObject();
+        InputStream file = new FileInputStream("./data/Courses.ser");
+        InputStream buffer = new BufferedInputStream(file);
+        ObjectInput input = new ObjectInputStream(buffer);
+
+        instance = (TextCourseDataAccess) input.readObject();
     }
 
     private static void persist(){

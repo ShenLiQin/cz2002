@@ -11,14 +11,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b2a96ea-68a5-4f89-8ab5-21e919bb5e30" name="Default Changelist" comment="refactoring">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/Courses.ser" beforeDir="false" afterPath="$PROJECT_DIR$/data/Courses.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/Registrations.ser" beforeDir="false" afterPath="$PROJECT_DIR$/data/Registrations.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/Users.ser" beforeDir="false" afterPath="$PROJECT_DIR$/data/Users.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/final/Control/StudentCourseRegistrar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Control/StudentCourseRegistrar.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/final/Control/UserSession.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Control/UserSession.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextRegistrationDataAccess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextRegistrationDataAccess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/EmailMessenger.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/Helper/EmailMessenger.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/final/STARSApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/STARSApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Control/StudentCourseRegistrar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/StudentCourseRegistrar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Control/UserSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/UserSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/STARSApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/STARSApp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +121,7 @@
       <workItem from="1605507376413" duration="210000" />
       <workItem from="1605507850865" duration="73191000" />
       <workItem from="1605925520839" duration="68909000" />
-      <workItem from="1606029593812" duration="59091000" />
+      <workItem from="1606029593812" duration="60981000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1605511966758</created>
@@ -422,7 +424,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606154121446</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="refactoring">
+      <created>1606154878812</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1606154878812</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -540,38 +549,38 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="279" y="79" key="Github.UntrackedFilesDialog/0.0.1200.760@0.0.1200.760" timestamp="1605508454475" />
-    <state width="1157" height="197" key="GridCell.Tab.0.bottom" timestamp="1606154220024">
+    <state width="1157" height="234" key="GridCell.Tab.0.bottom" timestamp="1606156928501">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606154220024" />
-    <state width="1157" height="197" key="GridCell.Tab.0.center" timestamp="1606154220024">
+    <state width="1157" height="234" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606156928501" />
+    <state width="1157" height="234" key="GridCell.Tab.0.center" timestamp="1606156928501">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1606154220024" />
-    <state width="1157" height="197" key="GridCell.Tab.0.left" timestamp="1606154220024">
+    <state width="1157" height="234" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1606156928501" />
+    <state width="1157" height="234" key="GridCell.Tab.0.left" timestamp="1606156928501">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1606154220024" />
-    <state width="1157" height="197" key="GridCell.Tab.0.right" timestamp="1606154220024">
+    <state width="1157" height="234" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1606156928501" />
+    <state width="1157" height="234" key="GridCell.Tab.0.right" timestamp="1606156928501">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1606154220024" />
-    <state width="1157" height="234" key="GridCell.Tab.1.bottom" timestamp="1606152253969">
+    <state width="1157" height="234" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1606156928501" />
+    <state width="1157" height="234" key="GridCell.Tab.1.bottom" timestamp="1606156928501">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606152253969" />
-    <state width="1157" height="234" key="GridCell.Tab.1.center" timestamp="1606152253969">
+    <state width="1157" height="234" key="GridCell.Tab.1.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606156928501" />
+    <state width="1157" height="234" key="GridCell.Tab.1.center" timestamp="1606156928501">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.center/0.0.1200.760@0.0.1200.760" timestamp="1606152253969" />
-    <state width="1157" height="234" key="GridCell.Tab.1.left" timestamp="1606152253969">
+    <state width="1157" height="234" key="GridCell.Tab.1.center/0.0.1200.760@0.0.1200.760" timestamp="1606156928501" />
+    <state width="1157" height="234" key="GridCell.Tab.1.left" timestamp="1606156928501">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.left/0.0.1200.760@0.0.1200.760" timestamp="1606152253969" />
-    <state width="1157" height="234" key="GridCell.Tab.1.right" timestamp="1606152253969">
+    <state width="1157" height="234" key="GridCell.Tab.1.left/0.0.1200.760@0.0.1200.760" timestamp="1606156928501" />
+    <state width="1157" height="234" key="GridCell.Tab.1.right" timestamp="1606156928501">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.right/0.0.1200.760@0.0.1200.760" timestamp="1606152253969" />
+    <state width="1157" height="234" key="GridCell.Tab.1.right/0.0.1200.760@0.0.1200.760" timestamp="1606156928501" />
     <state x="276" y="101" key="RollbackChangesDialog" timestamp="1605506844758">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -584,10 +593,10 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="168" y="295" key="VCS.EditChangelistDialog/0.0.1200.760@0.0.1200.760" timestamp="1605685783627" />
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1606154143154">
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1606154884900">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1606154143154" />
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1606154884900" />
     <state width="606" height="386" key="XDebugger.FullValuePopup" timestamp="1605511825096">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -624,6 +633,11 @@
           <url>file://$PROJECT_DIR$/src/ConsoleUtil.java</url>
           <line>17</line>
           <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Control/StudentCourseRegistrar.java</url>
+          <line>40</line>
+          <option name="timeStamp" value="104" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
