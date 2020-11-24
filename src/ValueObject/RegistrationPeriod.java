@@ -40,4 +40,14 @@ public class RegistrationPeriod implements Serializable {
         LocalDateTime now = LocalDateTime.now();
         return now.isBefore(startDate) || now.isAfter(endDate);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof RegistrationPeriod) {
+            RegistrationPeriod that = (RegistrationPeriod) obj;
+            return that.startDate.isEqual(startDate) && that.endDate.isEqual(endDate);
+        } else {
+            return false;
+        }
+    }
 }

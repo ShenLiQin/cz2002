@@ -25,6 +25,18 @@ public class RegistrationKey implements Comparable<RegistrationKey>, Serializabl
     private static final long serialVersionUID = 1L;
 
     /**
+     * Initialize all attributes of this class
+     * @param matricNumber String that presents student's matric number
+     * @param courseCode String containing the course code
+     * @param indexNumber Integer that represents the index number
+     */
+    public RegistrationKey(String matricNumber, String courseCode, int indexNumber) {
+        this.matricNumber = matricNumber;
+        this.courseCode = courseCode;
+        this.indexNumber = indexNumber;
+    }
+
+    /**
      * Gets a String that represents the student's matric number
      * @return String that presents student's matric number
      */
@@ -46,18 +58,6 @@ public class RegistrationKey implements Comparable<RegistrationKey>, Serializabl
      */
     public int getIndexNumber() {
         return indexNumber;
-    }
-
-    /**
-     * Initialize all attributes of this class
-     * @param matricNumber String that presents student's matric number
-     * @param courseCode String containing the course code
-     * @param indexNumber Integer that represents the index number
-     */
-    public RegistrationKey(String matricNumber, String courseCode, int indexNumber) {
-        this.matricNumber = matricNumber;
-        this.courseCode = courseCode;
-        this.indexNumber = indexNumber;
     }
 
     /**
