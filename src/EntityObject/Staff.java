@@ -12,7 +12,8 @@ import java.io.Serializable;
  * Class representing admin staff.
  *
  */
-public class Staff extends AbstractUser implements Serializable {
+public class Staff extends AbstractUser {
+    private String job;
     /**
      *Creates staff user containing staff specific information.
      *
@@ -25,7 +26,8 @@ public class Staff extends AbstractUser implements Serializable {
      * @see ValueObject.Gender
      * @see ValueObject.Nationality
      */
-    public Staff(String name, School school, Gender gender, Nationality nationality) throws PasswordStorage.CannotPerformOperationException {
+    public Staff(String name, School school, Gender gender, Nationality nationality, String job) throws PasswordStorage.CannotPerformOperationException {
         super(name, school, gender, nationality, UserType.ADMIN);
+        this.job = job;
     }
 }

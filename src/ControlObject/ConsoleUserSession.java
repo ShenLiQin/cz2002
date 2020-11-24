@@ -150,7 +150,7 @@ public class ConsoleUserSession implements ISession{
         _terminal.println("add course");
         printRegisteredCourses();
         try {
-            IReadCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+            IReadCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
             List<String> coursesString = courseDataAccessObject.getAllCourseCodes();
             Set<String> coursesRegistered = _user.getRegisteredCourses().keySet();
             Set<String> waitinglistCourses = _user.getRegisteredCourses().keySet();
@@ -224,7 +224,7 @@ public class ConsoleUserSession implements ISession{
         _terminal.println("drop course");
         printRegisteredCourses();
         try {
-            _user = Factory.getTextUserDataAccess(this).getStudent(_user.getMatricNumber());
+            _user = Factory.getTextUserDataAccessObject(this).getStudent(_user.getMatricNumber());
             TreeMap<String, Integer> registered = _user.getRegisteredCourses();
             TreeMap<String, Integer> waitList = _user.getWaitingListCourses();
             List<String> allCoursesStr = new ArrayList<>(registered.keySet());
@@ -298,7 +298,7 @@ public class ConsoleUserSession implements ISession{
     private void printRegisteredCourses() {
         try {
             _terminal.getProperties().setPromptColor(Color.green);
-            _user = Factory.getTextUserDataAccess(this).getStudent(_user.getMatricNumber());
+            _user = Factory.getTextUserDataAccessObject(this).getStudent(_user.getMatricNumber());
             TreeMap<String, Integer> registered = _user.getRegisteredCourses();
             TreeMap<String, Integer> waitingList = _user.getWaitingListCourses();
             _terminal.println("_______Registered Courses_______");
@@ -321,7 +321,7 @@ public class ConsoleUserSession implements ISession{
     private void checkCourseVacanciesMenu() {
         try {
             _terminal.println("Check course vacancies");
-            IReadCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+            IReadCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
             List<String> coursesString = courseDataAccessObject.getAllCourseCodes();
             String courseCode = _textIO.newStringInputReader()
                     .withNumberedPossibleValues(coursesString)
@@ -381,7 +381,7 @@ public class ConsoleUserSession implements ISession{
     private void changeIndexMenu() {
         _terminal.println("Change index");
         try {
-            _user = Factory.getTextUserDataAccess(this).getStudent(_user.getMatricNumber());
+            _user = Factory.getTextUserDataAccessObject(this).getStudent(_user.getMatricNumber());
             TreeMap<String, Integer> registered = _user.getRegisteredCourses();
             List<String> registeredCoursesStr = new ArrayList<>(registered.keySet());
             if (registeredCoursesStr.size() == 0) {
@@ -396,7 +396,7 @@ public class ConsoleUserSession implements ISession{
             _terminal.getProperties().setPromptColor(Color.GREEN);
             _terminal.println("User current index is: " + currIndexNumber);
             _terminal.getProperties().setPromptColor("white");
-            IReadCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+            IReadCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
             List<String> indexesStr = courseDataAccessObject.getCourse(courseCodeInput).getListOfIndexNumbers();
             String indexNumberInput = _textIO.newStringInputReader()
                     .withNumberedPossibleValues(indexesStr)
@@ -478,7 +478,7 @@ public class ConsoleUserSession implements ISession{
         int currIndexNumber;
         String courseCodeInput;
         try {
-            _user = Factory.getTextUserDataAccess(this).getStudent(_user.getMatricNumber());
+            _user = Factory.getTextUserDataAccessObject(this).getStudent(_user.getMatricNumber());
             TreeMap<String, Integer> registered = _user.getRegisteredCourses();
             List<String> registeredCoursesStr = new ArrayList<>(registered.keySet());
             if (registeredCoursesStr.size() == 0) {
@@ -513,7 +513,7 @@ public class ConsoleUserSession implements ISession{
                     .read("Enter peer password: ");
             //authenticate peer
             try {
-                absPeer = Factory.getTextUserDataAccess(this).authenticate(peerUsername, peerPassword);
+                absPeer = Factory.getTextUserDataAccessObject(this).authenticate(peerUsername, peerPassword);
                 if (!(absPeer instanceof Student)) {
                     _terminal.resetToBookmark("Enter peer username:");
                     _terminal.getProperties().setPromptColor("red");
@@ -545,7 +545,7 @@ public class ConsoleUserSession implements ISession{
                         }
 
                         boolean clashingTimeTable = false;
-                        IReadCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+                        IReadCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
                         Course course = courseDataAccessObject.getCourse(courseCodeInput);
                         Index peerIndex = course.getIndex(peerIndexNumber);
                         Index currIndex = course.getIndex(currIndexNumber);
@@ -573,8 +573,8 @@ public class ConsoleUserSession implements ISession{
                             }
                         }
                         if (!clashingTimeTable) {
-                            Set<String> peerRegisteredCourses = _user.getRegisteredCourses().keySet();
-                            Set<String> peerWaitlist = _user.getWaitingListCourses().keySet();
+                            Set<String> peerRegisteredCourses = studentPeer.getRegisteredCourses().keySet();
+                            Set<String> peerWaitlist = studentPeer.getWaitingListCourses().keySet();
                             ArrayList<String> peerAllRegisteredCourses = new ArrayList<>();
                             peerAllRegisteredCourses.addAll(peerRegisteredCourses);
                             peerAllRegisteredCourses.addAll(peerWaitlist);
@@ -644,7 +644,7 @@ public class ConsoleUserSession implements ISession{
      */
     private void displayUserMainMenu() {
         try {
-            RegistrationPeriod registrationPeriod = Factory.getTextRegistrationDataAccess(this).getRegistrationPeriod();
+            RegistrationPeriod registrationPeriod = Factory.getTextRegistrationDataAccessObject(this).getRegistrationPeriod();
             withinRegistrationPeriod = !registrationPeriod.notWithinRegistrationPeriod();
             if (!withinRegistrationPeriod) {
                 _terminal.getProperties().setPromptColor("red");

@@ -16,7 +16,7 @@ public class Index implements Serializable {
     /**
      * Index number of the course
      */
-    private int indexNumber;
+    private final int indexNumber;
     /**
      * Maximum number of student this index can have
      */

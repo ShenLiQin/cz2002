@@ -38,10 +38,10 @@ public class STARSApp {
         try {
             IReadWriteUserDataAccessObject userDataAccessObject;
             IReadWriteCourseDataAccessObject courseDataAccessObject;
-            Staff newA = Factory.createStaff("Richard", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN);
+            Staff newA = Factory.createStaff("Richard", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN, "admin staff");
             ISession session1 = Factory.createSession(newA);
             ConsoleAdminSession adminSession = (ConsoleAdminSession) session1;
-            userDataAccessObject = Factory.getTextUserDataAccess(adminSession);
+            userDataAccessObject = Factory.getTextUserDataAccessObject(adminSession);
             userDataAccessObject.addAdmin(newA);
             Student newS1 = Factory.createStudent("Ian", School.SCSE, Gender.MALE, Nationality.SINGAPOREAN, 23);
             newS1.setMatricNumber("U1941314D");
@@ -107,7 +107,7 @@ public class STARSApp {
             newS15.setMatricNumber("U1941263W");
             userDataAccessObject.addStudent(newS21);
 
-            courseDataAccessObject = Factory.getTextCourseDataAccess(adminSession);
+            courseDataAccessObject = Factory.getTextCourseDataAccessObject(adminSession);
 
             Index index1 = Factory.createIndex(200100, 10);
             Hashtable<DayOfWeek, List<LocalTime>> index1Date = new Hashtable<>();
@@ -318,7 +318,7 @@ public class STARSApp {
             courseDataAccessObject.addCourse(course8);
 
             RegistrationPeriod registrationPeriod = Factory.createRegistrationPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(3));
-            Factory.getTextRegistrationDataAccess(adminSession).updateRegistrationPeriod(registrationPeriod);
+            Factory.getTextRegistrationDataAccessObject(adminSession).updateRegistrationPeriod(registrationPeriod);
 
             StudentCourseRegistrar studentCourseRegistrar = Factory.createStudentCourseRegistrar();
             studentCourseRegistrar.addRegistration(newS1.getMatricNumber(), course1.getCourseCode(), index1.getIndexNumber());

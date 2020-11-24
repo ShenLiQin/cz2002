@@ -116,10 +116,10 @@ public class TextRegistrationDataAccessObject implements Serializable, IReadWrit
      * Register student to a course index using information from registrationKey
      * @param registrationKey RegistrationKey object that contains student matric number, course code and index
      *
-     * @see HelperObject.Factory#getTextCourseDataAccess(ConsoleAdminSession)
+     * @see HelperObject.Factory#getTextCourseDataAccessObject(ConsoleAdminSession)
      * @see DataAccessObject.IReadWriteCourseDataAccessObject#getCourse(String)
      *
-     * @see HelperObject.Factory#getTextUserDataAccess(ConsoleAdminSession)
+     * @see HelperObject.Factory#getTextUserDataAccessObject(ConsoleAdminSession)
      * @see DataAccessObject.IReadWriteUserDataAccessObject#updateStudent(Student)
      *
      * @see ValueObject.RegistrationKey#getCourseCode()
@@ -147,14 +147,14 @@ public class TextRegistrationDataAccessObject implements Serializable, IReadWrit
         persist();
 
         //enroll student
-        IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+        IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
         Course course = courseDataAccessObject.getCourse(registrationKey.getCourseCode());
         Index index = course.getIndex(registrationKey.getIndexNumber());
         String waitingListStudent =  index.enrollStudent(registrationKey.getMatricNumber());
 
         course.updateIndex(index);
         courseDataAccessObject.updateCourse(course);
-        IReadWriteUserDataAccessObject userDataAccess = Factory.getTextUserDataAccess(this);
+        IReadWriteUserDataAccessObject userDataAccess = Factory.getTextUserDataAccessObject(this);
         Student student = userDataAccess.getStudent(registrationKey.getMatricNumber());
 
         if (waitingListStudent != null) {
@@ -175,11 +175,11 @@ public class TextRegistrationDataAccessObject implements Serializable, IReadWrit
     /**
      * Delete a student from a course index using information from registrationKey
      * @param registrationKey RegistrationPeriod object that contains student matric number, course code and index
-     * @see HelperObject.Factory#getTextCourseDataAccess(ConsoleAdminSession)
+     * @see HelperObject.Factory#getTextCourseDataAccessObject(ConsoleAdminSession)
      * @see DataAccessObject.IReadWriteCourseDataAccessObject#getCourse(String)
      * @see DataAccessObject.IReadWriteCourseDataAccessObject#updateCourse(Course)
      *
-     * @see HelperObject.Factory#getTextUserDataAccess(ConsoleAdminSession)
+     * @see HelperObject.Factory#getTextUserDataAccessObject(ConsoleAdminSession)
      * @see DataAccessObject.IReadWriteUserDataAccessObject#updateStudent(Student)
      * @see DataAccessObject.IReadWriteUserDataAccessObject#getStudent(String)
      *
@@ -213,7 +213,7 @@ public class TextRegistrationDataAccessObject implements Serializable, IReadWrit
     public void deleteRegistration(RegistrationKey registrationKey) throws IOException, ClassNotFoundException, NonExistentUserException, NonExistentCourseException, ExistingCourseException, MaxEnrolledStudentsException, ExistingUserException {
         registrations.remove(registrationKey);
 
-        IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+        IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
         Course course = courseDataAccessObject.getCourse(registrationKey.getCourseCode());
         Index index = course.getIndex(registrationKey.getIndexNumber());
         String waitingListStudentMatricNumber = index.dropStudent(registrationKey.getMatricNumber());
@@ -221,7 +221,7 @@ public class TextRegistrationDataAccessObject implements Serializable, IReadWrit
         courseDataAccessObject.updateCourse(course);
 
         //update student
-        IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess(this);
+        IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccessObject(this);
         Student student = userDataAccessObject.getStudent(registrationKey.getMatricNumber());
         student.deregisterCourse(registrationKey.getCourseCode());
         student.deregisterAUs(course.getAUs());

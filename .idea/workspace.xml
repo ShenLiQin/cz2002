@@ -10,64 +10,40 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b2a96ea-68a5-4f89-8ab5-21e919bb5e30" name="Default Changelist" comment="refactoring">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="0b2a96ea-68a5-4f89-8ab5-21e919bb5e30" name="Default Changelist" comment="refactoring, added javadoc">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/Courses.ser" beforeDir="false" afterPath="$PROJECT_DIR$/data/Courses.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/Registrations.ser" beforeDir="false" afterPath="$PROJECT_DIR$/data/Registrations.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/Users.ser" beforeDir="false" afterPath="$PROJECT_DIR$/data/Users.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Control/AdminSession.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Control/ISession.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Control/LoginControl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Control/StudentCourseRegistrar.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Control/UserSession.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/ICourseDataAccessObject.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/IRegistrationDataAccessObject.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/IUserDataAccessObject.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextCourseDataAccess.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextRegistrationDataAccess.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextUserDataAccess.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/EmailMessenger$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/EmailMessenger.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/Factory$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/Factory.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/IMessenger.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/InputValidator.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/PasswordStorage$CannotPerformOperationException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/PasswordStorage$InvalidHashException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/Helper/PasswordStorage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/ControlObject/AdminSession.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/ControlObject/LoginControl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/ControlObject/StudentCourseRegistrar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/ControlObject/StudentCourseRegistrar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/ControlObject/UserSession.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextCourseDataAccessObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextCourseDataAccessObject.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextRegistrationDataAccessObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextRegistrationDataAccessObject.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextUserDataAccessObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/DataAccessObject/TextUserDataAccessObject.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/EntityObject/AbstractUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/EntityObject/AbstractUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/EntityObject/Index.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/EntityObject/Index.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/EntityObject/Staff.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/EntityObject/Staff.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/EntityObject/Student.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/EntityObject/Student.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/HelperObject/Factory$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/HelperObject/Factory$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/HelperObject/Factory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/HelperObject/Factory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/HelperObject/InputValidator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/HelperObject/InputValidator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/HelperObject/PasswordStorage$CannotPerformOperationException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/HelperObject/PasswordStorage$CannotPerformOperationException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/HelperObject/PasswordStorage$InvalidHashException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/HelperObject/PasswordStorage$InvalidHashException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/final/HelperObject/PasswordStorage.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/HelperObject/PasswordStorage.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/final/STARSApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/STARSApp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/AbstractUser.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/Course.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/Index.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/RegistrationKey.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/ValueObject/RegistrationKey.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/RegistrationPeriod.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/final/ValueObject/RegistrationPeriod.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/Staff.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/final/ValueObject/Student.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Control/AdminSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ControlObject/ConsoleAdminSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Control/ISession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ControlObject/ISession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Control/LoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ControlObject/ConsoleLoginControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Control/StudentCourseRegistrar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ControlObject/StudentCourseRegistrar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Control/UserSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ControlObject/ConsoleUserSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/ICourseDataAccessObject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/IRegistrationDataAccessObject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/IUserDataAccessObject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/TextCourseDataAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataAccessObject/TextCourseDataAccessObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/TextRegistrationDataAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataAccessObject/TextRegistrationDataAccessObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/TextUserDataAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataAccessObject/TextUserDataAccessObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helper/EmailMessenger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HelperObject/EmailMessenger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helper/Factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HelperObject/Factory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helper/IMessenger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HelperObject/IMessenger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helper/InputValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HelperObject/InputValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helper/PasswordStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HelperObject/PasswordStorage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ControlObject/ConsoleAdminSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ControlObject/ConsoleAdminSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ControlObject/ConsoleLoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ControlObject/ConsoleLoginControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ControlObject/ConsoleUserSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ControlObject/ConsoleUserSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ControlObject/StudentCourseRegistrar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ControlObject/StudentCourseRegistrar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataAccessObject/TextRegistrationDataAccessObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataAccessObject/TextRegistrationDataAccessObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EntityObject/AbstractUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EntityObject/AbstractUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EntityObject/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EntityObject/Index.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EntityObject/Staff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EntityObject/Staff.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EntityObject/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EntityObject/Student.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HelperObject/Factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HelperObject/Factory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/STARSApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/STARSApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueObject/AbstractUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EntityObject/AbstractUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueObject/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EntityObject/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueObject/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EntityObject/Index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueObject/RegistrationKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ValueObject/RegistrationKey.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueObject/RegistrationPeriod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ValueObject/RegistrationPeriod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueObject/Staff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EntityObject/Staff.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueObject/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EntityObject/Student.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,7 +145,7 @@
       <workItem from="1605507376413" duration="210000" />
       <workItem from="1605507850865" duration="73191000" />
       <workItem from="1605925520839" duration="68909000" />
-      <workItem from="1606029593812" duration="84279000" />
+      <workItem from="1606029593812" duration="95078000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1605511966758</created>
@@ -486,7 +462,21 @@
       <option name="project" value="LOCAL" />
       <updated>1606157206491</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="refactoring, added javadoc">
+      <created>1606209601808</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1606209601808</updated>
+    </task>
+    <task id="LOCAL-00047" summary="refactoring, added javadoc">
+      <created>1606209610870</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1606209610870</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -521,7 +511,8 @@
     <MESSAGE value="prevent student from adding courses that causes time table clashes" />
     <MESSAGE value="added new functionalities : sign in as student and perform tasks regardless of registration period, delete index, delete course" />
     <MESSAGE value="refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring" />
+    <MESSAGE value="refactoring, added javadoc" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring, added javadoc" />
   </component>
   <component name="WindowStateProjectService">
     <state x="299" y="0" width="616" height="760" key="#Main" timestamp="1605507032156">
@@ -568,10 +559,10 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="385" y="271" width="448" height="218" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1200.760@0.0.1200.760" timestamp="1606184918996" />
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1606207086448">
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1606211163995">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1200.760@0.0.1200.760" timestamp="1606207086448" />
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1200.760@0.0.1200.760" timestamp="1606211163995" />
     <state x="332" y="128" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1605700702731">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -608,38 +599,38 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="279" y="79" key="Github.UntrackedFilesDialog/0.0.1200.760@0.0.1200.760" timestamp="1605508454475" />
-    <state width="1157" height="197" key="GridCell.Tab.0.bottom" timestamp="1606207097046">
+    <state width="1157" height="234" key="GridCell.Tab.0.bottom" timestamp="1606220262803">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606207097046" />
-    <state width="1157" height="197" key="GridCell.Tab.0.center" timestamp="1606207097046">
+    <state width="1157" height="234" key="GridCell.Tab.0.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606220262803" />
+    <state width="1157" height="234" key="GridCell.Tab.0.center" timestamp="1606220262803">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1606207097046" />
-    <state width="1157" height="197" key="GridCell.Tab.0.left" timestamp="1606207097045">
+    <state width="1157" height="234" key="GridCell.Tab.0.center/0.0.1200.760@0.0.1200.760" timestamp="1606220262803" />
+    <state width="1157" height="234" key="GridCell.Tab.0.left" timestamp="1606220262803">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1606207097045" />
-    <state width="1157" height="197" key="GridCell.Tab.0.right" timestamp="1606207097046">
+    <state width="1157" height="234" key="GridCell.Tab.0.left/0.0.1200.760@0.0.1200.760" timestamp="1606220262803" />
+    <state width="1157" height="234" key="GridCell.Tab.0.right" timestamp="1606220262803">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="197" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1606207097046" />
-    <state width="1157" height="234" key="GridCell.Tab.1.bottom" timestamp="1606193611729">
+    <state width="1157" height="234" key="GridCell.Tab.0.right/0.0.1200.760@0.0.1200.760" timestamp="1606220262803" />
+    <state width="1157" height="234" key="GridCell.Tab.1.bottom" timestamp="1606220262804">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606193611729" />
-    <state width="1157" height="234" key="GridCell.Tab.1.center" timestamp="1606193611729">
+    <state width="1157" height="234" key="GridCell.Tab.1.bottom/0.0.1200.760@0.0.1200.760" timestamp="1606220262804" />
+    <state width="1157" height="234" key="GridCell.Tab.1.center" timestamp="1606220262803">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.center/0.0.1200.760@0.0.1200.760" timestamp="1606193611729" />
-    <state width="1157" height="234" key="GridCell.Tab.1.left" timestamp="1606193611729">
+    <state width="1157" height="234" key="GridCell.Tab.1.center/0.0.1200.760@0.0.1200.760" timestamp="1606220262803" />
+    <state width="1157" height="234" key="GridCell.Tab.1.left" timestamp="1606220262803">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.left/0.0.1200.760@0.0.1200.760" timestamp="1606193611729" />
-    <state width="1157" height="234" key="GridCell.Tab.1.right" timestamp="1606193611729">
+    <state width="1157" height="234" key="GridCell.Tab.1.left/0.0.1200.760@0.0.1200.760" timestamp="1606220262803" />
+    <state width="1157" height="234" key="GridCell.Tab.1.right" timestamp="1606220262803">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state width="1157" height="234" key="GridCell.Tab.1.right/0.0.1200.760@0.0.1200.760" timestamp="1606193611729" />
+    <state width="1157" height="234" key="GridCell.Tab.1.right/0.0.1200.760@0.0.1200.760" timestamp="1606220262803" />
     <state x="276" y="101" key="RollbackChangesDialog" timestamp="1606185932624">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -656,10 +647,10 @@
       <screen x="0" y="0" width="1200" height="760" />
     </state>
     <state x="168" y="295" key="VCS.EditChangelistDialog/0.0.1200.760@0.0.1200.760" timestamp="1605685783627" />
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1606157218244">
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2" timestamp="1606209652460">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
-    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1606157218244" />
+    <state x="194" y="114" key="Vcs.Push.Dialog.v2/0.0.1200.760@0.0.1200.760" timestamp="1606209652460" />
     <state width="606" height="386" key="XDebugger.FullValuePopup" timestamp="1605511825096">
       <screen x="0" y="0" width="1200" height="760" />
     </state>
@@ -698,9 +689,14 @@
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ControlObject/StudentCourseRegistrar.java</url>
-          <line>68</line>
-          <option name="timeStamp" value="106" />
+          <url>file://$PROJECT_DIR$/src/ControlObject/ConsoleUserSession.java</url>
+          <line>629</line>
+          <option name="timeStamp" value="107" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/ControlObject/ConsoleUserSession.java</url>
+          <line>580</line>
+          <option name="timeStamp" value="108" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

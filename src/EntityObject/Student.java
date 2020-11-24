@@ -168,7 +168,7 @@ public class Student extends AbstractUser {
      * @param AUs Integer representing number of AUs of the course that the student is dropping
      */
     public void deregisterAUs(int AUs) {
-        this.totalRegisteredAUs += AUs;
+        this.totalRegisteredAUs -= AUs;
     }
 
     /**

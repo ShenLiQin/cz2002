@@ -23,10 +23,10 @@ public class StudentCourseRegistrar {
      * @param matricNumber, student matric number.
      * @param courseCode course to be added.
      * @param indexNumber index number to be added.
-     * @see HelperObject.Factory#getTextCourseDataAccess(ConsoleAdminSession)
+     * @see HelperObject.Factory#getTextCourseDataAccessObject(ConsoleAdminSession)
      * @see DataAccessObject.IReadWriteCourseDataAccessObject#getCourse(String)
      *
-     * @see HelperObject.Factory#getTextUserDataAccess(ConsoleAdminSession)
+     * @see HelperObject.Factory#getTextUserDataAccessObject(ConsoleAdminSession)
      * @see DataAccessObject.IReadWriteUserDataAccessObject#updateStudent(Student)
      *
      * @see ValueObject.RegistrationKey#getCourseCode()
@@ -53,10 +53,10 @@ public class StudentCourseRegistrar {
      * @throws ClashingTimeTableException index will result in clashing time table
      */
     public void addRegistration(String matricNumber, String courseCode, int indexNumber) throws IOException, ClassNotFoundException, InvalidAccessPeriodException, InsufficientAUsException, ExistingCourseException, ExistingUserException, ExistingRegistrationException, NonExistentUserException, MaxEnrolledStudentsException, ClashingTimeTableException {
-        IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess(this);
-        IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+        IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccessObject(this);
+        IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
         IReadWriteRegistrationDataAccessObject registrationDataAccessObject =
-                Factory.getTextRegistrationDataAccess(this);
+                Factory.getTextRegistrationDataAccessObject(this);
 
         if (registrationDataAccessObject.getRegistrationPeriod().notWithinRegistrationPeriod()) {
             throw new InvalidAccessPeriodException();
@@ -99,11 +99,11 @@ public class StudentCourseRegistrar {
      * @param matricNumber, student matric number.
      * @param courseCode course to be added.
      * @param indexNumber index number to be added.
-     * @see HelperObject.Factory#getTextCourseDataAccess(ConsoleAdminSession)
+     * @see HelperObject.Factory#getTextCourseDataAccessObject(ConsoleAdminSession)
      * @see DataAccessObject.IReadWriteCourseDataAccessObject#getCourse(String)
      * @see DataAccessObject.IReadWriteCourseDataAccessObject#updateCourse(Course)
      *
-     * @see HelperObject.Factory#getTextUserDataAccess(ConsoleAdminSession)
+     * @see HelperObject.Factory#getTextUserDataAccessObject(ConsoleAdminSession)
      * @see DataAccessObject.IReadWriteUserDataAccessObject#updateStudent(Student)
      * @see DataAccessObject.IReadWriteUserDataAccessObject#getStudent(String)
      * @see EntityObject.Student#getEmail()
@@ -138,9 +138,9 @@ public class StudentCourseRegistrar {
      * @throws ExistingUserException user already exist
      */
     public void deleteRegistration(String matricNumber, String courseCode, int indexNumber) throws IOException, ClassNotFoundException, InvalidAccessPeriodException, NonExistentRegistrationException, NonExistentUserException, NonExistentCourseException, ExistingCourseException, MaxEnrolledStudentsException, ExistingUserException {
-        IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+        IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
         IReadWriteRegistrationDataAccessObject registrationDataAccessObject =
-                Factory.getTextRegistrationDataAccess(this);
+                Factory.getTextRegistrationDataAccessObject(this);
         if (registrationDataAccessObject.getRegistrationPeriod().notWithinRegistrationPeriod()) {
             throw new InvalidAccessPeriodException();
         }
@@ -153,7 +153,7 @@ public class StudentCourseRegistrar {
             course.updateIndex(index);
             courseDataAccessObject.updateCourse(course);
 
-            IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess(this);
+            IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccessObject(this);
             Student student = userDataAccessObject.getStudent(matricNumber);
             student.deregisterCourse(courseCode);
             userDataAccessObject.updateStudent(student);

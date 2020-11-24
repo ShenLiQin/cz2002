@@ -163,7 +163,7 @@ public class ConsoleAdminSession implements ISession {
      * If input start period is same as end period, error message is printed and user prompted to enter period again
      * @see HelperObject.InputValidator#validateDateTimeInput(String)
      * @see HelperObject.Factory#createRegistrationPeriod(LocalDateTime, LocalDateTime)
-     * @see HelperObject.Factory#getTextRegistrationDataAccess(ConsoleAdminSession)
+     * @see HelperObject.Factory#getTextRegistrationDataAccessObject(ConsoleAdminSession)
      * @see DataAccessObject.IReadWriteRegistrationDataAccessObject#updateRegistrationPeriod(RegistrationPeriod)
      * @see org.beryx.textio.InputReader
      * @see org.beryx.textio.TextTerminal
@@ -220,14 +220,14 @@ public class ConsoleAdminSession implements ISession {
         RegistrationPeriod newRP = Factory.createRegistrationPeriod(startDate, endDate);
         try {
             IReadWriteRegistrationDataAccessObject registrationDataAccessObject =
-                    Factory.getTextRegistrationDataAccess(this);
+                    Factory.getTextRegistrationDataAccessObject(this);
             registrationDataAccessObject.updateRegistrationPeriod(newRP);
             _terminal.getProperties().setPromptColor(Color.GREEN);
             _terminal.println("successfully changed access period");
             boolean email = _textIO.newBooleanInputReader().
                     read("Do you want to inform all students by emailing them?");
             if (email) {
-                IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess(this);
+                IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccessObject(this);
                 List<String> allMatricNumbers = userDataAccessObject.getAllStudentMatricNumbers();
 
                 _terminal.println("Please wait...");
@@ -268,7 +268,7 @@ public class ConsoleAdminSession implements ISession {
      * If input for MaxAUs is out of range of 0-25, error message is printed and user prompted to enter MaxAUs again
      *
      * @see HelperObject.InputValidator#validateDateTimeInput(String)
-     * @see HelperObject.Factory#getTextUserDataAccess(ConsoleAdminSession)
+     * @see HelperObject.Factory#getTextUserDataAccessObject(ConsoleAdminSession)
      * @see DataAccessObject.IReadWriteUserDataAccessObject#addStudent(Student)
      * @see DataAccessObject.IReadWriteUserDataAccessObject#studentsInfoToString()
      * @see HelperObject.InputValidator#validateNameInput(String)
@@ -301,13 +301,13 @@ public class ConsoleAdminSession implements ISession {
                 .read("MaxAUs: (leave blank for default 21 AUs)");
         try {
             Student newStudent = Factory.createStudent(name, school, gender, nationality, maxAUs);
-            IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess(this);
+            IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccessObject(this);
             userDataAccessObject.addStudent(newStudent);
             _terminal.getProperties().setPromptColor(Color.GREEN);
             _terminal.println("successfully added student");
             _terminal.println("list of all students:");
 
-            userDataAccessObject = Factory.getTextUserDataAccess(this);
+            userDataAccessObject = Factory.getTextUserDataAccessObject(this);
             _terminal.println(userDataAccessObject.studentsInfoToString());
         } catch (ExistingUserException e) {
             _terminal.getProperties().setPromptColor("red");
@@ -333,7 +333,7 @@ public class ConsoleAdminSession implements ISession {
     private void checkIndexVacanciesMenu() {
         try {
             _terminal.println("Check index vacancies");
-            IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+            IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
             List<String> coursesString = courseDataAccessObject.getAllCourseCodes();
             String courseCode = _textIO.newStringInputReader()
                     .withNumberedPossibleValues(coursesString)
@@ -402,7 +402,7 @@ public class ConsoleAdminSession implements ISession {
         _terminal.println("add/update/delete course");
         _terminal.setBookmark("add/update course home page");
         try {
-            IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+            IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
             List<String> coursesString = courseDataAccessObject.getAllCourseCodes();
             coursesString.add("add new course");
             selectedCourseCode = _textIO.newStringInputReader()
@@ -496,7 +496,7 @@ public class ConsoleAdminSession implements ISession {
             } while (contAdd);
 
             try {
-                IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+                IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
                 courseDataAccessObject.addCourse(selectedCourse);
                 _terminal.getProperties().setPromptColor(Color.GREEN);
                 _terminal.println("Successfully added course");
@@ -606,7 +606,7 @@ public class ConsoleAdminSession implements ISession {
                     case 5 -> {
                         try {
                             IReadWriteRegistrationDataAccessObject registrationDataAccessObject =
-                                    Factory.getTextRegistrationDataAccess(this);
+                                    Factory.getTextRegistrationDataAccessObject(this);
                             List<String> indexNumbers = selectedCourse.getListOfIndexNumbers();
                             for (Iterator<String> indexNumberIterator = indexNumbers.iterator(); indexNumberIterator.hasNext();) {
                                 String indexNumber = indexNumberIterator.next();
@@ -630,7 +630,7 @@ public class ConsoleAdminSession implements ISession {
                                     }
                                 }
                             }
-                            Factory.getTextCourseDataAccess(this).deleteCourse(selectedCourse);
+                            Factory.getTextCourseDataAccessObject(this).deleteCourse(selectedCourse);
                             _terminal.getProperties().setPromptColor(Color.green);
                             _terminal.println("Course deleted");
                         } catch (IOException | ClassNotFoundException e) {
@@ -874,7 +874,7 @@ public class ConsoleAdminSession implements ISession {
                 case 6 -> {
                     try {
                         IReadWriteRegistrationDataAccessObject registrationDataAccessObject =
-                                Factory.getTextRegistrationDataAccess(this);
+                                Factory.getTextRegistrationDataAccessObject(this);
                         ArrayList<String> enrolledStudents = existingIndex.getEnrolledStudents();
                         Queue<String> waitingList = existingIndex.getWaitingList();
                         ArrayList<String> allStudents = new ArrayList<>();
@@ -916,7 +916,7 @@ public class ConsoleAdminSession implements ISession {
      */
     private void printStudentListByIndexMenu() {
         try {
-            IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+            IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
             String courseCode = _textIO.newStringInputReader()
                     .withNumberedPossibleValues(courseDataAccessObject.getAllCourseCodes())
                     .read("print student list by index");
@@ -944,7 +944,7 @@ public class ConsoleAdminSession implements ISession {
     private void printStudentListByCourseMenu() {
         try {
             String courseCode;
-            IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+            IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
             courseCode = _textIO.newStringInputReader()
                     .withNumberedPossibleValues(courseDataAccessObject.getAllCourseCodes())
                     .read("print student list by course");
@@ -984,13 +984,13 @@ public class ConsoleAdminSession implements ISession {
                     .withMinLength(6)
                     .withInputMasking(true)
                     .read("Enter Password: ");
-            AbstractUser abstractUser = Factory.getTextUserDataAccess(this).authenticate(username, password);
+            AbstractUser abstractUser = Factory.getTextUserDataAccessObject(this).authenticate(username, password);
             if (abstractUser == null || abstractUser.getUserType() == UserType.ADMIN) {
                 _terminal.getProperties().setPromptColor("red");
                 _terminal.println("Invalid User");
             } else {
                 IReadWriteRegistrationDataAccessObject registrationDataAccessObject =
-                        Factory.getTextRegistrationDataAccess(this);
+                        Factory.getTextRegistrationDataAccessObject(this);
                 RegistrationPeriod temporaryRegistrationPeriod = Factory.createRegistrationPeriod(LocalDateTime.now().minusDays(2),
                         LocalDateTime.now().plusDays(2));
                 RegistrationPeriod currentRegistrationPeriod = registrationDataAccessObject.getRegistrationPeriod();
@@ -1025,7 +1025,7 @@ public class ConsoleAdminSession implements ISession {
      */
     private void updateCourse(Course newCourse) {
         try {
-            IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccess(this);
+            IReadWriteCourseDataAccessObject courseDataAccessObject = Factory.getTextCourseDataAccessObject(this);
             courseDataAccessObject.updateCourse(newCourse);
             _terminal.getProperties().setPromptColor(Color.GREEN);
             _terminal.println("Successfully updated course");
@@ -1045,7 +1045,7 @@ public class ConsoleAdminSession implements ISession {
     private String getStudentListByIndexString(Index index) {
         StringBuilder str = new StringBuilder();
         try {
-            IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess(this);
+            IReadWriteUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccessObject(this);
             ArrayList<String> enrolledStudents = index.getEnrolledStudents();
             Queue<String> waitingListStudents = index.getWaitingList();
             str.append("indexNumber: ").append(index.getIndexNumber()).append('\n');

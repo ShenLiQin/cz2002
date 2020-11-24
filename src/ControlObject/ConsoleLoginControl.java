@@ -59,7 +59,7 @@ public class ConsoleLoginControl implements ILoginControl {
      * @see org.beryx.textio.TextTerminal
      * @see org.beryx.textio.TextIO
      *
-     * @see HelperObject.Factory#getTextUserDataAccess(ConsoleAdminSession) (String, String)
+     * @see HelperObject.Factory#getTextUserDataAccessObject(ConsoleAdminSession) (String, String)
      * @see DataAccessObject.IReadWriteUserDataAccessObject#authenticate(String, String)
      *
      */
@@ -67,7 +67,7 @@ public class ConsoleLoginControl implements ILoginControl {
     public AbstractUser login() {
         _terminal.setBookmark("clear");
         try {
-            IReadUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccess(this);
+            IReadUserDataAccessObject userDataAccessObject = Factory.getTextUserDataAccessObject(this);
             _terminal.println(welcome);
             _terminal.setBookmark("prompt");
             do {

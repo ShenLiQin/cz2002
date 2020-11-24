@@ -26,15 +26,6 @@ public abstract class AbstractUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Gets user type
-     * @return userType An enum that represents user type
-     * @see ValueObject.UserType
-     */
-    public UserType getUserType() {
-        return userType;
-    }
-
-    /**
      * Creates user containing specific information.
      *
      * @param name A String that represents user name
@@ -68,6 +59,15 @@ public abstract class AbstractUser implements Serializable {
                 "@ntu.edu.sg";
         System.out.println(username + ": " + name.strip().toLowerCase() +
                 Year.now().toString() + ": " + email);
+    }
+
+    /**
+     * Gets user type
+     * @return userType An enum that represents user type
+     * @see ValueObject.UserType
+     */
+    public UserType getUserType() {
+        return userType;
     }
 
     /**

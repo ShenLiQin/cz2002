@@ -23,7 +23,6 @@ public class Factory {
         return new ConsoleLoginControl(textIO, textIO.getTextTerminal());
     }
 
-
     /**
      * Gets the read and write/ read only version of TextUserDataAccessObject interface.
      * Admin session, Student course registrar, registration data access object returns read and write version
@@ -33,39 +32,39 @@ public class Factory {
      * @throws IOException when there is error in accessing files
      * @throws ClassNotFoundException when class is not found
      */
-    public static IReadWriteUserDataAccessObject getTextUserDataAccess(ConsoleAdminSession a) throws IOException, ClassNotFoundException {
+    public static IReadWriteUserDataAccessObject getTextUserDataAccessObject(ConsoleAdminSession a) throws IOException, ClassNotFoundException {
         return TextUserDataAccessObject.getInstance();
     }
 
     /**
      * @param u user session
-     * Refer to {@link #getTextUserDataAccess(ConsoleAdminSession a)} for the overloaded method}.
+     * Refer to {@link #getTextUserDataAccessObject(ConsoleAdminSession a)} for the overloaded method}.
      */
-    public static IReadUserDataAccessObject getTextUserDataAccess(ConsoleUserSession u) throws IOException, ClassNotFoundException {
+    public static IReadUserDataAccessObject getTextUserDataAccessObject(ConsoleUserSession u) throws IOException, ClassNotFoundException {
         return TextUserDataAccessObject.getInstance();
     }
 
     /**
      * @param s student course registrar
-     * Refer to {@link #getTextUserDataAccess(ConsoleAdminSession a)} for the overloaded method}.
+     * Refer to {@link #getTextUserDataAccessObject(ConsoleAdminSession a)} for the overloaded method}.
      */
-    public static IReadWriteUserDataAccessObject getTextUserDataAccess(StudentCourseRegistrar s) throws IOException, ClassNotFoundException {
+    public static IReadWriteUserDataAccessObject getTextUserDataAccessObject(StudentCourseRegistrar s) throws IOException, ClassNotFoundException {
         return TextUserDataAccessObject.getInstance();
     }
 
     /**
      * @param r registration data access object
-     * Refer to {@link #getTextUserDataAccess(ConsoleAdminSession a)} for the overloaded method}.
+     * Refer to {@link #getTextUserDataAccessObject(ConsoleAdminSession a)} for the overloaded method}.
      */
-    public static IReadWriteUserDataAccessObject getTextUserDataAccess(IReadWriteRegistrationDataAccessObject r) throws IOException, ClassNotFoundException {
+    public static IReadWriteUserDataAccessObject getTextUserDataAccessObject(IReadWriteRegistrationDataAccessObject r) throws IOException, ClassNotFoundException {
         return TextUserDataAccessObject.getInstance();
     }
 
     /**
      * @param l login control object
-     * Refer to {@link #getTextUserDataAccess(ConsoleAdminSession a)} for the overloaded method}.
+     * Refer to {@link #getTextUserDataAccessObject(ConsoleAdminSession a)} for the overloaded method}.
      */
-    public static IReadUserDataAccessObject getTextUserDataAccess(ILoginControl l) throws IOException, ClassNotFoundException {
+    public static IReadUserDataAccessObject getTextUserDataAccessObject(ILoginControl l) throws IOException, ClassNotFoundException {
         return TextUserDataAccessObject.getInstance();
     }
 
@@ -78,31 +77,31 @@ public class Factory {
      * @throws IOException when there is error in accessing files
      * @throws ClassNotFoundException when class is not found
      */
-    public static IReadWriteCourseDataAccessObject getTextCourseDataAccess(ConsoleAdminSession a) throws IOException, ClassNotFoundException {
+    public static IReadWriteCourseDataAccessObject getTextCourseDataAccessObject(ConsoleAdminSession a) throws IOException, ClassNotFoundException {
         return TextCourseDataAccessObject.getInstance();
     }
 
     /**
      * @param u user session
-     * Refer to {@link #getTextCourseDataAccess(ConsoleAdminSession a)} for the overloaded method}.
+     * Refer to {@link #getTextCourseDataAccessObject(ConsoleAdminSession a)} for the overloaded method}.
      */
-    public static IReadCourseDataAccessObject getTextCourseDataAccess(ConsoleUserSession u) throws IOException, ClassNotFoundException {
+    public static IReadCourseDataAccessObject getTextCourseDataAccessObject(ConsoleUserSession u) throws IOException, ClassNotFoundException {
         return TextCourseDataAccessObject.getInstance();
     }
 
     /**
      * @param s student course registrar
-     * Refer to {@link #getTextCourseDataAccess(ConsoleAdminSession a)} for the overloaded method}.
+     * Refer to {@link #getTextCourseDataAccessObject(ConsoleAdminSession a)} for the overloaded method}.
      */
-    public static IReadWriteCourseDataAccessObject getTextCourseDataAccess(StudentCourseRegistrar s) throws IOException, ClassNotFoundException {
+    public static IReadWriteCourseDataAccessObject getTextCourseDataAccessObject(StudentCourseRegistrar s) throws IOException, ClassNotFoundException {
         return TextCourseDataAccessObject.getInstance();
     }
 
     /**
      * @param r registration data access object
-     * Refer to {@link #getTextCourseDataAccess(ConsoleAdminSession a)} for the overloaded method}.
+     * Refer to {@link #getTextCourseDataAccessObject(ConsoleAdminSession a)} for the overloaded method}.
      */
-    public static IReadWriteCourseDataAccessObject getTextCourseDataAccess(IReadWriteRegistrationDataAccessObject r) throws IOException, ClassNotFoundException {
+    public static IReadWriteCourseDataAccessObject getTextCourseDataAccessObject(IReadWriteRegistrationDataAccessObject r) throws IOException, ClassNotFoundException {
         return TextCourseDataAccessObject.getInstance();
     }
 
@@ -115,23 +114,23 @@ public class Factory {
      * @throws IOException when there is error in accessing files
      * @throws ClassNotFoundException when class is not found
      */
-    public static IReadWriteRegistrationDataAccessObject getTextRegistrationDataAccess(ConsoleAdminSession a) throws IOException, ClassNotFoundException {
+    public static IReadWriteRegistrationDataAccessObject getTextRegistrationDataAccessObject(ConsoleAdminSession a) throws IOException, ClassNotFoundException {
         return TextRegistrationDataAccessObject.getInstance();
     }
 
     /**
      * @param u user session
-     * Refer to {@link #getTextRegistrationDataAccess(ConsoleAdminSession a)} for the overloaded method}.
+     * Refer to {@link #getTextRegistrationDataAccessObject(ConsoleAdminSession a)} for the overloaded method}.
      */
-    public static IReadRegistrationDataAccessObject getTextRegistrationDataAccess(ConsoleUserSession u) throws IOException, ClassNotFoundException {
+    public static IReadRegistrationDataAccessObject getTextRegistrationDataAccessObject(ConsoleUserSession u) throws IOException, ClassNotFoundException {
         return TextRegistrationDataAccessObject.getInstance();
     }
 
     /**
      * @param s student course registrar
-     * Refer to {@link #getTextRegistrationDataAccess(ConsoleAdminSession a)} for the overloaded method}.
+     * Refer to {@link #getTextRegistrationDataAccessObject(ConsoleAdminSession a)} for the overloaded method}.
      */
-    public static IReadWriteRegistrationDataAccessObject getTextRegistrationDataAccess(StudentCourseRegistrar s) throws IOException, ClassNotFoundException {
+    public static IReadWriteRegistrationDataAccessObject getTextRegistrationDataAccessObject(StudentCourseRegistrar s) throws IOException, ClassNotFoundException {
         return TextRegistrationDataAccessObject.getInstance();
     }
 
@@ -183,29 +182,18 @@ public class Factory {
      * @return Staff object
      * @throws PasswordStorage.CannotPerformOperationException unsafe to verify password on platform
      */
-    public static Staff createStaff(String name, School school, Gender gender, Nationality nationality) throws PasswordStorage.CannotPerformOperationException {
-        return new Staff(name, school, gender, nationality);
+    public static Staff createStaff(String name, School school, Gender gender, Nationality nationality, String job) throws PasswordStorage.CannotPerformOperationException {
+        return new Staff(name, school, gender, nationality, job);
     }
 
     /**
      * Creates an index with tutorials and lab sessions.
      * @param indexNumber Integer that stores the index number of the index class
      * @param maxClassSize Integer that stores the maximum number of students allowed to be registered in the index class
-     * @param tutorialTimings Hashtable object that stores tutorial timings as a day of the week, and time in HH:MM format
-     * @param tutorialVenue Venue object that stores tutorial location of the course
-     * @param laboratoryTimings Hashtable object that stores lab timings as a day of the week, and time in HH:MM format
-     * @param laboratoryVenue Venue object that stores lab location of the course
      * @return Index object
      */
-    public static Index createIndex(int indexNumber, int maxClassSize, Hashtable<DayOfWeek, List<LocalTime>> tutorialTimings, Venue tutorialVenue, Hashtable<DayOfWeek, List<LocalTime>> laboratoryTimings, Venue laboratoryVenue) {
-        return new Index(indexNumber, maxClassSize, tutorialTimings, tutorialVenue, laboratoryTimings, laboratoryVenue);
-    }
-
-    /**
-     * Refer to {@link #createIndex(int, int, Hashtable, Venue, Hashtable, Venue)} for the overloaded method}.
-     */
     public static Index createIndex(int indexNumber, int maxClassSize) {
-        return createIndex(indexNumber, maxClassSize, null, null, null, null);
+        return new Index(indexNumber, maxClassSize, null, null, null, null);
     }
 
     /**
